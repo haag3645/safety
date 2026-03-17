@@ -644,6 +644,12 @@
     overflow: hidden;
     padding: 0;
   }
+  #panelFreq .answer-box { margin-top: 10px; }
+  #panelFreq, #panelKeyword { padding-top: 0; margin-top: -72px; }
+  #panelWorkFreq .answer-box { margin-top: 10px; }
+  #panelYear .answer-box,
+  #panelWorkYear .answer-box { margin-top: 10px; }
+  #panelWorkYear, #panelWorkKw, #panelWorkFreq, #panelWorkStudy { padding-top: 0; margin-top: -72px; }
   .answer-label {
     display: flex;
     align-items: center;
@@ -1290,7 +1296,7 @@
   <button class="main-nav-btn work" id="navWorkKw"    onclick="toggleNav('workkw',this)">작업형 키워드 ▼</button>
   <button class="main-nav-btn work" id="navWorkFreq"  onclick="toggleNav('workfreq',this)">작업형 빈출 ▼</button>
   <button class="main-nav-btn work" id="navWorkStudy" onclick="toggleNav('workstudy',this)">작업형 공부 ▼</button>
-</nav>
+</nav></div>
 
 <!-- ═══════════════ 서브 네비 ═══════════════ -->
 
@@ -1362,7 +1368,7 @@
   <div class="ctrl-sep"></div>
 </div>
 
-</div>
+
 
 <!-- 작업형 키워드 서브 -->
 <div class="sub-nav-bar" id="subWorkKw">
@@ -14870,6 +14876,12 @@
         <div class="panel-info" id="freqInfo"></div>
       </div>
     </div>
+    <div id="freqStarBar" style="padding:8px 16px;background:#f4f6fb;border:1px solid #e0e4f0;border-radius:0 0 8px 8px;margin:-1px 0 8px;display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span style="font-size:12px;color:#888;font-weight:600;">빈출 필터:</span>
+      <button class="freq-star-btn" data-star="3" onclick="freqFilterByStar(3)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★★ 매년</button>
+      <button class="freq-star-btn" data-star="2" onclick="freqFilterByStar(2)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★ 자주</button>
+      <button class="freq-star-btn" data-star="1" onclick="freqFilterByStar(1)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★ 가끔</button>
+    </div>
     <div id="freqList" style="border:1px solid var(--gray-border);border-top:none;border-radius:0 0 8px 8px;"></div>
   </div>
 
@@ -14889,8 +14901,7 @@
 </div>
 
   <!-- 작업형 기출문제 패널 -->
-  <div class="panel" id="panelWorkYear">
-    <div id="workYearSections" style="display:none"><div id="workYearSectionsInner">
+  <div class="panel" id="panelWorkYear"><div id="workYearSections" style="display:none"><div id="workYearSectionsInner">
 <div class="year-section" id="yw2025">
 <div class="round-header">
 <div class="round-number">1</div>
@@ -34228,6 +34239,17 @@ function showFreq(star, btn) {
   document.querySelectorAll('#subFreq .sub-nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
+  // starBar 표시 + 현재 선택 버튼 하이라이트
+  const starBar = document.getElementById('freqStarBar');
+  if (starBar) {
+    starBar.style.display = 'flex';
+    starBar.querySelectorAll('.freq-star-btn').forEach(b => {
+      const on = Number(b.getAttribute('data-star')) === star;
+      b.style.background = on ? '#1a237e' : '#fff';
+      b.style.color      = on ? '#fff'    : '#1a237e';
+    });
+  }
+
   const list = document.getElementById('freqList');
   list.innerHTML = '';
 
@@ -34268,6 +34290,38 @@ function showFreq(star, btn) {
   }
 
   document.getElementById('panelFreq').classList.add('active');
+}
+
+function freqFilterByStar(starVal) {
+  const list = document.getElementById('freqList');
+  if (!list) return;
+
+  let totalVis = 0;
+  list.querySelectorAll('.q-card').forEach(card => {
+    const s = parseInt(card.getAttribute('data-star') || '0');
+    const show = (starVal === 0 || s === starVal);
+    card.style.display = show ? '' : 'none';
+    if (show) totalVis++;
+  });
+
+  // 버튼 active 스타일
+  const starBar = document.getElementById('freqStarBar');
+  if (starBar) {
+    starBar.querySelectorAll('.freq-star-btn').forEach(b => {
+      const on = Number(b.getAttribute('data-star')) === starVal;
+      b.style.background = on ? '#1a237e' : '#fff';
+      b.style.color      = on ? '#fff'    : '#1a237e';
+    });
+  }
+
+  // 카운트 갱신
+  const infoEl = document.getElementById('freqInfo');
+  if (infoEl) infoEl.textContent = totalVis + '개 문제';
+  const titleEl = document.getElementById('freqTitle');
+  if (titleEl) {
+    const label = starVal === 3 ? '★★★' : starVal === 2 ? '★★' : starVal === 1 ? '★' : '전체';
+    titleEl.textContent = '🏆 필답형 빈출 — ' + label;
+  }
 }
 
 /* ══════════════════════════════════════════
@@ -34481,7 +34535,20 @@ function showWorkStudy(mode, btn) {
     clearBtn.style.display = 'none';
     document.getElementById('workStudyTitle').textContent = '📋 전체카드';
     document.getElementById('workStudyInfo').textContent = '';
-    panel.classList.remove('active');
+    hideAllPanels();
+    const wys = document.getElementById('workYearSections');
+    if (wys) wys.style.display = '';
+    const defId = currentWorkYearId || 'yw2025';
+    document.querySelectorAll('#panelWorkYear .year-section').forEach(s => {
+      s.classList.remove('active'); s.style.display = 'none';
+    });
+    const sec = document.getElementById(defId);
+    if (sec) { sec.classList.add('active'); sec.style.display = 'block'; }
+    const panel2 = document.getElementById('panelWorkYear');
+    if (panel2) panel2.classList.add('active');
+    document.querySelectorAll('#subWorkYear .sub-nav-btn').forEach(b => b.classList.remove('active'));
+    const defBtn = document.getElementById('wyb' + defId.replace('yw',''));
+    if (defBtn) defBtn.classList.add('active');
     return;
   }
 
