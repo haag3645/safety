@@ -1352,11 +1352,6 @@
 
 <!-- 필답형 빈출 서브 -->
 <div class="sub-nav-bar" id="subFreq">
-  <button class="sub-nav-btn" id="fbAll" onclick="showFreq(0,this)">📋 전체카드</button>
-  <button class="sub-nav-btn" id="fb3" onclick="showFreq(3,this)">★★★ 빈출</button>
-  <button class="sub-nav-btn" id="fb2" onclick="showFreq(2,this)">★★ 빈출</button>
-  <button class="sub-nav-btn" id="fb1" onclick="showFreq(1,this)">★ 빈출</button>
-  <div class="ctrl-sep"></div>
 </div>
 
 <!-- 필답형 공부 서브 -->
@@ -1386,11 +1381,6 @@
 
 <!-- 작업형 빈출 서브 -->
 <div class="sub-nav-bar" id="subWorkFreq">
-  <button class="sub-nav-btn" id="wfbAll" onclick="showWorkFreq(0,this)">📋 전체카드</button>
-  <button class="sub-nav-btn" id="wfb3" onclick="showWorkFreq(3,this)">★★★ 빈출</button>
-  <button class="sub-nav-btn" id="wfb2" onclick="showWorkFreq(2,this)">★★ 빈출</button>
-  <button class="sub-nav-btn" id="wfb1" onclick="showWorkFreq(1,this)">★ 빈출</button>
-  <div class="ctrl-sep"></div>
 </div>
 
 <!-- 작업형 공부 서브 -->
@@ -14878,9 +14868,9 @@
     </div>
     <div id="freqStarBar" style="padding:8px 16px;background:#f4f6fb;border:1px solid #e0e4f0;border-radius:0 0 8px 8px;margin:-1px 0 8px;display:none;align-items:center;gap:8px;flex-wrap:wrap;">
       <span style="font-size:12px;color:#888;font-weight:600;">빈출 필터:</span>
-      <button class="freq-star-btn" data-star="3" onclick="freqFilterByStar(3)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★★ 매년</button>
-      <button class="freq-star-btn" data-star="2" onclick="freqFilterByStar(2)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★ 자주</button>
-      <button class="freq-star-btn" data-star="1" onclick="freqFilterByStar(1)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★ 가끔</button>
+      <button class="freq-star-btn" data-star="3" onclick="showFreq(3,this)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★★ 매년</button>
+      <button class="freq-star-btn" data-star="2" onclick="showFreq(2,this)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★ 자주</button>
+      <button class="freq-star-btn" data-star="1" onclick="showFreq(1,this)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★ 가끔</button>
     </div>
     <div id="freqList" style="border:1px solid var(--gray-border);border-top:none;border-radius:0 0 8px 8px;"></div>
   </div>
@@ -33622,9 +33612,9 @@
     </div>
     <div id="workFreqStarBar" style="padding:8px 16px;background:#f4f6fb;border:1px solid #e0e4f0;border-radius:0 0 8px 8px;margin:-1px 0 8px;display:none;align-items:center;gap:8px;flex-wrap:wrap;">
       <span style="font-size:12px;color:#888;font-weight:600;">빈출 필터:</span>
-      <button class="wfreq-star-btn" data-star="3" onclick="workFreqFilterByStar(3)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★★ 매년</button>
-      <button class="wfreq-star-btn" data-star="2" onclick="workFreqFilterByStar(2)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★ 자주</button>
-      <button class="wfreq-star-btn" data-star="1" onclick="workFreqFilterByStar(1)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★ 가끔</button>
+      <button class="wfreq-star-btn" data-star="3" onclick="showWorkFreq(3,this)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★★ 매년</button>
+      <button class="wfreq-star-btn" data-star="2" onclick="showWorkFreq(2,this)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★★ 자주</button>
+      <button class="wfreq-star-btn" data-star="1" onclick="showWorkFreq(1,this)" style="padding:4px 10px;border:1.5px solid #1a237e;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#1a237e;">★ 가끔</button>
     </div>
     <div id="workFreqList" style="border:1px solid var(--gray-border);border-top:none;border-radius:0 0 8px 8px;"></div>
   </div>
@@ -33898,9 +33888,8 @@ function toggleNav(type, btn) {
     document.getElementById('kwList').innerHTML = '<div style="padding:60px 20px;text-align:center;color:#999;font-size:15px;">👆 위에서 키워드를 선택하면<br>해당 주제의 기출문제가 표시됩니다.</div>';
     document.getElementById('panelKeyword').classList.add('active');
   } else if (type === 'freq') {
-    document.getElementById('subFreq').classList.add('open');
     // 기본: ★★★
-    showFreq(3, document.getElementById('fb3'));
+    showFreq(3, null);
   } else if (type === 'study') {
     document.getElementById('subStudy').classList.add('open');
     showStudy('all', document.getElementById('sb_all'));
@@ -33912,8 +33901,8 @@ function toggleNav(type, btn) {
     hideAllPanels();
     document.getElementById('panelWorkKw').classList.add('active');
   } else if (type === 'workfreq') {
-    document.getElementById('subWorkFreq').classList.add('open');
-    showWorkFreq(3, document.getElementById('wfb3'));
+    // 기본: ★★★
+    showWorkFreq(3, null);
   } else if (type === 'workyear') {
     document.getElementById('subWorkYear').classList.add('open');
     const defW = currentWorkYearId || 'yw2025';
@@ -34235,9 +34224,13 @@ function onKeywordSub(keyword, btn) {
    필답형 빈출
 ══════════════════════════════════════════ */
 function showFreq(star, btn) {
-  hideAllPanels();
-  document.querySelectorAll('#subFreq .sub-nav-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  // starBar 버튼에서 호출 시(btn이 .freq-star-btn)는 패널 유지
+  const fromStarBar = btn && btn.classList.contains('freq-star-btn');
+  if (!fromStarBar) {
+    hideAllPanels();
+    document.querySelectorAll('#subFreq .sub-nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
 
   // starBar 표시 + 현재 선택 버튼 하이라이트
   const starBar = document.getElementById('freqStarBar');
@@ -34401,9 +34394,13 @@ function clearStudyPanel() {} // 동적 할당됨
    작업형 빈출
 ══════════════════════════════════════════ */
 function showWorkFreq(star, btn) {
-  hideAllPanels();
-  document.querySelectorAll('#subWorkFreq .sub-nav-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  // starBar 버튼에서 호출 시(btn이 .wfreq-star-btn)는 패널 유지
+  const fromStarBar = btn && btn.classList.contains('wfreq-star-btn');
+  if (!fromStarBar) {
+    hideAllPanels();
+    document.querySelectorAll('#subWorkFreq .sub-nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
 
   // starBar 표시 + 현재 선택 버튼 하이라이트
   const starBar = document.getElementById('workFreqStarBar');
