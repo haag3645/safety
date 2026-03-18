@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>2026년 건설안전기사 꼭 따야한다 경덕아!</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -12,6 +12,7 @@
   top: 0;
   z-index: 500;
   background: white;
+  touch-action: pan-x;  /* 세로 스크롤은 body에 위임 */
 }
 
   :root {
@@ -243,8 +244,8 @@
     color: var(--gray-text);
     font-weight: 600;
     border-radius: 20px;
-    transition: all 0.18s;
     white-space: nowrap;
+    touch-action: manipulation;
   }
   .sub-nav-btn:hover { background: #eef0fa; border-color: var(--navy); color: var(--navy); }
   .sub-nav-btn.active { background: var(--navy); border-color: var(--navy); color: white; }
@@ -966,7 +967,7 @@
     background: rgba(0,0,0,0.1); z-index: 400;
   }
   .progress-bar-inner {
-    height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-light)); width: 0%; transition: width 0.1s;
+    height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-light)); width: 0%;
   }
 
   /* ── Q-TABLE ── */
@@ -994,7 +995,9 @@
     
   }
 
-  html { scroll-behavior: smooth; }
+  /* iOS 스크롤 진동 방지: html에 smooth 제거 (iOS 모멘텀과 충돌) */
+  html { scroll-behavior: auto; }
+  body { overscroll-behavior-y: none; }
 
   /* ── NAV ARROW BUTTONS ── */
   .nav-arrow-btn {
@@ -1171,7 +1174,7 @@
   padding: 5px 14px; border: 1.5px solid var(--gray-border);
   background: white; border-radius: 20px; font-size: 12px;
   color: var(--gray-text); font-weight: 600; cursor: pointer;
-  white-space: nowrap; transition: all 0.15s;
+  white-space: nowrap; touch-action: manipulation;
 }
 .sub-nav-btn:hover { border-color: var(--navy); color: var(--navy); }
 .sub-nav-btn.active { background: var(--navy); border-color: var(--navy); color: white; }
@@ -1307,7 +1310,7 @@
 <!-- ═══════════════ 서브 네비 ═══════════════ -->
 
 <!-- 필답형 기출 서브 -->
-<div class="sub-nav-bar" id="subWorkYear" style="overflow-x:auto;flex-wrap:nowrap;">
+<div class="sub-nav-bar" id="subWorkYear" style="overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;">
   <button class="sub-nav-btn" id="wyb2025" onclick="showWorkYearSection('yw2025',this)">2025</button>
   <button class="sub-nav-btn" id="wyb2024" onclick="showWorkYearSection('yw2024',this)">2024</button>
   <button class="sub-nav-btn" id="wyb2023" onclick="showWorkYearSection('yw2023',this)">2023</button>
@@ -1320,7 +1323,7 @@
   <button class="sub-nav-btn" id="wyb2016" onclick="showWorkYearSection('yw2016',this)">2016</button>
   <button class="sub-nav-btn" id="wyb2015" onclick="showWorkYearSection('yw2015',this)">2015</button>
 </div>
-<div class="sub-nav-bar" id="subYear">
+<div class="sub-nav-bar" id="subYear" style="overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;">
   <button class="sub-nav-btn" id="yb2025" onclick="showYearSection('y2025',this)">2025</button>
   <button class="sub-nav-btn" id="yb2024" onclick="showYearSection('y2024',this)">2024</button>
   <button class="sub-nav-btn" id="yb2023" onclick="showYearSection('y2023',this)">2023</button>
@@ -1336,7 +1339,7 @@
 </div>
 
 <!-- 필답형 키워드 서브 -->
-<div class="sub-nav-bar" id="subKeyword">
+<div class="sub-nav-bar" id="subKeyword" style="overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;">
   <!-- Part 1 안전관리 -->
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전보건관리조직',this)">A-1 안전보건관리조직</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전관리계획 수립 및 운용',this)">A-2 안전관리계획 수립 및 운용</button>
@@ -1357,11 +1360,11 @@
 </div>
 
 <!-- 필답형 빈출 서브 -->
-<div class="sub-nav-bar" id="subFreq">
+<div class="sub-nav-bar" id="subFreq" style="-webkit-overflow-scrolling:touch;touch-action:pan-x;">
 </div>
 
 <!-- 필답형 공부 서브 -->
-<div class="sub-nav-bar" id="subStudy">
+<div class="sub-nav-bar" id="subStudy" style="-webkit-overflow-scrolling:touch;touch-action:pan-x;">
   <button class="sub-nav-btn" id="sb_all"     onclick="showStudy('all',this)">📋 전체카드</button>
   <button class="sub-nav-btn" id="sb_correct" onclick="showStudy('correct',this)">○ 정답노트 <span class="snote-cnt" id="cntCorrect">0</span></button>
   <button class="sub-nav-btn" id="sb_partial" onclick="showStudy('partial',this)">△ 중간노트 <span class="snote-cnt" id="cntPartial">0</span></button>
@@ -1372,7 +1375,7 @@
 
 
 <!-- 작업형 키워드 서브 -->
-<div class="sub-nav-bar" id="subWorkKw">
+<div class="sub-nav-bar" id="subWorkKw" style="overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;">
   <button class="sub-nav-btn kw-btn" onclick="filterWorkKeyword('비계',this)">🪜 비계</button>
   <button class="sub-nav-btn kw-btn" onclick="filterWorkKeyword('크레인·양중',this)">🏗 크레인·양중</button>
   <button class="sub-nav-btn kw-btn" onclick="filterWorkKeyword('굴착·터널',this)">⛏ 굴착·터널</button>
@@ -1386,11 +1389,11 @@
 </div>
 
 <!-- 작업형 빈출 서브 -->
-<div class="sub-nav-bar" id="subWorkFreq">
+<div class="sub-nav-bar" id="subWorkFreq" style="-webkit-overflow-scrolling:touch;touch-action:pan-x;">
 </div>
 
 <!-- 작업형 공부 서브 -->
-<div class="sub-nav-bar" id="subWorkStudy">
+<div class="sub-nav-bar" id="subWorkStudy" style="-webkit-overflow-scrolling:touch;touch-action:pan-x;">
   <button class="sub-nav-btn" id="wsb_all"     onclick="showWorkStudy('all',this)">📋 전체카드</button>
   <button class="sub-nav-btn" id="wsb_correct" onclick="showWorkStudy('correct',this)">○ 정답노트 <span class="snote-cnt" id="wcntCorrect">0</span></button>
   <button class="sub-nav-btn" id="wsb_partial" onclick="showWorkStudy('partial',this)">△ 중간노트 <span class="snote-cnt" id="wcntPartial">0</span></button>
@@ -34752,12 +34755,19 @@ function scrollToMatch(dir) {
 function initScrollTop() {
   const btn = document.getElementById('scrollTop');
   const bar = document.getElementById('progressBar');
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    btn.style.display = scrolled > 300 ? 'flex' : 'none';
-    bar.style.width = total > 0 ? (scrolled/total*100) + '%' : '0';
-  });
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        btn.style.display = scrolled > 300 ? 'flex' : 'none';
+        bar.style.width = total > 0 ? (scrolled/total*100) + '%' : '0';
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 /* ══════════════════════════════════════════
@@ -34774,7 +34784,7 @@ function toggleWrong(id)   {
       na.style.display = 'block';
       setTimeout(() => {
         na.classList.add('open');
-        na.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => na.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
       }, 50);
     } else {
       na.style.display = 'none';
