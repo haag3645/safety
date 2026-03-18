@@ -210,7 +210,11 @@
   .main-nav-btn .nav-arrow { font-size: 10px; transition: transform 0.2s; margin-left: 2px; }
   .main-nav-btn.sub-open .nav-arrow { transform: rotate(180deg); }
   .main-nav-sep { width: 1px; background: var(--gray-border); margin: 8px 0; }
-  .main-nav-sep-group { width: 2px; background: #bdbdbd; margin: 6px 4px; flex-shrink: 0; }
+  .main-nav-sep-group { width: 2px; background: #9e9e9e; margin: 4px 6px; flex-shrink: 0; border-radius: 1px; }
+  .main-nav-divider {
+    color: #bdbdbd; font-size: 18px; font-weight: 300;
+    padding: 0 2px; align-self: center; user-select: none; flex-shrink: 0;
+  }
 
   /* ── SUB NAV BAR ── */
   .sub-nav-bar {
@@ -1291,11 +1295,13 @@
   <button class="main-nav-btn" id="navKeyword" onclick="toggleNav('keyword',this)">필답형 키워드 ▼</button>
   <button class="main-nav-btn" id="navFreq"    onclick="toggleNav('freq',this)">필답형 빈출 ▼</button>
   <button class="main-nav-btn" id="navStudy"   onclick="toggleNav('study',this)">필답형 공부 ▼</button>
-  <div class="main-nav-sep"></div>
+  <span class="main-nav-divider">|</span>
   <button class="main-nav-btn work" id="navWorkYear"  onclick="toggleNav('workyear',this)">작업형 기출문제 ▲</button>
   <button class="main-nav-btn work" id="navWorkKw"    onclick="toggleNav('workkw',this)">작업형 키워드 ▼</button>
   <button class="main-nav-btn work" id="navWorkFreq"  onclick="toggleNav('workfreq',this)">작업형 빈출 ▼</button>
   <button class="main-nav-btn work" id="navWorkStudy" onclick="toggleNav('workstudy',this)">작업형 공부 ▼</button>
+  <span class="main-nav-divider">|</span>
+  <button class="main-nav-btn" id="navTheory" onclick="toggleNav('theory',this)" style="color:#6a1b9a;font-weight:700;">이론정리 ▼</button>
 </nav></div>
 
 <!-- ═══════════════ 서브 네비 ═══════════════ -->
@@ -1390,6 +1396,15 @@
   <button class="sub-nav-btn" id="wsb_partial" onclick="showWorkStudy('partial',this)">△ 중간노트 <span class="snote-cnt" id="wcntPartial">0</span></button>
   <button class="sub-nav-btn" id="wsb_wrong"   onclick="showWorkStudy('wrong',this)">✕ 오답노트 <span class="snote-cnt" id="wcntWrong">0</span></button>
   <div class="ctrl-sep"></div>
+</div>
+<!-- 이론정리 서브 -->
+<div class="sub-nav-bar" id="subTheory" style="flex-wrap:wrap;">
+  <button class="sub-nav-btn" id="thb_ch01" onclick="showTheoryChapter('ch01',this)">CH01 안전보건관리조직</button>
+  <button class="sub-nav-btn" id="thb_ch02" onclick="showTheoryChapter('ch02',this)">CH02 안전관리계획</button>
+  <button class="sub-nav-btn" id="thb_ch03" onclick="showTheoryChapter('ch03',this)">CH03 산업재해 조사분석</button>
+  <button class="sub-nav-btn" id="thb_ch04" onclick="showTheoryChapter('ch04',this)">CH04 안전점검·인증·진단</button>
+  <button class="sub-nav-btn" id="thb_ch05" onclick="showTheoryChapter('ch05',this)">CH05 보호구·안전보건표지</button>
+  <button class="sub-nav-btn" id="thb_ch06" onclick="showTheoryChapter('ch06',this)">CH06 안전보건교육</button>
 </div>
 
 </div>
@@ -33630,6 +33645,10 @@
     </div>
     <div id="workStudyList" style="border:1px solid var(--gray-border);border-top:none;border-radius:0 0 8px 8px;"></div>
   </div>
+  <!-- 이론정리 패널 -->
+  <div class="panel" id="panelTheory" style="padding-bottom:40px;">
+    <div id="theoryContent"></div>
+  </div>
 
 </div><!-- /container -->
 
@@ -35366,6 +35385,2744 @@ function printWorkStudyPdf(mode) {
   _buildPdfWin('건설안전기사 작업형 공부 \u2014 ' + labelMap[mode] + ' (' + cards.length + '문제)', h);
 }
 
+</script>
+
+<!-- ══════════════════════════════════════════════════════════
+     🚀 ENHANCEMENT MODULE v2.0
+     1. Lazy Loading (성능)
+     2. 모의시험 모드
+     3. 에빙하우스 복습 스케줄러
+     4. 학습 통계 대시보드
+     5. AI 두음법 생성기
+══════════════════════════════════════════════════════════ -->
+<style>
+/* ── 복습 배너 ── */
+#reviewBanner {
+  display: flex; align-items: center; gap: 12px;
+  background: linear-gradient(135deg, #e65100 0%, #ff6d00 100%);
+  color: white; padding: 10px 20px; font-size: 14px; font-weight: 500;
+  flex-wrap: wrap;
+}
+#reviewBanner strong { font-weight: 800; font-size: 16px; }
+#reviewBanner .rb-btn {
+  background: rgba(255,255,255,0.22); border: 1.5px solid rgba(255,255,255,0.5);
+  color: white; padding: 5px 16px; border-radius: 20px; cursor: pointer;
+  font-size: 13px; font-weight: 700; transition: background 0.2s; font-family: 'Noto Sans KR', sans-serif;
+}
+#reviewBanner .rb-btn:hover { background: rgba(255,255,255,0.38); }
+#reviewBanner .rb-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 18px; padding: 0 4px; line-height: 1; }
+
+/* ── 오버레이 공통 ── */
+.enh-overlay {
+  position: fixed; inset: 0; background: rgba(10,15,50,0.65);
+  z-index: 9900; display: flex; align-items: center; justify-content: center;
+  padding: 16px; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+}
+.enh-modal {
+  background: white; border-radius: 20px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  max-width: 700px; width: 100%; max-height: 92vh; overflow-y: auto;
+  animation: enhSlideUp 0.3s cubic-bezier(.16,1,.3,1);
+}
+@keyframes enhSlideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+.enh-close {
+  background: none; border: none; cursor: pointer;
+  color: #999; font-size: 13px; font-weight: 700;
+  padding: 6px 14px; border-radius: 20px; transition: all 0.2s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.enh-close:hover { background: #f0f0f0; color: #333; }
+
+/* ── 툴바 추가 버튼 ── */
+.enh-ctrl-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 12px 13px; border: none; background: none; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #555e80;
+  font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s;
+  white-space: nowrap;
+}
+.enh-ctrl-btn:hover { color: #1a237e; border-bottom-color: #1a237e; }
+.enh-streak-badge {
+  display: inline-block; background: #ff6d00; color: white;
+  font-size: 10px; font-weight: 800; padding: 1px 6px;
+  border-radius: 10px; margin-left: 3px; vertical-align: middle;
+}
+.enh-review-badge {
+  display: inline-block; background: #c62828; color: white;
+  font-size: 10px; font-weight: 800; padding: 1px 6px;
+  border-radius: 10px; margin-left: 3px; vertical-align: middle;
+}
+/* 네비바 뱃지 */
+
+/* ════════════════════════════
+   모의시험 모드
+════════════════════════════ */
+.exam-modal { padding: 0; overflow: hidden; }
+.exam-header {
+  padding: 16px 20px; border-bottom: 1px solid #eee;
+  display: flex; align-items: center; gap: 14px;
+  background: #fafbff;
+}
+.exam-prog-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
+.exam-prog-bar {
+  flex: 1; height: 8px; background: #e8e8e8; border-radius: 4px; overflow: hidden;
+}
+.exam-prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1a237e, #ff6d00);
+  border-radius: 4px; transition: width 0.5s cubic-bezier(.16,1,.3,1);
+}
+.exam-count { font-size: 13px; font-weight: 700; color: #1a237e; white-space: nowrap; }
+.exam-body { padding: 24px 28px; }
+.exam-q-title {
+  font-size: 17px; font-weight: 800; color: #1a237e;
+  margin-bottom: 14px; padding-bottom: 12px;
+  border-bottom: 2.5px solid #ff6d00;
+  line-height: 1.4;
+}
+.exam-q-content {
+  background: #f6f8ff; border-radius: 12px; padding: 16px 18px;
+  font-size: 14.5px; line-height: 1.8; margin-bottom: 20px;
+  border: 1px solid #e8ebff;
+}
+.exam-input-section label {
+  display: block; font-size: 12.5px; font-weight: 700;
+  color: #1a237e; margin-bottom: 8px; letter-spacing: 0.3px;
+}
+#examAnswerTA {
+  width: 100%; border: 2px solid #e0e4f0; border-radius: 12px;
+  padding: 14px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px; line-height: 1.7; resize: vertical; min-height: 100px;
+  transition: border-color 0.2s; background: #fafbff;
+}
+#examAnswerTA:focus { outline: none; border-color: #1a237e; background: white; }
+.exam-submit-btn {
+  margin-top: 14px; width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  color: white; border: none; border-radius: 12px;
+  font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s;
+  font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.3px;
+}
+.exam-submit-btn:hover { opacity: 0.88; }
+
+.exam-reveal-section { display: none; }
+.exam-answer-box {
+  background: #e8f5e9; border: 1.5px solid #a5d6a7;
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 14px;
+}
+.exam-answer-box-label {
+  font-size: 11.5px; font-weight: 800; color: #2e7d32;
+  margin-bottom: 8px; letter-spacing: 0.5px;
+}
+.exam-answer-box-content { font-size: 14px; line-height: 1.9; }
+.exam-kw-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.exam-kw-chip {
+  padding: 4px 13px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  background: #e0e0e0; color: #616161; transition: all 0.4s;
+}
+.exam-kw-chip.kw-hit  { background: #2e7d32; color: white; }
+.exam-kw-chip.kw-miss { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+.exam-grade-section { }
+.exam-grade-label { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 10px; text-align: center; }
+.exam-grade-btns { display: flex; gap: 10px; }
+.grade-btn {
+  flex: 1; padding: 14px 6px; border: 2.5px solid; border-radius: 12px;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  background: white; font-family: 'Noto Sans KR', sans-serif;
+}
+.grade-btn-ok    { border-color: #2e7d32; color: #2e7d32; }
+.grade-btn-ok:hover    { background: #2e7d32; color: white; }
+.grade-btn-mid   { border-color: #e65100; color: #e65100; }
+.grade-btn-mid:hover   { background: #e65100; color: white; }
+.grade-btn-bad   { border-color: #c62828; color: #c62828; }
+.grade-btn-bad:hover   { background: #c62828; color: white; }
+
+/* Exam Result */
+.exam-result-modal {
+  padding: 44px 28px 36px; text-align: center;
+}
+.result-trophy { font-size: 48px; margin-bottom: 8px; }
+.result-heading { font-size: 22px; font-weight: 800; color: #1a237e; margin-bottom: 20px; }
+.result-score-ring {
+  width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 6px solid #ff6d00;
+  background: linear-gradient(135deg, #f0f4ff, #fff8f0);
+}
+.result-score-num { font-size: 48px; font-weight: 900; color: #1a237e; line-height: 1; }
+.result-score-label { font-size: 13px; color: #888; margin-top: 2px; }
+.result-breakdown { display: flex; justify-content: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+.rb-item { padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 14px; }
+.rb-ok  { background: #e8f5e9; color: #2e7d32; }
+.rb-mid { background: #fff8e1; color: #e65100; }
+.rb-bad { background: #ffebee; color: #c62828; }
+.result-msg { font-size: 15px; color: #555; margin-bottom: 28px; line-height: 1.6; }
+.result-action-btns { display: flex; gap: 12px; justify-content: center; }
+.result-btn-done {
+  padding: 13px 30px; border-radius: 12px; font-size: 15px; font-weight: 700;
+  cursor: pointer; border: 2px solid #ddd; background: #f5f5f5; color: #444;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+}
+.result-btn-done:hover { background: #e8e8e8; }
+.result-btn-retry {
+  padding: 13px 30px; border-radius: 12px; font-size: 15px; font-weight: 700;
+  cursor: pointer; border: none;
+  background: linear-gradient(135deg, #1a237e, #3949ab); color: white;
+  font-family: 'Noto Sans KR', sans-serif; transition: opacity 0.2s;
+}
+.result-btn-retry:hover { opacity: 0.88; }
+
+/* ════════════════════════════
+   통계 대시보드
+════════════════════════════ */
+.stats-modal { padding: 0; max-width: 740px; }
+.stats-hdr {
+  padding: 20px 26px; border-bottom: 1px solid #eee;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, #0d1257 0%, #1a237e 100%); color: white;
+  border-radius: 20px 20px 0 0;
+}
+.stats-hdr h2 { font-size: 18px; font-weight: 800; }
+.stats-hdr .enh-close { color: rgba(255,255,255,0.7); }
+.stats-hdr .enh-close:hover { background: rgba(255,255,255,0.15); color: white; }
+.stats-body { padding: 22px 26px; }
+
+.stats-kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;
+}
+@media (max-width: 500px) { .stats-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+.kpi-card {
+  text-align: center; padding: 18px 8px; border-radius: 14px;
+  background: #f6f8ff; border: 1.5px solid #e8ebff;
+  transition: transform 0.2s;
+}
+.kpi-card:hover { transform: translateY(-2px); }
+.kpi-icon { font-size: 24px; margin-bottom: 6px; }
+.kpi-val { font-size: 30px; font-weight: 900; color: #1a237e; line-height: 1; }
+.kpi-label { font-size: 11px; color: #888; margin-top: 4px; font-weight: 500; }
+.kpi-streak .kpi-val { color: #ff6d00; }
+.kpi-review .kpi-val { color: #c62828; }
+.kpi-correct .kpi-val { color: #2e7d32; }
+
+.stats-sec { margin-bottom: 24px; }
+.stats-sec-title {
+  font-size: 13.5px; font-weight: 800; color: #1a237e;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.stats-sec-title::after {
+  content: ''; flex: 1; height: 1.5px; background: #e8ebff;
+}
+
+/* Distribution */
+.dist-rows { display: flex; flex-direction: column; gap: 10px; }
+.dist-row { display: flex; align-items: center; gap: 10px; }
+.dist-lbl { width: 52px; font-size: 12px; font-weight: 600; color: #555; }
+.dist-track { flex: 1; height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+.dist-fill { height: 100%; border-radius: 7px; transition: width 0.8s cubic-bezier(.16,1,.3,1); }
+.dist-fill-ok  { background: linear-gradient(90deg, #2e7d32, #66bb6a); }
+.dist-fill-mid { background: linear-gradient(90deg, #e65100, #ffa726); }
+.dist-fill-bad { background: linear-gradient(90deg, #c62828, #ef5350); }
+.dist-pct { width: 44px; font-size: 12px; font-weight: 700; text-align: right; color: #333; }
+
+/* Heatmap 월 네비게이션 */
+.hm-month-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.hm-month-label {
+  font-size: 14px; font-weight: 800; color: #1a237e;
+}
+.hm-nav-btn {
+  background: none; border: 1.5px solid #e0e4f0; border-radius: 20px;
+  padding: 4px 14px; font-size: 12px; font-weight: 700;
+  color: #555e80; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.18s;
+}
+.hm-nav-btn:hover:not(:disabled) { background: #1a237e; border-color: #1a237e; color: white; }
+
+/* Heatmap */
+.hm-wrap { }
+.hm-dow-labels {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 4px;
+}
+.hm-dow-labels span { font-size: 10px; color: #bbb; text-align: center; font-weight: 600; }
+.hm-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.hm-cell {
+  height: 32px; border-radius: 4px; cursor: default;
+  transition: transform 0.15s; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: rgba(0,0,0,0.35);
+}
+.hm-cell:hover { transform: scale(1.12); z-index: 2; }
+.hm-lv0 { background: #f0f0f0; }
+.hm-lv1 { background: #c8e6c9; color: #2e7d32; }
+.hm-lv2 { background: #81c784; color: #1b5e20; }
+.hm-lv3 { background: #388e3c; color: white; }
+.hm-lv4 { background: #1b5e20; color: white; }
+.hm-today { outline: 2px solid #ff6d00; outline-offset: 1px; border-radius: 4px; color: #ff6d00 !important; font-weight: 800 !important; }
+.hm-lv3.hm-today, .hm-lv4.hm-today { color: white !important; }
+.hm-empty { background: transparent !important; }
+
+/* Review Schedule */
+.rs-list { display: flex; flex-direction: column; gap: 8px; }
+.rs-row {
+  border-radius: 10px; border: 1px solid #e8ebff;
+  background: #f6f8ff; overflow: hidden;
+}
+.rs-row.rs-today { background: #fff8e1; border-color: #ffcc80; }
+.rs-row.rs-past  { background: #ffebee; border-color: #ef9a9a; }
+.rs-row-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; cursor: pointer; gap: 10px;
+  font-size: 13px; user-select: none;
+}
+.rs-row-header:hover { filter: brightness(0.97); }
+.rs-row-left { display: flex; align-items: center; gap: 10px; }
+.rs-date { font-weight: 700; color: #333; }
+.rs-cnt {
+  background: #1a237e; color: white; font-size: 11px; font-weight: 700;
+  padding: 2px 10px; border-radius: 20px;
+}
+.rs-row.rs-today .rs-cnt { background: #e65100; }
+.rs-row.rs-past  .rs-cnt { background: #c62828; }
+.rs-toggle { font-size: 11px; color: #999; transition: transform 0.2s; }
+.rs-toggle.open { transform: rotate(180deg); }
+.rs-study-btn {
+  background: #1a237e; color: white; border: none; border-radius: 20px;
+  padding: 4px 12px; font-size: 11px; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; white-space: nowrap; transition: opacity 0.2s;
+}
+.rs-study-btn:hover { opacity: 0.82; }
+.rs-row.rs-today .rs-study-btn { background: #e65100; }
+.rs-row.rs-past  .rs-study-btn { background: #c62828; }
+
+.rs-q-list {
+  display: none; border-top: 1px solid #e8ebff; padding: 8px 12px; gap: 4px;
+  flex-direction: column;
+}
+.rs-q-list.open { display: flex; }
+.rs-q-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 7px; font-size: 12.5px; color: #333;
+  background: rgba(255,255,255,0.7);
+}
+.rs-q-item:hover { background: white; }
+.rs-q-num { font-size: 10px; font-weight: 700; color: #aaa; min-width: 18px; }
+.rs-q-title { flex: 1; line-height: 1.4; }
+.rs-q-goto {
+  background: none; border: 1px solid #c5cae9; border-radius: 12px;
+  padding: 2px 9px; font-size: 11px; color: #3949ab; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 600; white-space: nowrap;
+  transition: all 0.18s;
+}
+.rs-q-goto:hover { background: #1a237e; color: white; border-color: #1a237e; }
+.rs-empty { font-size: 13px; color: #aaa; text-align: center; padding: 18px; }
+
+/* ════════════════════════════
+   이론정리 카드
+════════════════════════════ */
+.theory-chapter-header {
+  background: linear-gradient(135deg, #0d1257 0%, #1a237e 60%, #283593 100%);
+  color: white; border-radius: 14px; padding: 22px 24px;
+  margin-bottom: 20px; position: relative; overflow: hidden;
+}
+.theory-chapter-header::after {
+  content: ''; position: absolute; right: -30px; top: -30px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.theory-chapter-num { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 1px; margin-bottom: 4px; }
+.theory-chapter-title { font-size: 20px; font-weight: 900; }
+.theory-chapter-desc { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
+
+.theory-section-title {
+  font-size: 14px; font-weight: 800; color: #1a237e;
+  padding: 6px 0 10px; margin: 24px 0 12px;
+  border-bottom: 2.5px solid #e8ebff;
+  display: flex; align-items: center; gap: 8px;
+}
+.theory-section-title::before {
+  content: ''; width: 4px; height: 18px;
+  background: linear-gradient(180deg, #ff6d00, #1a237e);
+  border-radius: 2px; flex-shrink: 0;
+}
+
+.theory-card {
+  background: white; border: 1.5px solid #e8ebff;
+  border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.theory-card:hover { box-shadow: 0 4px 16px rgba(26,35,126,0.1); }
+.theory-card-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; cursor: pointer;
+  background: #fafbff; user-select: none;
+}
+.theory-card-header:hover { background: #f0f3ff; }
+.theory-star { color: #e65100; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.theory-card-title { flex: 1; font-size: 14px; font-weight: 700; color: #1a237e; }
+.theory-toggle { font-size: 11px; color: #aaa; transition: transform 0.2s; }
+.theory-card.open .theory-toggle { transform: rotate(180deg); }
+.theory-card-body { display: none; padding: 16px 18px; border-top: 1px solid #e8ebff; font-size: 13.5px; line-height: 1.85; }
+.theory-card.open .theory-card-body { display: block; }
+
+.theory-def { margin-bottom: 14px; }
+.theory-def-term { font-weight: 800; color: #1a237e; margin-bottom: 4px; font-size: 14px; }
+.theory-def-desc { color: #333; }
+.theory-def-desc strong { color: #c62828; font-weight: 700; }
+
+.theory-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.theory-table th { background: #e8ebff; color: #1a237e; font-weight: 700; padding: 8px 10px; border: 1px solid #c5cae9; text-align: center; }
+.theory-table td { padding: 8px 10px; border: 1px solid #e0e4f0; vertical-align: top; }
+.theory-table tr:nth-child(even) td { background: #fafbff; }
+
+.theory-list { margin: 8px 0 0 0; padding: 0; list-style: none; }
+.theory-list li { display: flex; gap: 8px; padding: 4px 0; color: #333; }
+.theory-list li::before { content: '•'; color: #1a237e; font-weight: 900; flex-shrink: 0; }
+.theory-list li strong { color: #c62828; }
+
+.theory-point {
+  background: linear-gradient(135deg, #fff8e1, #fff3cd);
+  border: 1.5px solid #ffcc80; border-radius: 10px;
+  padding: 12px 16px; margin: 12px 0; font-size: 13px;
+}
+.theory-point-label { font-weight: 800; color: #e65100; margin-bottom: 6px; font-size: 12px; letter-spacing: 0.5px; }
+
+.theory-tip {
+  background: #f3e5f5; border: 1.5px solid #ce93d8;
+  border-radius: 10px; padding: 10px 14px; margin: 10px 0;
+  font-size: 12.5px; color: #4a148c; font-weight: 600;
+}
+.theory-tip-label { font-weight: 800; margin-right: 6px; }
+
+.theory-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;
+}
+@media (max-width: 560px) { .theory-compare { grid-template-columns: 1fr; } }
+.theory-compare-box {
+  background: #f6f8ff; border: 1.5px solid #e8ebff;
+  border-radius: 10px; padding: 12px 14px;
+}
+.theory-compare-title { font-size: 12px; font-weight: 800; color: #1a237e; margin-bottom: 8px; }
+
+.theory-keyword-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.theory-kchip {
+  background: #e8eaf6; color: #1a237e; font-size: 12px;
+  font-weight: 700; padding: 3px 12px; border-radius: 20px;
+}
+.theory-kchip.red { background: #ffebee; color: #c62828; }
+.theory-kchip.orange { background: #fff8e1; color: #e65100; }
+.theory-kchip.green { background: #e8f5e9; color: #2e7d32; }
+.mn-gen-btn {
+  display: inline-flex; align-items: center;
+  margin-left: auto; flex-shrink: 0;
+  padding: 2px 10px;
+  background: linear-gradient(135deg, #4527a0, #6a1b9a);
+  color: white; border: none; border-radius: 20px;
+  font-size: 11.5px; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: opacity 0.2s;
+  letter-spacing: 0.2px;
+}
+.mn-gen-btn:hover { opacity: 0.82; }
+.mn-gen-btn:disabled { opacity: 0.5; cursor: wait; }
+.mn-result {
+  margin-top: 10px; padding: 14px 16px;
+  background: linear-gradient(135deg, #f3e5f5, #ede7f6);
+  border: 1.5px solid #ce93d8; border-radius: 12px;
+  animation: enhSlideUp 0.3s ease;
+}
+.mn-acronym {
+  font-size: 22px; font-weight: 900; color: #4a148c;
+  margin-bottom: 6px; letter-spacing: 3px;
+}
+.mn-story { font-size: 13px; color: #6a1b9a; margin-bottom: 4px; line-height: 1.6; }
+.mn-tip   { font-size: 12px; color: #880e4f; }
+.mn-error { background: #ffebee; border-color: #ef9a9a; color: #c62828; font-size: 13px; padding: 12px; border-radius: 10px; margin-top: 8px; }
+</style>
+
+<script>
+/* ══════════════════════════════════════════
+   🚀 ENHANCEMENT MODULE v2.0
+══════════════════════════════════════════ */
+(function() {
+  'use strict';
+
+  /* ─── Storage Keys ─── */
+  const ENH_REVIEW_KEY = 'ksaEnhReview';
+  const ENH_LOG_KEY    = 'ksaEnhLog';
+
+  /* ─── Helpers ─── */
+  function enhLoad(key, def) {
+    try { return JSON.parse(localStorage.getItem(key) || def); } catch { return JSON.parse(def); }
+  }
+  function enhSave(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+  }
+  function today() { return new Date().toISOString().split('T')[0]; }
+  function addDays(n) {
+    const d = new Date(); d.setDate(d.getDate() + n);
+    return d.toISOString().split('T')[0];
+  }
+
+  /* ══════════════════════════════════════════
+     1. PERFORMANCE: Lazy Loading
+  ══════════════════════════════════════════ */
+  function initLazyLoad() {
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        e.target.style.contentVisibility = e.isIntersecting ? 'visible' : 'auto';
+      });
+    }, { rootMargin: '200px' });
+    document.querySelectorAll('.q-card').forEach(c => {
+      c.style.contentVisibility = 'auto';
+      c.style.containIntrinsicSize = '0 120px';
+      io.observe(c);
+    });
+  }
+
+  /* ══════════════════════════════════════════
+     3. EBBINGHAUS REVIEW SCHEDULER
+  ══════════════════════════════════════════ */
+  const INTERVALS = [1, 3, 7, 14, 30]; // days
+
+  function getReviewSchedule() { return enhLoad(ENH_REVIEW_KEY, '{}'); }
+  function saveReviewSchedule(s) { enhSave(ENH_REVIEW_KEY, s); }
+
+  function scheduleReview(cardId, wrongCount) {
+    const idx = Math.min((wrongCount || 1) - 1, INTERVALS.length - 1);
+    const s = getReviewSchedule();
+    s[cardId] = { date: addDays(INTERVALS[idx]), wrongCount: wrongCount || 1 };
+    saveReviewSchedule(s);
+    refreshReviewBadge();
+  }
+
+  function clearReview(cardId) {
+    const s = getReviewSchedule();
+    delete s[cardId];
+    saveReviewSchedule(s);
+    refreshReviewBadge();
+  }
+
+  function getDueReviewIds() {
+    const s = getReviewSchedule();
+    const t = today();
+    return Object.entries(s)
+      .filter(([, v]) => (v.date || v) <= t)
+      .map(([id]) => id);
+  }
+
+  function refreshReviewBadge() {
+    const due = getDueReviewIds().length;
+    const el = document.getElementById('enhReviewBadge');
+    if (el) el.textContent = due;
+    const banner = document.getElementById('reviewBanner');
+    if (banner) {
+      const span = banner.querySelector('strong');
+      if (span) span.textContent = due;
+      if (due === 0) banner.remove();
+    }
+  }
+
+  /* ─── Hook into existing setState ─── */
+  function hookStateToggle() {
+    const orig = window.setStateToggle;
+    window.setStateToggle = function(id, state) {
+      if (typeof orig === 'function') orig(id, state);
+      logStudy(state);
+      if (state === 'wrong') {
+        const s = getReviewSchedule();
+        const prev = s[id];
+        const wc = prev ? (prev.wrongCount || 0) + 1 : 1;
+        scheduleReview(id, wc);
+      } else if (state === 'correct') {
+        clearReview(id);
+      }
+      updateStreakBadge();
+    };
+  }
+
+  /* ─── Review Banner ─── */
+  function showReviewBanner() {
+    const due = getDueReviewIds().length;
+    if (due === 0) return;
+    const el = document.createElement('div');
+    el.id = 'reviewBanner';
+    el.innerHTML = `
+      <span>📅 오늘 복습할 문제 <strong>${due}</strong>개가 있어요!</span>
+      <button class="rb-btn" onclick="window.showMockExam('review')">복습 시작 →</button>
+      <button class="rb-close" onclick="this.parentElement.remove()">✕</button>`;
+    const stickyTop = document.getElementById('stickyTop');
+    if (stickyTop) stickyTop.insertAdjacentElement('afterend', el);
+    else document.body.insertAdjacentElement('afterbegin', el);
+  }
+
+  /* ══════════════════════════════════════════
+     3b. DAILY LOG & STREAK
+  ══════════════════════════════════════════ */
+  function getDailyLog() { return enhLoad(ENH_LOG_KEY, '{}'); }
+
+  function logStudy(state) {
+    const log = getDailyLog();
+    const t = today();
+    if (!log[t]) log[t] = { studied: 0, correct: 0, wrong: 0, partial: 0 };
+    log[t].studied++;
+    if (log[t][state] !== undefined) log[t][state]++;
+    enhSave(ENH_LOG_KEY, log);
+  }
+
+  function getStreak() {
+    const log = getDailyLog();
+    let streak = 0;
+    const now = new Date();
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(now); d.setDate(d.getDate() - i);
+      const ds = d.toISOString().split('T')[0];
+      if (log[ds] && log[ds].studied > 0) streak++;
+      else if (i > 0) break;
+    }
+    return streak;
+  }
+
+  function updateStreakBadge() {
+    const el = document.getElementById('enhStreakBadge');
+    if (el) el.textContent = getStreak();
+  }
+
+  /* ══════════════════════════════════════════
+     2. MOCK EXAM MODE (모의시험)
+  ══════════════════════════════════════════ */
+  window.showMockExam = function(mode) {
+    const allCards = Array.from(document.querySelectorAll('.q-card[data-id]'));
+    let pool = [];
+
+    if (mode === 'review') {
+      const dueIds = new Set(getDueReviewIds());
+      pool = allCards.filter(c => dueIds.has(c.dataset.id));
+      if (pool.length === 0) { showToast('오늘 복습할 문제가 없어요!'); return; }
+    } else if (mode === 'custom' && window._examPoolOverride) {
+      pool = window._examPoolOverride;
+      window._examPoolOverride = null;
+      if (pool.length === 0) { showToast('문제를 찾을 수 없어요.'); return; }
+    } else {
+      // Mix: wrong + partial + random
+      const wCards = allCards.filter(c => typeof wrongSet !== 'undefined' && wrongSet.has(c.dataset.id));
+      const pCards = allCards.filter(c => typeof partialSet !== 'undefined' && partialSet.has(c.dataset.id));
+      const others = allCards.filter(c => !wrongSet?.has(c.dataset.id) && !partialSet?.has(c.dataset.id));
+      const shuffledOthers = others.sort(() => Math.random() - 0.5);
+      pool = [...wCards, ...pCards, ...shuffledOthers].slice(0, 20);
+    }
+
+    if (pool.length === 0) { showToast('문제가 없습니다. 기출문제 탭을 먼저 확인하세요.'); return; }
+    pool = pool.sort(() => Math.random() - 0.5).slice(0, Math.min(pool.length, 20));
+
+    const overlay = document.createElement('div');
+    overlay.className = 'enh-overlay';
+    overlay.id = 'examOverlay';
+    document.body.appendChild(overlay);
+
+    let idx = 0;
+    const results = { correct: 0, partial: 0, wrong: 0 };
+
+    function render(i) {
+      if (i >= pool.length) { showResults(); return; }
+      const card = pool[i];
+      const title    = card.querySelector('.q-title')?.innerText?.trim() || '문제';
+      const question = card.querySelector('.question-text')?.innerHTML || '';
+      const answer   = card.querySelector('.answer-box')?.innerHTML || '';
+      const chips    = Array.from(card.querySelectorAll('.chip')).map(c => c.textContent.trim());
+      const pct      = Math.round((i / pool.length) * 100);
+
+      overlay.innerHTML = `
+        <div class="enh-modal exam-modal">
+          <div class="exam-header">
+            <div class="exam-prog-wrap">
+              <div class="exam-prog-bar"><div class="exam-prog-fill" style="width:${pct}%"></div></div>
+              <span class="exam-count">${i + 1} / ${pool.length}</span>
+            </div>
+            <button class="enh-close" onclick="document.getElementById('examOverlay').remove()">✕ 나가기</button>
+          </div>
+          <div class="exam-body">
+            <div class="exam-q-title">${title}</div>
+            <div class="exam-q-content">${question}</div>
+
+            <div class="exam-input-section" id="examInputSec">
+              <label>📝 답안을 작성하세요 (키워드 위주로)</label>
+              <textarea id="examAnswerTA" placeholder="핵심 키워드를 적어보세요..."></textarea>
+              <button class="exam-submit-btn" onclick="examReveal()">정답 확인하기 →</button>
+            </div>
+
+            <div class="exam-reveal-section" id="examRevealSec" style="display:none">
+              <div class="exam-answer-box">
+                <div class="exam-answer-box-label">📋 모범 답안</div>
+                <div class="exam-answer-box-content">${answer}</div>
+              </div>
+              <div class="exam-kw-row" id="examKwRow">
+                ${chips.map(k => `<span class="exam-kw-chip" data-kw="${k}">${k}</span>`).join('')}
+              </div>
+              <div class="exam-grade-section">
+                <div class="exam-grade-label">✏️ 스스로 채점하세요</div>
+                <div class="exam-grade-btns">
+                  <button class="grade-btn grade-btn-ok"  onclick="examGrade('correct','${card.dataset.id}')">○ 맞았어요</button>
+                  <button class="grade-btn grade-btn-mid" onclick="examGrade('partial','${card.dataset.id}')">△ 부분 맞음</button>
+                  <button class="grade-btn grade-btn-bad" onclick="examGrade('wrong','${card.dataset.id}')">✕ 틀렸어요</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        overlay.querySelector('#examAnswerTA')?.focus();
+    }
+
+    window.examReveal = function() {
+      const userAns = document.getElementById('examAnswerTA')?.value || '';
+      document.getElementById('examInputSec').style.display = 'none';
+      document.getElementById('examRevealSec').style.display = 'block';
+      // Highlight keyword matches
+      document.querySelectorAll('.exam-kw-chip').forEach(chip => {
+        const kw = chip.dataset.kw;
+        const parts = kw.split(/[·,·\s]+/).filter(p => p.length > 1);
+        const hit = parts.some(p => userAns.includes(p)) || userAns.includes(kw);
+        chip.classList.add(hit ? 'kw-hit' : 'kw-miss');
+      });
+    };
+
+    window.examGrade = function(grade, cardId) {
+      results[grade]++;
+      if (typeof setStateToggle === 'function') setStateToggle(cardId, grade);
+      idx++;
+      render(idx);
+    };
+
+    function showResults() {
+      const total = results.correct + results.partial + results.wrong;
+      const pct = total > 0 ? Math.round((results.correct / total) * 100) : 0;
+      const trophy = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📚';
+      const msg = pct >= 80
+        ? '훌륭해요! 합격권 실력입니다. 오답만 다시 확인하세요.'
+        : pct >= 60
+        ? '조금만 더! 틀린 문제 위주로 반복 복습하면 됩니다.'
+        : '기초부터 차근차근 다져봐요. 에빙하우스 복습을 활용하세요!';
+
+      overlay.innerHTML = `
+        <div class="enh-modal exam-result-modal">
+          <div class="result-trophy">${trophy}</div>
+          <div class="result-heading">모의시험 완료!</div>
+          <div class="result-score-ring">
+            <div class="result-score-num">${pct}</div>
+            <div class="result-score-label">점 (자가채점)</div>
+          </div>
+          <div class="result-breakdown">
+            <div class="rb-item rb-ok">○ 맞음 <strong>${results.correct}</strong>개</div>
+            <div class="rb-item rb-mid">△ 부분 <strong>${results.partial}</strong>개</div>
+            <div class="rb-item rb-bad">✕ 틀림 <strong>${results.wrong}</strong>개</div>
+          </div>
+          <div class="result-msg">${msg}</div>
+          <div class="result-action-btns">
+            <button class="result-btn-done" onclick="document.getElementById('examOverlay').remove()">완료</button>
+            <button class="result-btn-retry" onclick="document.getElementById('examOverlay').remove(); showMockExam();">다시 도전</button>
+          </div>
+        </div>`;
+    }
+
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    render(0);
+  };
+
+  /* ══════════════════════════════════════════
+     4. STATS DASHBOARD
+  ══════════════════════════════════════════ */
+  window.showStatsDashboard = function() {
+    const log      = getDailyLog();
+    const streak   = getStreak();
+    const schedule = getReviewSchedule();
+    const due      = getDueReviewIds().length;
+
+    let totalStudied = 0, totalCorrect = 0, totalWrong = 0, totalPartial = 0;
+    Object.values(log).forEach(d => {
+      totalStudied += d.studied  || 0;
+      totalCorrect += d.correct  || 0;
+      totalWrong   += d.wrong    || 0;
+      totalPartial += d.partial  || 0;
+    });
+
+    const correctPct  = totalStudied > 0 ? (totalCorrect  / totalStudied * 100).toFixed(1) : 0;
+    const partialPct  = totalStudied > 0 ? (totalPartial  / totalStudied * 100).toFixed(1) : 0;
+    const wrongPct    = totalStudied > 0 ? (totalWrong    / totalStudied * 100).toFixed(1) : 0;
+
+    // Sets from parent scope
+    const wCnt = typeof wrongSet   !== 'undefined' ? wrongSet.size   : 0;
+    const cCnt = typeof correctSet !== 'undefined' ? correctSet.size : 0;
+    const pCnt = typeof partialSet !== 'undefined' ? partialSet.size : 0;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'enh-overlay';
+    overlay.innerHTML = `
+      <div class="enh-modal stats-modal">
+        <div class="stats-hdr">
+          <h2>📊 나의 학습 통계</h2>
+          <button class="enh-close" onclick="this.closest('.enh-overlay').remove()">✕ 닫기</button>
+        </div>
+        <div class="stats-body">
+
+          <!-- KPI -->
+          <div class="stats-kpi-grid">
+            <div class="kpi-card kpi-streak">
+              <div class="kpi-icon">🔥</div>
+              <div class="kpi-val">${streak}</div>
+              <div class="kpi-label">연속 학습일</div>
+            </div>
+            <div class="kpi-card kpi-total">
+              <div class="kpi-icon">📖</div>
+              <div class="kpi-val">${totalStudied}</div>
+              <div class="kpi-label">총 채점 횟수</div>
+            </div>
+            <div class="kpi-card kpi-correct">
+              <div class="kpi-icon">✓</div>
+              <div class="kpi-val">${cCnt}</div>
+              <div class="kpi-label">정답 문제</div>
+            </div>
+            <div class="kpi-card kpi-review">
+              <div class="kpi-icon">📅</div>
+              <div class="kpi-val">${due}</div>
+              <div class="kpi-label">오늘 복습 예정</div>
+            </div>
+          </div>
+
+          <!-- Distribution -->
+          <div class="stats-sec">
+            <div class="stats-sec-title">📈 채점 분포</div>
+            <div class="dist-rows">
+              <div class="dist-row">
+                <div class="dist-lbl">○ 정답</div>
+                <div class="dist-track"><div class="dist-fill dist-fill-ok"  style="width:${correctPct}%"></div></div>
+                <div class="dist-pct">${correctPct}%</div>
+              </div>
+              <div class="dist-row">
+                <div class="dist-lbl">△ 중간</div>
+                <div class="dist-track"><div class="dist-fill dist-fill-mid" style="width:${partialPct}%"></div></div>
+                <div class="dist-pct">${partialPct}%</div>
+              </div>
+              <div class="dist-row">
+                <div class="dist-lbl">✕ 오답</div>
+                <div class="dist-track"><div class="dist-fill dist-fill-bad" style="width:${wrongPct}%"></div></div>
+                <div class="dist-pct">${wrongPct}%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Heatmap -->
+          <div class="stats-sec">
+            <div class="stats-sec-title">학습 달력</div>
+            <div class="hm-wrap">
+              <div class="hm-month-nav">
+                <button class="hm-nav-btn" id="hmPrevBtn">‹ 이전 달</button>
+                <span class="hm-month-label" id="hmMonthLabel"></span>
+                <button class="hm-nav-btn" id="hmNextBtn">다음 달 ›</button>
+              </div>
+              <div class="hm-dow-labels">
+                <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+              </div>
+              <div class="hm-grid" id="heatmapGrid"></div>
+            </div>
+          </div>
+
+          <!-- Ebbinghaus Review Schedule -->
+          <div class="stats-sec">
+            <div class="stats-sec-title">🧠 에빙하우스 복습 예정</div>
+            <div class="rs-list" id="reviewSchedList"></div>
+          </div>
+
+        </div>
+      </div>`;
+
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+    // Build heatmap
+    buildHeatmapDOM(log, document.getElementById('heatmapGrid'));
+    buildReviewSchedDOM(schedule, document.getElementById('reviewSchedList'));
+  };
+
+  function buildHeatmapDOM(log, container) {
+    // 초기: 현재 달
+    let viewYear  = new Date().getFullYear();
+    let viewMonth = new Date().getMonth(); // 0-indexed
+
+    function render() {
+      container.innerHTML = '';
+      const now      = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+      const label    = `${viewYear}년 ${viewMonth + 1}월`;
+      const labelEl  = document.getElementById('hmMonthLabel');
+      if (labelEl) labelEl.textContent = label;
+
+      // 이번 달 1일의 요일(0=일)
+      const firstDow = new Date(viewYear, viewMonth, 1).getDay();
+      // 이번 달 마지막 날
+      const lastDay  = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+      // 앞 빈칸
+      for (let i = 0; i < firstDow; i++) {
+        const e = document.createElement('div');
+        e.className = 'hm-cell hm-empty';
+        container.appendChild(e);
+      }
+
+      for (let d = 1; d <= lastDay; d++) {
+        const mm  = String(viewMonth + 1).padStart(2, '0');
+        const dd  = String(d).padStart(2, '0');
+        const ds  = `${viewYear}-${mm}-${dd}`;
+        const count = (log[ds] || {}).studied || 0;
+        const lv  = count === 0 ? 0 : count < 5 ? 1 : count < 15 ? 2 : count < 30 ? 3 : 4;
+        const isToday = ds === todayStr;
+        const cell = document.createElement('div');
+        cell.className = `hm-cell hm-lv${lv}${isToday ? ' hm-today' : ''}`;
+        cell.title = count > 0 ? `${ds}: ${count}문제` : ds;
+        cell.textContent = d;
+        container.appendChild(cell);
+      }
+
+      // 다음달 버튼: 미래달은 비활성
+      const nextBtn = document.getElementById('hmNextBtn');
+      if (nextBtn) {
+        const isCurrentMonth = viewYear === now.getFullYear() && viewMonth === now.getMonth();
+        nextBtn.disabled = isCurrentMonth;
+        nextBtn.style.opacity = isCurrentMonth ? '0.35' : '1';
+        nextBtn.style.cursor  = isCurrentMonth ? 'default' : 'pointer';
+      }
+    }
+
+    render();
+
+    const prevBtn = document.getElementById('hmPrevBtn');
+    const nextBtn = document.getElementById('hmNextBtn');
+    if (prevBtn) prevBtn.onclick = () => {
+      viewMonth--;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      render();
+    };
+    if (nextBtn) nextBtn.onclick = () => {
+      const now = new Date();
+      if (viewYear === now.getFullYear() && viewMonth === now.getMonth()) return;
+      viewMonth++;
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      render();
+    };
+  }
+
+  function buildReviewSchedDOM(schedule, container) {
+    if (!container) return;
+    const t = today();
+    const entries = Object.entries(schedule);
+    if (entries.length === 0) {
+      container.innerHTML = '<div class="rs-empty">아직 복습 예정이 없어요. 오답 체크 시 자동 등록됩니다!</div>';
+      return;
+    }
+
+    // 날짜별로 id 목록 그룹핑
+    const grouped = {};
+    entries.forEach(([id, v]) => {
+      const date = v.date || v;
+      if (!grouped[date]) grouped[date] = [];
+      grouped[date].push(id);
+    });
+
+    // 카드 id → 제목 매핑
+    function getCardTitle(id) {
+      const card = document.querySelector(`.q-card[data-id="${id}"]`);
+      if (!card) return id;
+      return card.querySelector('.q-title')?.textContent?.trim() || id;
+    }
+
+    Object.keys(grouped).sort().forEach(date => {
+      const ids = grouped[date];
+      const isPast = date < t, isToday = date === t;
+      const dateLabel = isToday ? '오늘' : isPast ? '기한 초과' : date;
+
+      const row = document.createElement('div');
+      row.className = `rs-row${isToday ? ' rs-today' : isPast ? ' rs-past' : ''}`;
+
+      // 헤더
+      const header = document.createElement('div');
+      header.className = 'rs-row-header';
+      header.innerHTML = `
+        <div class="rs-row-left">
+          <span class="rs-date">${dateLabel}</span>
+          <span class="rs-cnt">${ids.length}문제</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="rs-study-btn">지금 공부하기</button>
+          <span class="rs-toggle">▼</span>
+        </div>`;
+      row.appendChild(header);
+
+      // 문제 목록 (접힘)
+      const qList = document.createElement('div');
+      qList.className = 'rs-q-list';
+      ids.forEach((id, idx) => {
+        const title = getCardTitle(id);
+        const item = document.createElement('div');
+        item.className = 'rs-q-item';
+        item.innerHTML = `
+          <span class="rs-q-num">${idx + 1}</span>
+          <span class="rs-q-title">${title}</span>
+          <button class="rs-q-goto" data-id="${id}">바로가기</button>`;
+        qList.appendChild(item);
+      });
+      row.appendChild(qList);
+
+      // 헤더 클릭 → 펼치기/접기
+      header.addEventListener('click', e => {
+        if (e.target.classList.contains('rs-study-btn')) return;
+        const isOpen = qList.classList.toggle('open');
+        header.querySelector('.rs-toggle').classList.toggle('open', isOpen);
+      });
+
+      // 지금 공부하기 → 해당 문제만 모의시험
+      header.querySelector('.rs-study-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        document.querySelector('.enh-overlay')?.remove();
+        const allCards = Array.from(document.querySelectorAll('.q-card[data-id]'));
+        const idSet = new Set(ids);
+        const pool = allCards.filter(c => idSet.has(c.dataset.id));
+        if (pool.length === 0) { showToast('문제를 찾을 수 없어요.'); return; }
+        // showMockExam에 pool 직접 주입
+        window._examPoolOverride = pool;
+        window.showMockExam('custom');
+      });
+
+      // 바로가기 → 해당 카드로 스크롤
+      qList.querySelectorAll('.rs-q-goto').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const id = btn.dataset.id;
+          document.querySelector('.enh-overlay')?.remove();
+          // yearStore 활성화 후 스크롤
+          const ys = document.getElementById('yearStore');
+          if (ys) ys.style.display = '';
+          document.querySelectorAll('.year-section').forEach(s => s.classList.add('active'));
+          setTimeout(() => {
+            const target = document.querySelector(`.q-card[data-id="${id}"]`);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              target.style.outline = '3px solid #ff6d00';
+              setTimeout(() => target.style.outline = '', 2000);
+            }
+          }, 100);
+        });
+      });
+
+      container.appendChild(row);
+    });
+  }
+
+  /* ══════════════════════════════════════════
+     UI INJECTION (메인 네비 우측)
+  ══════════════════════════════════════════ */
+  function injectToolbarButtons() {
+    const navBar = document.querySelector('.main-nav-bar');
+    if (!navBar) return;
+
+    const sep = document.createElement('span');
+    sep.className = 'main-nav-divider';
+    sep.textContent = '|';
+
+    const examBtn = document.createElement('button');
+    examBtn.className = 'main-nav-btn';
+    examBtn.textContent = '모의시험';
+    examBtn.onclick = () => showMockExam();
+
+    const statsBtn = document.createElement('button');
+    statsBtn.className = 'main-nav-btn';
+    statsBtn.innerHTML = `학습통계 <span class="enh-streak-badge" id="enhStreakBadge">${getStreak()}</span>`;
+    statsBtn.onclick = showStatsDashboard;
+
+    const due = getDueReviewIds().length;
+    const reviewBtn = document.createElement('button');
+    reviewBtn.className = 'main-nav-btn';
+    reviewBtn.innerHTML = `오늘복습 <span class="enh-review-badge" id="enhReviewBadge">${due}</span>`;
+    reviewBtn.onclick = () => showMockExam('review');
+
+    [sep, examBtn, statsBtn, reviewBtn].forEach(el => navBar.appendChild(el));
+  }
+
+  /* ══════════════════════════════════════════
+     이론정리 모듈
+  ══════════════════════════════════════════ */
+
+  /* ─── 이론 데이터 ─── */
+  const THEORY_DATA = {
+    ch01: {
+      num: 'CHAPTER 01', title: '안전보건관리조직',
+      desc: '안전조직의 목적·종류·장단점, 안전관리자 선임기준, 각 조직의 직무, 산업안전보건위원회·노사협의체',
+      sections: [
+        {
+          title: '기본 용어',
+          cards: [
+            {
+              star: '★★★', title: '중대재해 3가지',
+              body: `<ul class="theory-list">
+                <li>사망자가 <strong>1인 이상</strong> 발생한 재해</li>
+                <li><strong>3개월 이상</strong> 요양을 요하는 부상자가 동시에 <strong>2인 이상</strong> 발생한 재해</li>
+                <li>부상자 또는 직업성 질병자가 동시에 <strong>10인 이상</strong> 발생한 재해</li>
+              </ul>
+              <div class="theory-tip"><span class="theory-tip-label">암기</span> 사1·부2(3개월)·질10 → "사망하나 부상둘 질병열"</div>`
+            },
+            {
+              star: '★', title: '핵심 용어 정의',
+              body: `
+              <div class="theory-def"><div class="theory-def-term">산업재해</div><div class="theory-def-desc">노무를 제공하는 자가 업무에 관계되는 건설물·설비·원재료·가스·증기·분진 등에 의하거나 작업 또는 그 밖의 업무로 인하여 <strong>사망 또는 부상하거나 질병에 걸리는 것</strong></div></div>
+              <div class="theory-def"><div class="theory-def-term">도급</div><div class="theory-def-desc">명칭에 관계없이 물건의 제조·건설·수리 또는 서비스의 제공, 그 밖의 업무를 <strong>타인에게 맡기는 계약</strong></div></div>
+              <div class="theory-def"><div class="theory-def-term">안전·보건진단</div><div class="theory-def-desc">산업재해를 예방하기 위하여 잠재적 위험성을 발견하고 개선대책을 수립할 목적으로 고용노동부장관이 지정하는 자가 하는 <strong>조사·평가</strong></div></div>`
+            },
+            {
+              star: '★★★', title: '페일세이프(Fail safe) vs 풀프루프(Fool proof)',
+              body: `<div class="theory-compare">
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title">페일세이프 (Fail safe)</div>
+                  <strong>기계의 고장</strong>이 있어도 안전사고를 발생시키지 않도록 2중, 3중 통제를 가함
+                </div>
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title">풀프루프 (Fool proof)</div>
+                  <strong>인간의 실수</strong>가 있어도 안전사고를 발생시키지 않도록 2중, 3중 통제를 가함
+                </div>
+              </div>
+              <div class="theory-point">
+                <div class="theory-point-label">페일세이프 3가지 구분 ★★★</div>
+                <ul class="theory-list">
+                  <li><strong>Fail Passive</strong>: 부품 고장 시 기계장치는 <strong>정지</strong> 상태로</li>
+                  <li><strong>Fail Active</strong>: 부품 고장 시 <strong>경보</strong>를 울리며 짧은 시간 운전 가능</li>
+                  <li><strong>Fail Operational</strong>: 부품 고장이 있어도 <strong>다음 정기점검까지 운전</strong> 가능</li>
+                </ul>
+              </div>`
+            }
+          ]
+        },
+        {
+          title: '안전보건관리조직 종류 및 장단점',
+          cards: [
+            {
+              star: '★★★', title: '안전조직 3가지 종류',
+              body: `<table class="theory-table">
+                <tr><th>종류</th><th>적용규모</th><th>특징</th></tr>
+                <tr><td><strong>라인형(직계형)</strong></td><td>소규모 (100명 이하)</td><td>생산과 안전을 <strong>동시에 지시</strong>하는 형태</td></tr>
+                <tr><td><strong>스태프형(참모형)</strong></td><td>중규모 (100~1,000명)</td><td>안전 전담 스태프가 <strong>경영자 조언·자문</strong></td></tr>
+                <tr><td><strong>라인스태프형(혼합형)</strong></td><td>대규모 (1,000명 이상)</td><td>라인형+스태프형 <strong>장점을 취한 형태</strong></td></tr>
+              </table>`
+            },
+            {
+              star: '★★', title: '라인형 장·단점',
+              body: `<div class="theory-compare">
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title" style="color:#2e7d32;">장점</div>
+                  <ul class="theory-list">
+                    <li>명령 및 지시가 <strong>신속, 정확</strong></li>
+                    <li>안전대책의 실시가 <strong>신속</strong></li>
+                  </ul>
+                </div>
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title" style="color:#c62828;">단점</div>
+                  <ul class="theory-list">
+                    <li>안전정보가 <strong>불충분</strong></li>
+                    <li>라인에 <strong>과도한 책임</strong>이 부여</li>
+                  </ul>
+                </div>
+              </div>`
+            },
+            {
+              star: '★★', title: '스태프형 장·단점',
+              body: `<div class="theory-compare">
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title" style="color:#2e7d32;">장점</div>
+                  <ul class="theory-list">
+                    <li>안전정보 수집이 <strong>용이하고 빠름</strong></li>
+                    <li>안전지식 및 <strong>기술축적</strong>이 용이</li>
+                  </ul>
+                </div>
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title" style="color:#c62828;">단점</div>
+                  <ul class="theory-list">
+                    <li>안전과 생산을 <strong>별개로 취급</strong></li>
+                    <li>생산부문은 안전에 대한 <strong>책임·권한 없음</strong></li>
+                  </ul>
+                </div>
+              </div>`
+            },
+            {
+              star: '★★', title: '라인스태프형 장·단점',
+              body: `<div class="theory-compare">
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title" style="color:#2e7d32;">장점</div>
+                  <ul class="theory-list">
+                    <li>안전전문가 입안 → 경영자 명령으로 <strong>신속·정확</strong></li>
+                    <li>안전정보 수집이 <strong>용이하고 빠름</strong></li>
+                    <li>안전지식 및 <strong>기술축적</strong>이 용이</li>
+                  </ul>
+                </div>
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title" style="color:#c62828;">단점</div>
+                  <ul class="theory-list">
+                    <li><strong>명령계통과 조언·권고</strong>의 혼돈 우려</li>
+                    <li>스태프의 <strong>월권행위</strong> 우려</li>
+                    <li>라인이 스태프에 <strong>의존·미활용</strong> 가능</li>
+                  </ul>
+                </div>
+              </div>`
+            }
+          ]
+        },
+        {
+          title: '안전관리자 등 선임기준',
+          cards: [
+            {
+              star: '★★★', title: '안전관리자·산업안전보건위원회·노사협의체 선임기준',
+              body: `<table class="theory-table">
+                <tr><th>구분</th><th>선임기준</th></tr>
+                <tr><td><strong>안전관리자(전담)</strong></td><td>상시근로자 300인 이상 / 건설업 공사금액 120억원(토목 150억원) 이상</td></tr>
+                <tr><td><strong>산업안전보건위원회</strong></td><td>상시근로자 50인 이상 / 건설업 120억원(토목 150억원) 이상</td></tr>
+                <tr><td><strong>노사협의체</strong></td><td>공사금액 120억원(토목 150억원) 이상 건설업(도급사업)</td></tr>
+                <tr><td><strong>안전보건관리책임자</strong></td><td>상시근로자 50인 이상 / 총 공사금액 <strong>20억원</strong> 이상 건설업</td></tr>
+                <tr><td><strong>안전보건총괄책임자</strong></td><td>관계수급인 포함 상시근로자 100명(선박·보트·1차금속·토사석 50명) 이상 / 관계수급인 포함 공사금액 20억원 이상 건설업</td></tr>
+              </table>
+              <div class="theory-tip"><span class="theory-tip-label">암기</span> 안전관리책임자 건설업 기준: <strong>20억</strong>원 이상 ★</div>`
+            },
+            {
+              star: '★★★', title: '건설업 안전관리자 인원 기준',
+              body: `<table class="theory-table">
+                <tr><th>공사금액</th><th>인원</th></tr>
+                <tr><td>120억~800억 미만</td><td>1명 이상</td></tr>
+                <tr><td>800억~1,500억 미만</td><td>2명 이상</td></tr>
+                <tr><td>1,500억~2,200억 미만</td><td>3명 이상</td></tr>
+                <tr><td>2,200억~3,000억 미만</td><td>4명 이상</td></tr>
+                <tr><td>3,000억~3,900억 미만</td><td>5명 이상</td></tr>
+                <tr><td>1조원 이상</td><td>11명 + 매 2천억(2조 이상 3천억)마다 1명 추가</td></tr>
+              </table>
+              <div class="theory-tip"><span class="theory-tip-label">암기</span> 800→2 / 1500→3 / 2200→4 / 3000→5 순으로 900억 간격으로 +1</div>`
+            }
+          ]
+        },
+        {
+          title: '안전조직의 직무',
+          cards: [
+            {
+              star: '★★★', title: '안전관리자의 직무',
+              body: `<ul class="theory-list">
+                <li><strong>사업장 안전교육계획 수립 및 실시</strong>에 관한 보좌 및 조언·지도</li>
+                <li>사업장 <strong>순회점검·지도</strong> 및 조치의 건의</li>
+                <li><strong>재해 원인조사·분석 및 재발 방지</strong>를 위한 기술적 보좌 및 조언·지도</li>
+                <li><strong>재해 통계의 유지·관리·분석</strong>을 위한 보좌 및 조언·지도</li>
+                <li><strong>적격품 선정</strong>에 관한 보좌 및 조언·지도</li>
+                <li><strong>위험성평가</strong>에 관한 보좌 및 조언·지도</li>
+                <li>업무수행 내용의 <strong>기록·유지</strong></li>
+              </ul>
+              <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>안점재통적위기</strong> → 안전교육, 점검, 재해조사, 통계관리, 적격품, 위험성평가, 기록</div>`
+            },
+            {
+              star: '★★★', title: '안전보건관리책임자의 직무',
+              body: `<ul class="theory-list">
+                <li>산업재해 <strong>예방계획 수립</strong></li>
+                <li><strong>안전보건관리규정 작성 및 변경</strong></li>
+                <li>근로자의 <strong>안전·보건교육</strong></li>
+                <li><strong>작업환경 점검 및 개선</strong></li>
+                <li>근로자의 <strong>건강진단 등 건강관리</strong></li>
+                <li>산업재해 <strong>원인조사 및 재발방지대책 수립</strong></li>
+                <li>산업재해에 관한 <strong>통계 기록 및 유지</strong></li>
+                <li>안전장치 및 보호구 구입 시 <strong>적격품 여부 확인</strong></li>
+                <li><strong>위험성평가</strong> 실시</li>
+              </ul>
+              <div class="theory-point"><div class="theory-point-label">중요 포인트</div>산업안전보건위원회 심의·의결 사항과 <strong>6가지 동일</strong> — 예방계획·규정·교육·작업환경·건강진단·통계</div>`
+            },
+            {
+              star: '★★★', title: '안전보건총괄책임자의 직무',
+              body: `<ul class="theory-list">
+                <li>산업재해 발생 급박한 위험 및 중대재해 발생 시 <strong>작업의 중지</strong></li>
+                <li>도급 시 <strong>산업재해 예방조치</strong></li>
+                <li>산업안전보건관리비의 관계수급인 간 사용에 관한 <strong>협의·조정 및 집행 감독</strong></li>
+                <li>안전인증대상 기계 등 <strong>사용 여부 확인</strong></li>
+                <li><strong>위험성평가</strong> 실시</li>
+              </ul>`
+            },
+            {
+              star: '★★★', title: '관리감독자의 직무',
+              body: `<ul class="theory-list">
+                <li>기계·기구 또는 설비의 <strong>안전·보건 점검 및 이상 유무 확인</strong></li>
+                <li>근로자의 작업복·보호구 및 방호장치의 <strong>점검과 교육·지도</strong></li>
+                <li>산업재해에 관한 <strong>보고 및 응급조치</strong></li>
+                <li>작업장 <strong>정리정돈 및 통로확보</strong>에 대한 확인·감독</li>
+                <li>위험성평가를 위한 <strong>유해·위험요인 파악 및 개선조치</strong> 참여</li>
+              </ul>`
+            }
+          ]
+        },
+        {
+          title: '산업안전보건위원회 · 노사협의체',
+          cards: [
+            {
+              star: '★★★', title: '산업안전보건위원회 vs 노사협의체 비교',
+              body: `<table class="theory-table">
+                <tr><th>구분</th><th>산업안전보건위원회</th><th>노사협의체</th></tr>
+                <tr><td><strong>설치기준</strong></td><td>상시근로자 50인 이상 / 건설업 120억(토목 150억) 이상</td><td>공사금액 120억(토목 150억) 이상 건설업</td></tr>
+                <tr><td><strong>정기회의</strong></td><td><strong>분기마다</strong></td><td><strong>2개월마다</strong></td></tr>
+                <tr><td><strong>임시회의</strong></td><td colspan="2">위원장이 필요하다고 인정할 때</td></tr>
+              </table>
+              <div class="theory-tip"><span class="theory-tip-label">암기</span> 위원회=분기(3개월) / 노사협의체=2개월</div>`
+            },
+            {
+              star: '★★★', title: '산업안전보건위원회 구성',
+              body: `<div class="theory-compare">
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title">근로자위원</div>
+                  <ul class="theory-list">
+                    <li>근로자대표</li>
+                    <li>근로자대표가 지명하는 명예산업안전감독관 <strong>1명 이상</strong></li>
+                    <li>근로자대표가 지명하는 <strong>9명 이내</strong> 해당 사업장 근로자</li>
+                  </ul>
+                </div>
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title">사용자위원</div>
+                  <ul class="theory-list">
+                    <li>해당 사업의 대표자</li>
+                    <li>안전관리자 1명</li>
+                    <li>보건관리자 1명</li>
+                    <li>산업보건의</li>
+                    <li>대표자가 지명하는 <strong>9명 이내</strong> 해당 사업장 부서의 장</li>
+                  </ul>
+                </div>
+              </div>`
+            },
+            {
+              star: '★★', title: '노사협의체 구성',
+              body: `<div class="theory-compare">
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title">근로자위원</div>
+                  <ul class="theory-list">
+                    <li>전체 사업의 근로자대표</li>
+                    <li>근로자대표가 지명하는 명예산업안전감독관 <strong>1명</strong></li>
+                    <li>공사금액 <strong>20억 이상</strong> 공사의 관계수급인의 근로자대표</li>
+                  </ul>
+                </div>
+                <div class="theory-compare-box">
+                  <div class="theory-compare-title">사용자위원</div>
+                  <ul class="theory-list">
+                    <li>전체 사업의 대표자</li>
+                    <li>안전관리자 1명</li>
+                    <li>보건관리자 1명 (선임대상 건설업만)</li>
+                    <li>공사금액 <strong>20억 이상</strong> 공사의 관계수급인 사업주</li>
+                  </ul>
+                </div>
+              </div>`
+            },
+            {
+              star: '★★', title: '산업안전보건위원회 심의·의결 사항',
+              body: `<ul class="theory-list">
+                <li>산업재해 <strong>예방계획 수립</strong></li>
+                <li><strong>안전보건관리규정 작성 및 변경</strong></li>
+                <li>근로자의 <strong>안전·보건교육</strong></li>
+                <li><strong>작업환경 점검 및 개선</strong></li>
+                <li>근로자의 <strong>건강진단 등 건강관리</strong></li>
+                <li><strong>중대재해 원인조사 및 재발방지대책</strong> 수립</li>
+                <li>산업재해에 관한 <strong>통계 기록 및 유지</strong></li>
+                <li>유해·위험한 기계·기구 도입 시 <strong>안전·보건조치</strong></li>
+              </ul>
+              <div class="theory-point"><div class="theory-point-label">위원장 선출방법 ★</div>위원 중에서 <strong>호선(互選)</strong>한다. 근로자위원과 사용자위원 중 각 1명을 <strong>공동위원장</strong>으로 선출할 수 있다.</div>`
+            }
+          ]
+        },
+        {
+          title: '명예산업안전감독관 · 도급사업',
+          cards: [
+            {
+              star: '★★', title: '명예산업안전감독관',
+              body: `<div class="theory-def"><div class="theory-def-term">임기</div><div class="theory-def-desc"><strong>2년</strong></div></div>
+              <div class="theory-def"><div class="theory-def-term">주요 업무</div></div>
+              <ul class="theory-list">
+                <li>사업장 <strong>자체점검 참여</strong> 및 근로감독관 사업장 감독 참여</li>
+                <li>산업재해 발생 급박한 위험 시 <strong>작업중지 요청</strong></li>
+                <li>작업환경측정·건강진단 시 <strong>참석</strong></li>
+                <li>법령 위반 시 사업주에게 <strong>개선 요청 및 감독기관 신고</strong></li>
+              </ul>
+              <div class="theory-def" style="margin-top:12px;"><div class="theory-def-term">해촉 사유</div></div>
+              <ul class="theory-list">
+                <li>근로자대표가 <strong>해촉 요청</strong>한 경우</li>
+                <li>해당 단체에서 <strong>퇴직하거나 해임</strong>된 경우</li>
+                <li>업무 관련 <strong>부정한 행위</strong>를 한 경우</li>
+                <li><strong>질병·부상</strong>으로 업무 수행이 곤란하게 된 경우</li>
+              </ul>`
+            },
+            {
+              star: '★★', title: '도급에 따른 산업재해 예방조치 6가지',
+              body: `<ul class="theory-list">
+                <li>도급인·수급인으로 구성하는 <strong>안전·보건 협의체 구성 및 운영</strong></li>
+                <li><strong>작업장 순회점검</strong> (건설업·제조업: 2일 1회 이상 / 그 밖: 1주일 1회 이상)</li>
+                <li>관계수급인 근로자에게 하는 안전보건교육을 위한 <strong>장소 및 자료 제공</strong></li>
+                <li>관계수급인 근로자에게 하는 <strong>안전보건교육 실시 확인</strong></li>
+                <li><strong>경보체계 운영과 대피방법 등 훈련</strong></li>
+                <li>위생시설 <strong>장소 제공 또는 이용 협조</strong></li>
+              </ul>
+              <div class="theory-tip"><span class="theory-tip-label">위생시설 5가지</span> 휴게·세면목욕·세탁·탈의·수면시설</div>`
+            },
+            {
+              star: '★', title: '유해작업 도급금지 작업',
+              body: `<ul class="theory-list">
+                <li><strong>도금작업</strong></li>
+                <li>수은·납·카드뮴을 <strong>제련·주입·가공·가열</strong>하는 작업</li>
+                <li><strong>허가대상물질</strong>을 제조하거나 사용하는 작업</li>
+              </ul>
+              <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>도수납카허</strong> → 도금, 수은, 납, 카드뮴, 허가대상물질</div>`
+            }
+          ]
+        }
+      ]
+    }
+  };
+
+  /* ── CH02 안전관리계획 수립 및 운용 ── */
+  THEORY_DATA.ch02 = {
+    num: 'CHAPTER 02', title: '안전관리계획 수립 및 운용',
+    desc: '안전보건관리규정, 개선계획, 공표대상, 안전관리자 증원·교체, 안전보건진단',
+    sections: [
+      {
+        title: '안전보건관리규정',
+        cards: [
+          {
+            star: '★★', title: '안전보건관리규정 작성대상 및 기한',
+            body: `<ul class="theory-list">
+              <li>작성대상: 상시 근로자 <strong>100명 이상</strong> 사업장 (일부 업종은 300명 이상)</li>
+              <li>작성기한: 사유 발생한 날부터 <strong>30일 이내</strong></li>
+              <li>변경 시: <strong>산업안전보건위원회 심의·의결</strong> (미설치 시 근로자대표 동의)</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">암기</span> 100명→30일→위원회 심의</div>`
+          },
+          {
+            star: '★★★', title: '안전보건관리규정 포함사항 5가지',
+            body: `<ul class="theory-list">
+              <li>안전·보건 <strong>관리조직과 그 직무</strong>에 관한 사항</li>
+              <li>안전·<strong>보건교육</strong>에 관한 사항</li>
+              <li>작업장의 <strong>안전 및 보건관리</strong>에 관한 사항</li>
+              <li><strong>사고 조사 및 대책 수립</strong>에 관한 사항</li>
+              <li>그 밖에 <strong>안전·보건</strong>에 관한 사항</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>조교작사기</strong> → 조직, 교육, 작업장관리, 사고대책, 기타</div>`
+          }
+        ]
+      },
+      {
+        title: '안전보건 개선계획',
+        cards: [
+          {
+            star: '★★★', title: '안전보건 개선계획 작성대상 사업장 4가지',
+            body: `<ul class="theory-list">
+              <li>산업재해율이 같은 업종 <strong>규모별 평균 산업재해율보다 높은</strong> 사업장</li>
+              <li>사업주가 안전보건조치의무를 이행하지 아니하여 <strong>중대재해가 발생</strong>한 사업장</li>
+              <li><strong>직업성 질병자가 연간 2명 이상</strong> 발생한 사업장</li>
+              <li><strong>유해인자의 노출기준을 초과</strong>한 사업장</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>평중직유</strong> → 평균초과, 중대재해, 직업병 2명, 유해인자 초과</div>`
+          },
+          {
+            star: '★★', title: '안전·보건진단 후 개선계획 대상 사업장 (비교)',
+            body: `<table class="theory-table">
+              <tr><th>개선계획 작성대상</th><th>진단 후 개선계획 대상</th></tr>
+              <tr><td>평균재해율보다 높은 사업장</td><td>평균재해율의 <strong>2배 이상</strong> 사업장</td></tr>
+              <tr><td>중대재해 발생</td><td>중대재해 발생</td></tr>
+              <tr><td>직업성 질병자 2명 이상</td><td>직업성 질병자 2명 이상 (1천명 이상은 3명)</td></tr>
+              <tr><td>유해인자 노출기준 초과</td><td>화재·폭발·누출 등 주변 피해 확산 사업장</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">암기</span> 진단 대상은 <strong>"2배"</strong>가 핵심 — 개선계획은 "평균초과", 진단은 "2배 이상"</div>`
+          },
+          {
+            star: '★', title: '개선계획서 제출기한 및 포함사항',
+            body: `<ul class="theory-list">
+              <li>명령받은 날부터 <strong>60일 이내</strong> 지방고용노동관서의 장에게 제출</li>
+              <li>포함사항: <strong>시설, 안전·보건관리체제, 안전·보건교육</strong>, 산업재해 예방 및 작업환경 개선</li>
+            </ul>`
+          }
+        ]
+      },
+      {
+        title: '안전관리자 증원·교체 및 공표',
+        cards: [
+          {
+            star: '★★★', title: '안전관리자 증원·교체 명령 대상 4가지',
+            body: `<ul class="theory-list">
+              <li>연간 재해율이 같은 업종 평균재해율의 <strong>2배 이상</strong>인 경우</li>
+              <li><strong>중대재해 연간 2건 이상</strong> 발생 (전년도 사망만인율 이하인 경우 제외)</li>
+              <li>관리자가 질병 등으로 <strong>3개월 이상</strong> 직무 수행 불가</li>
+              <li>화학적 인자로 인한 직업성질병자 <strong>연간 3명 이상</strong> 발생</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>2배 2건 3개월 3명</strong> → "이이삼삼" 증원·교체!</div>`
+          },
+          {
+            star: '★★★', title: '재해발생 건수 공표 대상 사업장 5가지',
+            body: `<ul class="theory-list">
+              <li>사망재해자가 <strong>연간 2명 이상</strong> 발생한 사업장</li>
+              <li>사망만인율이 <strong>규모별 같은 업종 평균 사망만인율 이상</strong>인 사업장</li>
+              <li><strong>중대산업사고</strong>가 발생한 사업장</li>
+              <li>산업재해 발생 사실을 <strong>은폐</strong>한 사업장</li>
+              <li>산업재해 발생 보고를 최근 <strong>3년 이내 2회 이상</strong> 하지 않은 사업장</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>사만중은보</strong> → 사망2명, 만인율, 중대산업, 은폐, 보고 3년2회</div>`
+          }
+        ]
+      },
+      {
+        title: '안전보건진단',
+        cards: [
+          {
+            star: '★', title: '안전보건진단 대상 사업장 3가지',
+            body: `<ul class="theory-list">
+              <li><strong>중대재해 발생</strong> 사업장</li>
+              <li><strong>안전보건개선계획 수립·시행명령</strong>을 받은 사업장</li>
+              <li>추락·폭발·붕괴 등 재해발생 위험이 <strong>현저히 높은</strong> 사업장</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">암기</span> 중대재해 발생하면 진단! 진단받아 개선계획 수립!</div>`
+          },
+          {
+            star: '★', title: '안전보건진단 3가지 종류',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>내용 핵심</th></tr>
+              <tr><td><strong>종합진단</strong></td><td>경영·관리적 사항 + 작업조건·환경 + 유해·위험요인 측정 전반</td></tr>
+              <tr><td><strong>안전진단</strong></td><td>안전 관련 유해·위험요인 (기계·폭발·전기·추락 등)</td></tr>
+              <tr><td><strong>보건진단</strong></td><td>허가대상물질·유해물질·온도·습도·소음 등 보건 관련</td></tr>
+            </table>`
+          }
+        ]
+      }
+    ]
+  };
+
+  /* ── CH03 산업재해발생 및 재해조사분석 ── */
+  THEORY_DATA.ch03 = {
+    num: 'CHAPTER 03', title: '산업재해발생 및 재해조사분석',
+    desc: '재해조사 목적·유의사항, 재해발생 조치순서, 사고이론, 재해율 계산, 재해코스트',
+    sections: [
+      {
+        title: '재해조사 분석',
+        cards: [
+          {
+            star: '★★', title: '재해조사 목적 및 유의사항',
+            body: `<div class="theory-def"><div class="theory-def-term">목적 3가지</div></div>
+            <ul class="theory-list">
+              <li>재해발생 <strong>원인 및 결함 규명</strong></li>
+              <li>재해예방 <strong>자료 수집</strong></li>
+              <li>동종 재해 및 유사재해 <strong>재발방지</strong></li>
+            </ul>
+            <div class="theory-def" style="margin-top:10px;"><div class="theory-def-term">유의사항 핵심</div></div>
+            <ul class="theory-list">
+              <li><strong>사실</strong>을 수집한다</li>
+              <li>조사는 <strong>신속</strong>하게, <strong>2차 재해 방지</strong>를 도모한다</li>
+              <li>조사는 <strong>2인 이상</strong>이 한다</li>
+              <li><strong>책임추궁보다 재발방지</strong>를 우선하는 기본 태도를 갖는다</li>
+            </ul>`
+          },
+          {
+            star: '★★', title: '재해발생 시 조치순서 & 긴급조치 순서',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">재해발생 시 조치순서</div>
+                <ul class="theory-list">
+                  <li>① 긴급조치</li>
+                  <li>② 재해조사</li>
+                  <li>③ 원인분석</li>
+                  <li>④ 대책수립</li>
+                  <li>⑤ 실시</li>
+                  <li>⑥ 평가</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">긴급조치 순서</div>
+                <ul class="theory-list">
+                  <li>① 피재기계 정지</li>
+                  <li>② 피재자 응급조치</li>
+                  <li>③ 관계자에게 통보</li>
+                  <li>④ 2차 재해 방지</li>
+                  <li>⑤ 현장 보존</li>
+                </ul>
+              </div>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>피피관이현</strong> → 피재기계, 피재자, 관계자통보, 2차재해, 현장보존</div>`
+          },
+          {
+            star: '★', title: '산업재해 발생 보고',
+            body: `<ul class="theory-list">
+              <li>사망자 발생, <strong>3일 이상 휴업</strong>이 필요한 부상·질병 → 발생일부터 <strong>1개월 이내</strong> 산업재해조사표 제출</li>
+              <li>중대재해 발생 시 → <strong>지체 없이</strong> 보고 (발생개요·피해상황, 조치 및 전망, 그 밖의 중요사항)</li>
+            </ul>`
+          }
+        ]
+      },
+      {
+        title: '상해종류 및 재해발생형태',
+        cards: [
+          {
+            star: '★★★', title: '상해종류 15가지 (핵심)',
+            body: `<div class="theory-keyword-chips">
+              <span class="theory-kchip">골절</span><span class="theory-kchip">동상</span><span class="theory-kchip">부종</span>
+              <span class="theory-kchip">찔림(자상)</span><span class="theory-kchip">타박상</span><span class="theory-kchip">절단</span>
+              <span class="theory-kchip">중독·질식</span><span class="theory-kchip">찰과상</span><span class="theory-kchip">베임(창상)</span>
+              <span class="theory-kchip">화상</span><span class="theory-kchip">뇌진탕</span><span class="theory-kchip">익사</span>
+              <span class="theory-kchip">피부병</span><span class="theory-kchip">청력장애</span><span class="theory-kchip">시력장애</span>
+            </div>`
+          },
+          {
+            star: '★★★', title: '재해 발생형태 핵심',
+            body: `<table class="theory-table">
+              <tr><th>형태</th><th>핵심 내용</th></tr>
+              <tr><td><strong>떨어짐</strong></td><td>높은 곳에서 중력에 의해 떨어짐</td></tr>
+              <tr><td><strong>넘어짐</strong></td><td>평면·경사면·층계에서 구르거나 넘어짐</td></tr>
+              <tr><td><strong>맞음</strong></td><td>날아오거나 떨어진 물체에 맞음</td></tr>
+              <tr><td><strong>끼임</strong></td><td>두 물체 사이 또는 회전체에 끼이거나 감김</td></tr>
+              <tr><td><strong>무너짐</strong></td><td>토사·건축물·가설물이 허물어져 내림</td></tr>
+              <tr><td><strong>감전</strong></td><td>충전부 접촉, 아크 접촉</td></tr>
+            </table>
+            <div class="theory-point">
+              <div class="theory-point-label">떨어짐 vs 넘어짐 분류기준 ★</div>
+              바닥면과 신체가 떨어진 상태 → <strong>떨어짐</strong><br>
+              바닥면과 접해있는 상태에서 낮은 위치로 → <strong>넘어짐</strong><br>
+              구조물 높이 보폭(60cm) 이상 → <strong>떨어짐</strong> / 미만 → <strong>넘어짐</strong>
+            </div>`
+          },
+          {
+            star: '★', title: '기인물 vs 가해물',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">기인물</div>
+                직접적으로 재해를 <strong>유발하거나 영향을 끼친</strong> 기계·물체·사람·환경
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">가해물</div>
+                근로자에게 <strong>직접적으로 상해를 입힌</strong> 기계·물체·사람·환경
+              </div>
+            </div>`
+          }
+        ]
+      },
+      {
+        title: '사고이론 및 사고빈도',
+        cards: [
+          {
+            star: '★★', title: '하인리히 도미노 5단계 vs 버드 5단계',
+            body: `<table class="theory-table">
+              <tr><th>단계</th><th>하인리히</th><th>버드</th><th>아담스</th></tr>
+              <tr><td>1단계</td><td>선천적 결함</td><td>제어부족(관리부재)</td><td>관리구조</td></tr>
+              <tr><td>2단계</td><td>개인적 결함</td><td>기본원인(기원)</td><td>작전적 에러</td></tr>
+              <tr><td>3단계</td><td>불안전행동·상태</td><td>직접원인(징후)</td><td>전술적 에러</td></tr>
+              <tr><td>4단계</td><td>사고</td><td>사고(접촉)</td><td>사고</td></tr>
+              <tr><td>5단계</td><td>재해(상해)</td><td>상해(손실)</td><td>상해</td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '사고빈도법칙 비교',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">하인리히 1:29:300</div>
+                총 <strong>330건</strong> 분석<br>
+                중상·사망 <strong>1</strong>건<br>
+                경상해 <strong>29</strong>건<br>
+                무상해사고 <strong>300</strong>건
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">버드 1:10:30:600</div>
+                총 <strong>641건</strong> 분석<br>
+                중상·폐질 <strong>1</strong>건<br>
+                경상해 <strong>10</strong>건<br>
+                무상해사고 <strong>30</strong>건<br>
+                위험순간 <strong>600</strong>건
+              </div>
+            </div>`
+          },
+          {
+            star: '★★', title: '산업재해 예방의 4원칙',
+            body: `<ul class="theory-list">
+              <li><strong>예방 가능의 원칙</strong>: 원인만 제거되면 예방 가능</li>
+              <li><strong>손실 우연의 원칙</strong>: 상해의 종류·정도는 조건에 따라 우연히 발생</li>
+              <li><strong>대책 선정의 원칙</strong>: 원인에 적합한 대책이 선정되어야 함</li>
+              <li><strong>원인 연계의 원칙</strong>: 직접원인과 간접원인이 연계되어 발생</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>예손대원</strong></div>`
+          },
+          {
+            star: '★', title: '재해사례연구 진행 4단계',
+            body: `<table class="theory-table">
+              <tr><th>단계</th><th>내용</th></tr>
+              <tr><td>전제 조건</td><td>재해 상황의 파악</td></tr>
+              <tr><td>1단계</td><td>사실의 확인 (사람·물건·관리·재해발생경과)</td></tr>
+              <tr><td>2단계</td><td>문제점 발견</td></tr>
+              <tr><td>3단계</td><td>근본 문제점 결정(재해원인 결정)</td></tr>
+              <tr><td>4단계</td><td>대책수립</td></tr>
+            </table>`
+          }
+        ]
+      },
+      {
+        title: '재해율 계산',
+        cards: [
+          {
+            star: '★★★', title: '재해율 공식 6가지',
+            body: `<div class="theory-point">
+              <div class="theory-point-label">도수율(빈도율) ★★★</div>
+              재해건수 / 연근로시간수 × 10⁶<br>
+              <small>1일 8시간, 1년 300일 → 1인당 연 2,400시간</small>
+            </div>
+            <div class="theory-point">
+              <div class="theory-point-label">강도율 ★★★</div>
+              총 요양 근로손실일수 / 연근로시간수 × 1,000<br>
+              <small>사망·1~3급: 7,500일 / 근로손실일수 = 휴업일수 × 300/365</small>
+            </div>
+            <div class="theory-point">
+              <div class="theory-point-label">종합재해지수(FSI) ★★★</div>
+              √(도수율 × 강도율)
+            </div>
+            <div class="theory-point">
+              <div class="theory-point-label">연천인율</div>
+              연간재해자수 / 연평균근로자수 × 1,000 = 도수율 × 2.4
+            </div>
+            <div class="theory-point">
+              <div class="theory-point-label">환산도수율 / 환산강도율</div>
+              환산도수율 = 도수율 ÷ 10 (평생 재해건수)<br>
+              환산강도율 = 강도율 × 100 (평생 근로손실일수)<br>
+              <small>평생근로시간 = 40년×2,400h + 4,000h = 100,000시간</small>
+            </div>`
+          },
+          {
+            star: '★★★', title: '신체장해 등급별 근로손실일수',
+            body: `<table class="theory-table">
+              <tr><th>등급</th><th>사망·1~3급</th><th>4급</th><th>5급</th><th>6급</th><th>7급</th><th>8급</th></tr>
+              <tr><td><strong>손실일수</strong></td><td>7,500</td><td>5,500</td><td>4,000</td><td>3,000</td><td>2,200</td><td>1,500</td></tr>
+              <tr><th>등급</th><th>9급</th><th>10급</th><th>11급</th><th>12급</th><th>13급</th><th>14급</th></tr>
+              <tr><td><strong>손실일수</strong></td><td>1,000</td><td>600</td><td>400</td><td>200</td><td>100</td><td>50</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">암기</span> 7500-5500-4000-3000-2200-1500-1000-600-400-200-100-50 (반씩 줄어드는 패턴)</div>`
+          },
+          {
+            star: '★★★', title: 'Safe-T-Score (세이프 티 스코어)',
+            body: `<div class="theory-point">
+              <div class="theory-point-label">공식</div>
+              Safe-T-Score = (현재빈도율 - 과거빈도율) / √(과거빈도율/(현재)총근로시간수 × 1,000,000)
+            </div>
+            <table class="theory-table">
+              <tr><th>계산값</th><th>판정</th></tr>
+              <tr><td>-2 이하</td><td>과거보다 <strong>안전이 좋아졌다</strong></td></tr>
+              <tr><td>-2 ~ +2</td><td>과거와 <strong>큰 차이 없다</strong></td></tr>
+              <tr><td>+2 이상</td><td>과거보다 <strong>안전이 심각하게 나빠졌다</strong></td></tr>
+            </table>`
+          }
+        ]
+      },
+      {
+        title: '재해손실비 계산',
+        cards: [
+          {
+            star: '★★', title: '재해코스트 계산방식 비교',
+            body: `<table class="theory-table">
+              <tr><th>방식</th><th>공식</th><th>특징</th></tr>
+              <tr><td><strong>하인리히</strong></td><td>직접비 + 간접비 (1:4)</td><td>산재보상금 = 직접비</td></tr>
+              <tr><td><strong>시몬즈</strong></td><td>산재보험료 + 비보험코스트</td><td>휴업·통원·구급·무상해 × 상수</td></tr>
+              <tr><td><strong>버즈</strong></td><td>보험비용 : 비보험재산 : 기타재산 = 1:5~50:1~3</td><td>-</td></tr>
+              <tr><td><strong>콤패스</strong></td><td>공동비용(불변) + 개별비용(가변)</td><td>-</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">하인리히 직접비 항목</span> 치료비·휴업급여·요양급여·유족급여·장해급여·간병급여·직업재활급여·상병보상연금·장례비</div>`
+          }
+        ]
+      }
+    ]
+  };
+
+  /* ── CH04 안전점검·인증 및 진단 ── */
+  THEORY_DATA.ch04 = {
+    num: 'CHAPTER 04', title: '안전점검·인증 및 진단',
+    desc: '안전점검 종류, 안전검사·인증·자율안전확인 대상, 심사종류·기간',
+    sections: [
+      {
+        title: '안전점검',
+        cards: [
+          {
+            star: '★', title: '안전점검의 종류 4가지',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>내용</th></tr>
+              <tr><td><strong>정기점검(계획점검)</strong></td><td>일정 기간마다 정기적으로 실시, 법적 기준에 따라 책임자가 실시</td></tr>
+              <tr><td><strong>수시점검(일상점검)</strong></td><td>매일 작업 전·중·후에 실시, 작업자·관리감독자·사업주 순찰 포함</td></tr>
+              <tr><td><strong>특별점검</strong></td><td>신설·변경·고장수리 등 비정기적, 기술책임자 실시, 악천후 시도 실시</td></tr>
+              <tr><td><strong>임시점검</strong></td><td>이상 발견 시 임시로 실시, 정기점검 후 다음 점검일 이전에 실시</td></tr>
+            </table>`
+          }
+        ]
+      },
+      {
+        title: '안전인증 및 안전검사',
+        cards: [
+          {
+            star: '★★', title: '안전인증 심사 종류 및 기간',
+            body: `<table class="theory-table">
+              <tr><th>심사 종류</th><th>기간</th></tr>
+              <tr><td><strong>예비심사</strong></td><td>7일</td></tr>
+              <tr><td><strong>서면심사</strong></td><td>15일 (외국 제조: 30일)</td></tr>
+              <tr><td><strong>기술능력 및 생산체계 심사</strong></td><td>30일 (외국 제조: 45일)</td></tr>
+              <tr><td><strong>개별 제품심사</strong></td><td>15일</td></tr>
+              <tr><td><strong>형식별 제품심사</strong></td><td>30일 (보호구: 60일)</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>예7 서개15 기형30</strong></div>`
+          },
+          {
+            star: '★★★', title: '안전인증 대상 기계·기구 (핵심)',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">안전인증 대상</div>
+                <ul class="theory-list">
+                  <li>설치·이전: <strong>크레인, 리프트, 곤돌라</strong></li>
+                  <li>주요구조 변경: <strong>프레스, 전단기·절곡기, 크레인, 리프트, 압력용기, 롤러기, 사출성형기, 고소작업대, 곤돌라</strong></li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">자율안전확인 대상</div>
+                <ul class="theory-list">
+                  <li>연삭기·연마기, 산업용 로봇, 혼합기, 파쇄기·분쇄기, 식품가공용 기계, 컨베이어, 자동차정비용 리프트, 공작기계, 목재가공용 기계, 인쇄기</li>
+                </ul>
+              </div>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">두음법 안전인증</span> <strong>손다치는 기계</strong>(프레스·전단기·사출·롤러) / <strong>양중기</strong>(크레인·리프트·곤돌라) / <strong>폭발</strong>(압력용기) / <strong>추락</strong>(고소작업대)</div>`
+          },
+          {
+            star: '★★★', title: '안전검사 대상 기계·기구 13가지',
+            body: `<div class="theory-keyword-chips">
+              <span class="theory-kchip">프레스</span><span class="theory-kchip">전단기</span>
+              <span class="theory-kchip red">크레인(2톤 미만 제외)</span><span class="theory-kchip">리프트</span>
+              <span class="theory-kchip">압력용기</span><span class="theory-kchip">곤돌라</span>
+              <span class="theory-kchip red">국소배기장치(이동식 제외)</span><span class="theory-kchip">원심기(산업용)</span>
+              <span class="theory-kchip red">롤러기(밀폐형 제외)</span><span class="theory-kchip red">사출성형기(294kN 미만 제외)</span>
+              <span class="theory-kchip">고소작업대</span><span class="theory-kchip">컨베이어</span>
+              <span class="theory-kchip">산업용 로봇</span>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> 안전인증 대상 + <strong>극소(국소) 로봇이 고소의 큰(컨) 원</strong>을 검사!</div>`
+          },
+          {
+            star: '★★', title: '안전검사 주기',
+            body: `<table class="theory-table">
+              <tr><th>대상</th><th>최초</th><th>이후</th></tr>
+              <tr><td>크레인(고정식)·리프트·곤돌라</td><td>설치완료 후 <strong>3년 이내</strong></td><td><strong>2년마다</strong> (건설현장 <strong>6개월마다</strong>)</td></tr>
+              <tr><td>이동식 크레인·이삿짐리프트·고소작업대</td><td>신규등록 후 <strong>3년 이내</strong></td><td><strong>2년마다</strong></td></tr>
+              <tr><td>프레스·전단기·압력용기 등 나머지</td><td>설치완료 후 <strong>3년 이내</strong></td><td><strong>2년마다</strong> (공정안전 압력용기 <strong>4년</strong>)</td></tr>
+            </table>`
+          },
+          {
+            star: '★★', title: '형식별 심사기간 60일인 보호구 8가지',
+            body: `<div class="theory-keyword-chips">
+              <span class="theory-kchip red">추락·감전 위험방지용 안전모</span>
+              <span class="theory-kchip">안전화</span><span class="theory-kchip">안전장갑</span>
+              <span class="theory-kchip">방진마스크</span><span class="theory-kchip">방독마스크</span>
+              <span class="theory-kchip">송기마스크</span><span class="theory-kchip">전동식 호흡보호구</span>
+              <span class="theory-kchip">보호복</span>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>머리(안전모)·코입(마스크4종)·손(안전장갑)·발(안전화)·몸(보호복)</strong> 신체 전부!</div>`
+          },
+          {
+            star: '★', title: '자율검사프로그램 유효기간 및 인정 요건',
+            body: `<ul class="theory-list">
+              <li>유효기간: <strong>2년</strong></li>
+              <li>검사원을 <strong>고용</strong>하고 있을 것</li>
+              <li>검사 장비를 갖추고 <strong>유지·관리</strong>할 수 있을 것</li>
+              <li>안전검사 주기의 <strong>1/2에 해당하는 주기</strong>마다 검사 (크레인 건설현장 외: 6개월)</li>
+              <li>자율검사프로그램의 검사기준이 <strong>안전검사기준을 충족</strong>할 것</li>
+            </ul>`
+          }
+        ]
+      }
+    ]
+  };
+
+  /* ── CH05 보호구 및 안전보건표지 ── */
+  THEORY_DATA.ch05 = {
+    num: 'CHAPTER 05', title: '보호구 및 안전보건표지',
+    desc: '작업별 보호구, 안전인증·자율안전확인 대상, 안전모·마스크·안전대 세부기준, 안전보건표지 색채·종류',
+    sections: [
+      {
+        title: '보호구 기본',
+        cards: [
+          {
+            star: '★★★', title: '작업조건에 적합한 보호구',
+            body: `<table class="theory-table">
+              <tr><th>작업</th><th>보호구</th></tr>
+              <tr><td>물체가 떨어지거나 날아올 위험 / 추락할 위험</td><td><strong>안전모</strong></td></tr>
+              <tr><td>높이·깊이 <strong>2m 이상</strong> 추락 위험 장소</td><td><strong>안전대(帶)</strong></td></tr>
+              <tr><td>낙하·충격, 끼임, 감전, 정전기 대전 위험</td><td><strong>안전화</strong></td></tr>
+              <tr><td>물체가 흩날릴 위험</td><td><strong>보안경</strong></td></tr>
+              <tr><td>용접 시 불꽃·물체 흩날림</td><td><strong>보안면</strong></td></tr>
+              <tr><td>감전 위험</td><td><strong>절연용 보호구</strong></td></tr>
+              <tr><td>고열에 의한 화상 위험</td><td><strong>방열복</strong></td></tr>
+              <tr><td>선창 등 분진이 심한 하역작업</td><td><strong>방진마스크</strong></td></tr>
+              <tr><td>영하 18℃ 이하 급냉동어창 하역작업</td><td><strong>방한모·방한복·방한화·방한장갑</strong></td></tr>
+              <tr><td>이륜자동차·원동기장치자전거 운행</td><td><strong>승차용 안전모</strong></td></tr>
+              <tr><td>자전거 등 운행</td><td><strong>안전모</strong></td></tr>
+            </table>`
+          },
+          {
+            star: '★★★', title: '안전인증 대상 보호구 12가지',
+            body: `<div class="theory-keyword-chips">
+              <span class="theory-kchip red">추락·감전 위험방지용 안전모</span>
+              <span class="theory-kchip">안전화</span><span class="theory-kchip">안전장갑</span>
+              <span class="theory-kchip">방진마스크</span><span class="theory-kchip">방독마스크</span>
+              <span class="theory-kchip">송기마스크</span><span class="theory-kchip">전동식 호흡보호구</span>
+              <span class="theory-kchip">보호복</span><span class="theory-kchip red">안전대</span>
+              <span class="theory-kchip">차광·비산물 위험방지용 보안경</span>
+              <span class="theory-kchip">용접용 보안면</span>
+              <span class="theory-kchip">방음용 귀마개 또는 귀덮개</span>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">두음법(신체 순서)</span>
+              머리(안전모) → 눈(보안경) → 코·입(마스크4종) → 얼굴(보안면) → 귀(귀마개/귀덮개) → 손(안전장갑) → 허리(안전대) → 발(안전화) → 몸(보호복)
+            </div>`
+          },
+          {
+            star: '★★', title: '자율안전확인 대상 보호구 3가지',
+            body: `<ul class="theory-list">
+              <li>안전모 (안전인증 대상 제외)</li>
+              <li>보안경 (안전인증 대상 제외)</li>
+              <li>보안면 (안전인증 대상 제외)</li>
+            </ul>`
+          },
+          {
+            star: '★★★', title: '안전인증 제품 표시사항 5가지',
+            body: `<ul class="theory-list">
+              <li>① 형식 또는 모델명</li>
+              <li>② 규격 또는 등급 등</li>
+              <li>③ 제조자명</li>
+              <li>④ 제조번호 및 제조연월</li>
+              <li>⑤ 안전인증 번호</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>형규제 제번 인번</strong> (형·규·제조자명·제조번호/연월·안전인증번호)</div>`
+          },
+          {
+            star: '★', title: '안전인증제품 사용설명서 포함사항 9가지',
+            body: `<ul class="theory-list">
+              <li>① 안전인증의 표시</li>
+              <li>② 제품용도</li>
+              <li>③ 사용방법</li>
+              <li>④ 사용제한 및 경고사항</li>
+              <li>⑤ 점검사항과 방법</li>
+              <li>⑥ 폐기방법</li>
+              <li>⑦ 안전한 운반과 보관방법</li>
+              <li>⑧ 보증사항</li>
+              <li>⑨ 작성일자, 연락처 등</li>
+            </ul>`
+          },
+          {
+            star: '★', title: '보호구 구비 조건 / 선택 시 유의사항',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">구비 조건</div>
+                <ul class="theory-list">
+                  <li>착용이 간편할 것</li>
+                  <li>작업에 방해주지 않을 것</li>
+                  <li>품질이 우수할 것</li>
+                  <li>구조·끝마무리가 양호할 것</li>
+                  <li>겉모양이 좋을 것</li>
+                  <li>유해·위험에 대한 방호가 완전할 것</li>
+                  <li>금속성 재료는 내식성일 것</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">선택 시 유의사항</div>
+                <ul class="theory-list">
+                  <li>사용 목적에 적합할 것</li>
+                  <li>작업에 방해되지 않을 것</li>
+                  <li>품질이 우수할 것</li>
+                  <li>착용하기 쉽고 편리할 것</li>
+                </ul>
+              </div>
+            </div>`
+          }
+        ]
+      },
+      {
+        title: '안전모',
+        cards: [
+          {
+            star: '★★★', title: '안전모 종류(추락·감전방지용) AB / AE / ABE',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>사용구분</th><th>비고</th></tr>
+              <tr><td><strong>AB</strong></td><td>물체의 낙하·비래 및 <strong>추락</strong>에 의한 위험 방지·경감</td><td></td></tr>
+              <tr><td><strong>AE</strong></td><td>물체의 낙하·비래 위험 방지·경감 + 머리부위 <strong>감전</strong> 위험 방지</td><td>내전압성</td></tr>
+              <tr><td><strong>ABE</strong></td><td>낙하·비래 및 추락 위험 방지·경감 + 머리부위 감전 위험 방지</td><td>내전압성</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">핵심</span> 내전압성 = 7,000V 이하 전압에 견디는 것 (AE·ABE종)</div>`
+          },
+          {
+            star: '★★', title: '안전인증 안전모 성능시험 6가지',
+            body: `<table class="theory-table">
+              <tr><th>항목</th><th>기준</th></tr>
+              <tr><td>① 내관통성</td><td>AE·ABE종: 관통거리 <strong>9.5mm 이하</strong> / AB종: <strong>11.1mm 이하</strong></td></tr>
+              <tr><td>② 충격흡수성</td><td>최고전달충격력 <strong>4,450N</strong> 초과 금지</td></tr>
+              <tr><td>③ 내전압성</td><td>교류 <strong>20kV</strong>에서 1분간 절연파괴 없이, 누설전류 <strong>10mA 이하</strong></td></tr>
+              <tr><td>④ 내수성</td><td>AE·ABE종: 질량증가율 <strong>1% 미만</strong> (수중 24시간)</td></tr>
+              <tr><td>⑤ 난연성</td><td>모체가 불꽃을 내며 <strong>5초 이상</strong> 연소 금지</td></tr>
+              <tr><td>⑥ 턱끈풀림</td><td><strong>150N 이상 250N 이하</strong>에서 풀려야</td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '안전모 일반구조 주요 치수',
+            body: `<ul class="theory-list">
+              <li>착용높이: <strong>85mm 이상</strong>, 외부수직거리: <strong>80mm 미만</strong></li>
+              <li>내부수직거리: <strong>25mm 이상 50mm 미만</strong></li>
+              <li>수평간격: <strong>5mm 이상</strong></li>
+              <li>머리받침끈 폭: <strong>15mm 이상</strong>, 방사끈 총합: <strong>72mm 이상</strong></li>
+              <li>턱끈 폭: <strong>10mm 이상</strong></li>
+              <li>질량: 모체+착장체+충격흡수재 <strong>440g 이하</strong></li>
+              <li>AB종: 충격흡수재 필요, 돌출부 모체 표면에서 <strong>5mm 이하</strong></li>
+              <li>AE종: 금속제 부품 사용 금지, 관통 구멍 없을 것</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">자율안전확인 안전모 성능시험</span> 내관통성·충격흡수성·난연성·턱끈풀림 4가지</div>`
+          }
+        ]
+      },
+      {
+        title: '안전화·안전장갑',
+        cards: [
+          {
+            star: '★', title: '안전화 종류 7가지',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>특징</th></tr>
+              <tr><td>가죽제안전화</td><td>낙하·충격·찔림 위험 방지</td></tr>
+              <tr><td>고무제안전화</td><td>낙하·충격·찔림 + <strong>내수성</strong></td></tr>
+              <tr><td>정전기안전화</td><td>낙하·충격·찔림 + <strong>정전기 인체대전 방지</strong></td></tr>
+              <tr><td>발등안전화</td><td>발 및 <strong>발등</strong> 보호</td></tr>
+              <tr><td>절연화</td><td>낙하·충격·찔림 + <strong>저압 감전 방지</strong></td></tr>
+              <tr><td>절연장화</td><td><strong>고압 감전 방지</strong> + 방수</td></tr>
+              <tr><td>화학물질용 안전화</td><td>낙하·충격·찔림 + <strong>화학물질 유해위험 방지</strong></td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '안전화 등급 (사용장소)',
+            body: `<table class="theory-table">
+              <tr><th>등급</th><th>낙하높이</th><th>압축하중</th></tr>
+              <tr><td><strong>중작업용</strong></td><td>1,000mm</td><td>15.0±0.1 kN</td></tr>
+              <tr><td><strong>보통작업용</strong></td><td>500mm</td><td>10.0±0.1 kN</td></tr>
+              <tr><td><strong>경작업용</strong></td><td>250mm</td><td>4.4±0.1 kN</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>중1000-15 / 보500-10 / 경250-4.4</strong></div>`
+          },
+          {
+            star: '★', title: '가죽제 안전화 성능시험 9가지',
+            body: `<div class="theory-keyword-chips">
+              <span class="theory-kchip">내충격성</span><span class="theory-kchip">내압박성</span>
+              <span class="theory-kchip">내답발성</span><span class="theory-kchip">박리저항</span>
+              <span class="theory-kchip">내유성</span><span class="theory-kchip">인장강도·신장률</span>
+              <span class="theory-kchip">내부식성</span><span class="theory-kchip">인열강도</span>
+              <span class="theory-kchip">은면결렬</span>
+            </div>`
+          },
+          {
+            star: '★', title: '내전압용 절연장갑 등급·색상',
+            body: `<table class="theory-table">
+              <tr><th>등급</th><th>교류(V)</th><th>직류(V)</th><th>색상</th></tr>
+              <tr><td><strong>00</strong></td><td>500</td><td>750</td><td>갈색</td></tr>
+              <tr><td><strong>0</strong></td><td>1,000</td><td>1,500</td><td>빨간색</td></tr>
+              <tr><td><strong>1</strong></td><td>7,500</td><td>11,250</td><td>흰색</td></tr>
+              <tr><td><strong>2</strong></td><td>17,000</td><td>25,500</td><td>노란색</td></tr>
+              <tr><td><strong>3</strong></td><td>26,500</td><td>39,750</td><td>녹색</td></tr>
+              <tr><td><strong>4</strong></td><td>36,000</td><td>54,000</td><td>등색</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> 교류×1.5=직류 / <strong>공(00)갈 공(0)적 1백 2황 3녹 4등</strong><br>
+            절연장갑 성능: 인장강도 1,400N/cm² 이상 / 신장률 600% 이상 / 영구신장률 15% 이하</div>`
+          }
+        ]
+      },
+      {
+        title: '방진마스크·방독마스크',
+        cards: [
+          {
+            star: '★★', title: '방진마스크 등급별 사용장소',
+            body: `<table class="theory-table">
+              <tr><th>등급</th><th>사용장소</th></tr>
+              <tr><td><strong>특급</strong></td><td>베릴륨 등 독성 강한 물질 함유 분진 / <strong>석면</strong> 취급</td></tr>
+              <tr><td><strong>1급</strong></td><td>특급 제외 분진 발생장소 / 금속흄(열적 분진) / 기계적 분진(규소 등 제외)</td></tr>
+              <tr><td><strong>2급</strong></td><td>특급·1급 제외 분진 발생장소</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">핵심</span> 배기밸브 없는 안면부여과식 마스크 → 특급·1급 장소 사용 불가! / 사용조건: 산소농도 <strong>18% 이상</strong></div>`
+          },
+          {
+            star: '★', title: '방진마스크 형태',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">분리식</div>
+                <ul class="theory-list">
+                  <li>격리식: 전면형·반면형</li>
+                  <li>직결식: 전면형·반면형</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">안면부여과식</div>
+                <ul class="theory-list">
+                  <li>반면형만</li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            star: '★', title: '방진마스크 여과재 분진 포집효율',
+            body: `<table class="theory-table">
+              <tr><th>형태</th><th>등급</th><th>효율(%)</th></tr>
+              <tr><td rowspan="3">분리식</td><td>특급</td><td><strong>99.95</strong> 이상</td></tr>
+              <tr><td>1급</td><td><strong>94.0</strong> 이상</td></tr>
+              <tr><td>2급</td><td><strong>80.0</strong> 이상</td></tr>
+              <tr><td rowspan="3">안면부여과식</td><td>특급</td><td><strong>99.0</strong> 이상</td></tr>
+              <tr><td>1급</td><td>94.0 이상</td></tr>
+              <tr><td>2급</td><td>80.0 이상</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">핵심</span> 안면부 내부 이산화탄소 농도: <strong>부피분율 1% 이하</strong></div>`
+          },
+          {
+            star: '★★', title: '방독마스크 종류 및 시험가스',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>시험가스</th></tr>
+              <tr><td>유기화합물용</td><td>시클로헥산(C₆H₁₂), 디메틸에테르(CH₃OCH₃), 이소부탄(C₄H₁₀)</td></tr>
+              <tr><td>할로겐용</td><td>염소가스(Cl₂)</td></tr>
+              <tr><td>황화수소용</td><td>황화수소(H₂S)</td></tr>
+              <tr><td>시안화수소용</td><td>시안화수소(HCN)</td></tr>
+              <tr><td>아황산용</td><td>아황산가스(SO₂)</td></tr>
+              <tr><td>암모니아용</td><td>암모니아(NH₃)</td></tr>
+            </table>`
+          },
+          {
+            star: '★★', title: '방독마스크 등급별 사용장소',
+            body: `<table class="theory-table">
+              <tr><th>등급</th><th>농도</th></tr>
+              <tr><td><strong>고농도</strong></td><td>가스·증기 농도 <strong>2% 이하</strong> (암모니아: <strong>3% 이하</strong>)</td></tr>
+              <tr><td><strong>중농도</strong></td><td>가스·증기 농도 <strong>1% 이하</strong> (암모니아: <strong>1.5% 이하</strong>)</td></tr>
+              <tr><td><strong>저농도·최저농도</strong></td><td>가스·증기 농도 <strong>0.1% 이하</strong>, 긴급용 아닐 것</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">핵심</span> 산소농도 18% 이상 장소에서 사용 / 고농도·중농도: <strong>전면형(격리식·직결식)</strong> 사용 의무</div>`
+          },
+          {
+            star: '★★', title: '방독마스크 정화통 외부측면 표시 색',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>표시색</th></tr>
+              <tr><td>유기화합물용</td><td><strong>갈색</strong></td></tr>
+              <tr><td>할로겐용</td><td><strong>회색</strong></td></tr>
+              <tr><td>황화수소용</td><td><strong>회색</strong></td></tr>
+              <tr><td>시안화수소용</td><td><strong>회색</strong></td></tr>
+              <tr><td>아황산용</td><td><strong>노란색</strong></td></tr>
+              <tr><td>암모니아용</td><td><strong>녹색</strong></td></tr>
+              <tr><td>복합용</td><td>해당가스 모두 표시(2층 분리)</td></tr>
+              <tr><td>겸용</td><td>백색 + 해당가스 (2층 분리)</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>유갈 할황시=회색 / 아황=노란 / 암모=녹색</strong></div>`
+          },
+          {
+            star: '★', title: '방독마스크 유효시간 계산',
+            body: `<div class="theory-formula">
+              유효시간(분) = <strong>시험가스농도 × 표준유효시간 / 작업장 공기 중 유해가스 농도</strong>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">예제</span> 시험가스 1.5%, 표준유효시간 80분, 작업장 0.8%<br>
+            → 유효시간 = (1.5 × 80) / 0.8 = <strong>150분</strong></div>
+            <br>
+            <div class="theory-tip"><span class="theory-tip-label">안전인증 방독마스크 추가 표시사항</span> ① 파과곡선도 ② 사용시간 기록카드 ③ 정화통 외부측면 표시색 ④ 사용상의 주의사항</div>`
+          }
+        ]
+      },
+      {
+        title: '안전대·보호복',
+        cards: [
+          {
+            star: '★★', title: '안전대 종류',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>사용구분</th></tr>
+              <tr><td rowspan="2">벨트식</td><td>1개 걸이용</td></tr>
+              <tr><td>U자 걸이용</td></tr>
+              <tr><td rowspan="2">안전그네식</td><td>추락방지대</td></tr>
+              <tr><td>안전블록</td></tr>
+            </table>`
+          },
+          {
+            star: '★★', title: '안전대 주요 용어정의',
+            body: `<ul class="theory-list">
+              <li><strong>안전그네</strong>: 신체지지 목적으로 전신에 착용하는 띠 (상체 등 일부 지지 제외)</li>
+              <li><strong>추락방지대</strong>: 자동잠김장치 + 죔줄 + 수직구명줄에 연결된 금속장치</li>
+              <li><strong>안전블록</strong>: 안전그네와 연결, 추락 억제 자동잠김장치 + 죔줄 자동수축</li>
+              <li><strong>U자 걸이</strong>: 죔줄을 구조물에 U자형으로 돌려 훅/카라비너를 D링, 신축조절기를 각링에 연결</li>
+              <li><strong>1개 걸이</strong>: 죔줄 한쪽을 D링에 고정, 훅/카라비너를 구조물·구명줄에 고정</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">선정기준</span> U자 걸이: 발판 불완전, 체중 지지 필요 시 / 1개 걸이: 발판 확보, 안전대 의지 불필요 시</div>`
+          },
+          {
+            star: '★', title: '방열복의 종류 및 질량',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>착용부위</th><th>질량(kg)</th></tr>
+              <tr><td>방열상의</td><td>상체</td><td><strong>3.0</strong></td></tr>
+              <tr><td>방열하의</td><td>하체</td><td><strong>2.0</strong></td></tr>
+              <tr><td>방열일체복</td><td>상·하체</td><td><strong>4.3</strong></td></tr>
+              <tr><td>방열장갑</td><td>손</td><td><strong>0.5</strong></td></tr>
+              <tr><td>방열두건</td><td>머리</td><td><strong>2.0</strong></td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">방열복 성능기준</span> 난연성: 잔염·잔진 <strong>2초 미만</strong>, 탄화길이 <strong>102mm 이내</strong> / 절연저항: <strong>1MΩ 이상</strong> / 인장강도: 가로·세로 각 <strong>25kg 이상</strong></div>`
+          }
+        ]
+      },
+      {
+        title: '안전보건표지',
+        cards: [
+          {
+            star: '★★★', title: '안전보건표지 색채·색도기준·용도',
+            body: `<table class="theory-table">
+              <tr><th>색채</th><th>색도기준</th><th>용도</th><th>사용례</th></tr>
+              <tr><td><strong>빨간색</strong></td><td>7.5R 4/14</td><td>금지·경고</td><td>정지신호, 소화설비, 유해행위 금지 / 화학물질 유해·위험 경고</td></tr>
+              <tr><td><strong>노란색</strong></td><td>5Y 8.5/12</td><td>경고</td><td>화학물질 외 위험경고, 주의표지, 기계방호물</td></tr>
+              <tr><td><strong>파란색</strong></td><td>2.5PB 4/10</td><td>지시</td><td>특정 행위 지시, 사실 고지</td></tr>
+              <tr><td><strong>녹색</strong></td><td>2.5G 4/10</td><td>안내</td><td>비상구·피난소, 통행표지</td></tr>
+              <tr><td>흰색</td><td>N9.5</td><td>-</td><td>파란색·녹색 보조색</td></tr>
+              <tr><td>검은색</td><td>N0.5</td><td>-</td><td>문자, 빨간색·노란색 보조색</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>7.5R4/14(싫어4/14)</strong> / <strong>5Y8.5/12(오!빨리와이리)</strong> / <strong>2.5PB4/10 또는 2.5G4/10 (2.5×4=10)</strong></div>`
+          },
+          {
+            star: '★★★', title: '안전보건표지 기본 모형 및 색상',
+            body: `<table class="theory-table">
+              <tr><th>명칭</th><th>기본모형</th><th>색상</th></tr>
+              <tr><td><strong>금지표지</strong></td><td>원형 (사선)</td><td>바탕 <span style="color:#fff;background:#dc143c;padding:1px 6px;border-radius:3px">흰색</span>, 원 <span style="color:#fff;background:#dc143c;padding:1px 6px;border-radius:3px">빨간색</span>, 그림 <strong>검은색</strong></td></tr>
+              <tr><td><strong>경고표지</strong> (화학물질)</td><td>마름모형</td><td>바탕 무색, 모형 <strong>빨간색</strong>(검은색도 가능)</td></tr>
+              <tr><td><strong>경고표지</strong> (그 외)</td><td>삼각형</td><td>바탕 <span style="color:#333;background:#FFD700;padding:1px 6px;border-radius:3px">노란색</span>, 모형·그림 <strong>검은색</strong></td></tr>
+              <tr><td><strong>지시표지</strong></td><td>원형</td><td>바탕 <span style="color:#fff;background:#1565C0;padding:1px 6px;border-radius:3px">파란색</span>, 그림 <strong>흰색</strong></td></tr>
+              <tr><td><strong>안내표지</strong></td><td>사각형</td><td>바탕 흰색+부호 <span style="color:#fff;background:#2e7d32;padding:1px 6px;border-radius:3px">녹색</span> 또는 바탕 녹색+그림 흰색</td></tr>
+            </table>`
+          },
+          {
+            star: '★★★', title: '안전보건표지 종류 (금지·경고·지시·안내)',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">1. 금지표지 (8종)</div>
+                <ul class="theory-list">
+                  <li>101 출입금지, 102 보행금지, 103 차량통행금지</li>
+                  <li>104 사용금지, 105 탑승금지, 106 금연</li>
+                  <li>107 화기금지, 108 물체이동금지</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">2. 경고표지 (15종)</div>
+                <ul class="theory-list">
+                  <li>인화성·산화성·폭발성·급성독성·부식성 물질</li>
+                  <li>방사성물질, 고압전기, 매달린물체, 낙하물</li>
+                  <li>고온·저온·몸균형상실·레이저광선</li>
+                  <li>발암성·변이원성 등 물질, 위험장소</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">3. 지시표지 (9종)</div>
+                <ul class="theory-list">
+                  <li>301 보안경, 302 방독마스크, 303 방진마스크</li>
+                  <li>304 보안면, 305 안전모, 306 귀마개</li>
+                  <li>307 안전화, 308 안전장갑, 309 안전복</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">4. 안내표지 (8종)</div>
+                <ul class="theory-list">
+                  <li>401 녹십자, 402 응급구호, 403 들것</li>
+                  <li>404 세안장치, 405 비상용기구</li>
+                  <li>406 비상구, 407 좌측비상구, 408 우측비상구</li>
+                </ul>
+              </div>
+            </div>`
+          }
+        ]
+      }
+    ]
+  };
+
+  /* ── CH06 안전보건교육 ── */
+  THEORY_DATA.ch06 = {
+    num: 'CHAPTER 06', title: '안전보건교육',
+    desc: '안전교육 목적·원칙, 학습이론, OJT·Off JT, 교육단계, TWI·교육시간표, 무재해운동·위험예지훈련, 산업심리',
+    sections: [
+      {
+        title: '안전교육 기본',
+        cards: [
+          {
+            star: '★', title: '안전교육 실시 목적 7가지',
+            body: `<ul class="theory-list">
+              <li>① 인간정신의 안전화</li>
+              <li>② 인간행동의 안전화</li>
+              <li>③ 환경의 안전화</li>
+              <li>④ 설비물자의 안전화</li>
+              <li>⑤ 생산성 및 품질향상 기여</li>
+              <li>⑥ 직·간접적 경제적 손실 방지</li>
+              <li>⑦ 작업자를 산업재해로부터 보호</li>
+            </ul>`
+          },
+          {
+            star: '★', title: '교육 지도의 원칙 8가지',
+            body: `<ul class="theory-list">
+              <li>① 상대방(피교육자) 입장에서 교육</li>
+              <li>② 동기부여 (알려고 하는 의욕 유발)</li>
+              <li>③ 반복 교육</li>
+              <li>④ 쉬운 것 → 어려운 것 순</li>
+              <li>⑤ 한 번에 한 가지씩</li>
+              <li>⑥ 인상의 강화 (중요한 것 재강조)</li>
+              <li>⑦ 5관의 활용: 시각 60%, 청각 20%, 촉각 15%, 미각 3%, 후각 2%</li>
+              <li>⑧ 기능적 이해 (왜 그렇게 되는가)</li>
+            </ul>`
+          },
+          {
+            star: '★★', title: 'OJT vs Off JT 특징 비교',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">OJT (직장 내 개별교육)</div>
+                <ul class="theory-list">
+                  <li>직속상사가 일상 업무 통해 교육</li>
+                  <li>개개인에게 적절한 훈련 가능</li>
+                  <li>직장 실정에 맞는 훈련</li>
+                  <li>교육효과 즉시 업무 연결</li>
+                  <li>업무의 계속성 끊어지지 않음</li>
+                  <li>상호 신뢰·이해도 높음</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">Off JT (집합교육)</div>
+                <ul class="theory-list">
+                  <li>외부강사 초청, 일정 장소 집합</li>
+                  <li>다수 근로자 훈련 가능</li>
+                  <li>훈련에만 전념</li>
+                  <li>특별설비기구 이용 가능</li>
+                  <li>많은 지식·경험 교류</li>
+                  <li>집단적 노력이 흐트러질 수 있음</li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            star: '★', title: '관리감독자 대상 교육 종류 (TWI·MTP·ATT·CCS)',
+            body: `<table class="theory-table">
+              <tr><th>교육</th><th>대상</th><th>내용</th></tr>
+              <tr><td><strong>TWI</strong></td><td>일선관리감독자</td><td>JMT(작업방법), JIT(작업지도), JRT(인간관계), JST(작업안전)</td></tr>
+              <tr><td><strong>MTP</strong></td><td>중간계층관리자</td><td>Management Training Program</td></tr>
+              <tr><td><strong>ATT</strong></td><td>대상 한정 없음</td><td>이수 후 부하에게 지도 가능</td></tr>
+              <tr><td><strong>CCS</strong></td><td>최고층 관리감독자</td><td>Civil Communication Section</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">TWI 4과정</span> <strong>JMT·JIT·JRT·JST</strong> (방법·지도·관계·안전)</div>`
+          }
+        ]
+      },
+      {
+        title: '학습이론',
+        cards: [
+          {
+            star: '★', title: '학습이론 4가지 비교',
+            body: `<table class="theory-table">
+              <tr><th>이론</th><th>학자</th><th>핵심</th></tr>
+              <tr><td>시행착오설 (S-R)</td><td>Thorndike</td><td>준비성·연습·효과의 법칙</td></tr>
+              <tr><td>조건반사설 (S-R)</td><td>Pavlov</td><td>일관성·계속성·시간·강도의 원리</td></tr>
+              <tr><td>조작적 조건화 (강화)</td><td>Skinner</td><td>간헐적 강화 효과적, 즉시 강화, 긍정적 강화물</td></tr>
+              <tr><td>사회학습이론</td><td>Bandura</td><td>관찰·모방으로 학습, 대리적 강화</td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '기억의 과정 4단계',
+            body: `<div style="text-align:center; margin:8px 0; font-size:15px; font-weight:700; color:var(--th-accent)">
+              기명 → 파지 → 재생 → 재인
+            </div>
+            <ul class="theory-list">
+              <li><strong>기명</strong>: 사물의 인상을 마음에 간직</li>
+              <li><strong>파지</strong>: 인상이 보존됨</li>
+              <li><strong>재생</strong>: 보존된 인상이 떠오름</li>
+              <li><strong>재인</strong>: 유사 상황에서 과거 경험이 떠오름</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">망각 특징</span> ① 학습 직후 망각율 최고 ② 의미 없는 것이 더 빨리 망각 ③ 사고요하는 내용이 망각 적음 ④ 연습은 학습 직후 효과적</div>`
+          },
+          {
+            star: '★', title: '학습지도의 원리 6가지',
+            body: `<ul class="theory-list">
+              <li>① <strong>자발성</strong>의 원리: 스스로 능동적으로 참여</li>
+              <li>② <strong>개별화</strong>의 원리: 개인의 능력·소질 존중</li>
+              <li>③ <strong>목적</strong>의 원리: 목표가 분명할 때 적극 학습</li>
+              <li>④ <strong>사회화</strong>의 원리: 유용한 사회인으로 육성</li>
+              <li>⑤ <strong>통합화</strong>의 원리: 모든 능력의 조화적 발달</li>
+              <li>⑥ <strong>직관(직접경험)</strong>의 원리: 직접 경험으로 효과 향상</li>
+            </ul>`
+          }
+        ]
+      },
+      {
+        title: '교육 단계·방법',
+        cards: [
+          {
+            star: '★', title: '교육의 3요소 / 3단계',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">교육의 3요소</div>
+                <ul class="theory-list">
+                  <li>교육의 주체: <strong>강사</strong></li>
+                  <li>교육의 객체: <strong>학생(수강자)</strong></li>
+                  <li>교육의 매개체: <strong>교재(학습내용)</strong></li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">교육의 3단계</div>
+                <ul class="theory-list">
+                  <li>1단계 <strong>지식교육</strong>: 강의·시청각으로 지식 전달</li>
+                  <li>2단계 <strong>기능교육</strong>: 시범·현장실습으로 경험 체득</li>
+                  <li>3단계 <strong>태도교육</strong>: 작업동작 지도로 안전행동 습관화</li>
+                </ul>
+              </div>
+            </div>
+            <div class="theory-tip"><span class="theory-tip-label">태도교육 실시순서</span> 청취 → 이해·납득 → 모범 → 권장 → 평가(상·벌)</div>`
+          },
+          {
+            star: '★', title: '학습의 정도 4단계',
+            body: `<ul class="theory-list">
+              <li>① <strong>인지</strong>(to acquaint): ~을 인지하여야 한다</li>
+              <li>② <strong>지각</strong>(to know): ~을 알아야 한다</li>
+              <li>③ <strong>이해</strong>(to understand): ~을 이해하여야 한다</li>
+              <li>④ <strong>적용</strong>(to apply): ~을 ~에 적용할 수 있어야 한다</li>
+            </ul>`
+          },
+          {
+            star: '★', title: '교육진행 4단계',
+            body: `<table class="theory-table">
+              <tr><th>단계</th><th>핵심</th></tr>
+              <tr><td><strong>1단계: 도입</strong> (학습 준비)</td><td>마음 안정, 무슨 작업인지 말해주기, 의욕 갖게 함</td></tr>
+              <tr><td><strong>2단계: 제시</strong> (작업 설명)</td><td>주요 단계 설명·시범, 급소 강조, 끈기있게 지도</td></tr>
+              <tr><td><strong>3단계: 적용</strong> (작업 시킴)</td><td>잘못 고쳐주기, 설명하게 함, 확실히 알 때까지</td></tr>
+              <tr><td><strong>4단계: 확인</strong> (살펴보기)</td><td>질문 분위기 조성, 물어볼 사람 지정, 지도 횟수 감소</td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '교육훈련 평가의 4단계 (Kirkpatrick)',
+            body: `<ul class="theory-list">
+              <li>1단계 <strong>반응</strong>: 훈련을 어떻게 생각하는가?</li>
+              <li>2단계 <strong>학습</strong>: 어떤 원칙·사실·기술을 배웠는가?</li>
+              <li>3단계 <strong>행동</strong>: 직무수행 행동에 어떤 변화를 가져왔는가?</li>
+              <li>4단계 <strong>결과</strong>: 직무에 어떤 성과가 있었는가?</li>
+            </ul>`
+          },
+          {
+            star: '★', title: '토의식 교육법 종류',
+            body: `<table class="theory-table">
+              <tr><th>방법</th><th>특징</th></tr>
+              <tr><td><strong>사례연구법</strong></td><td>사례 제시 → 문제·상호관계 검토 → 대책 토의</td></tr>
+              <tr><td><strong>롤플레잉</strong></td><td>역할 부여 → 실제 연기 → 역할 인식 강화</td></tr>
+              <tr><td><strong>포럼</strong></td><td>자료 제시 → 피교육자가 문제점 제기·토의</td></tr>
+              <tr><td><strong>심포지엄</strong></td><td>전문가 몇 명이 견해 발표 → 전원 의견·질문 토의</td></tr>
+              <tr><td><strong>패널 디스커션</strong></td><td>전문가 4~5명이 피교육자 앞 토의 → 전원 참가</td></tr>
+              <tr><td><strong>버즈 세션(6-6 회의)</strong></td><td>6명씩 소집단, 6분씩 자유토의 → 의견 종합</td></tr>
+            </table>`
+          }
+        ]
+      },
+      {
+        title: '교육시간',
+        cards: [
+          {
+            star: '★★★', title: '근로자 안전보건교육 시간',
+            body: `<table class="theory-table">
+              <tr><th>교육과정</th><th>대상</th><th>시간</th></tr>
+              <tr><td rowspan="3"><strong>가. 정기교육</strong></td><td>사무직 종사</td><td>매반기 <strong>6시간</strong></td></tr>
+              <tr><td>판매업무 직접 종사</td><td>매반기 <strong>6시간</strong></td></tr>
+              <tr><td>그 밖의 근로자</td><td>매반기 <strong>12시간</strong></td></tr>
+              <tr><td rowspan="3"><strong>나. 채용 시</strong></td><td>일용·1주 이하 기간제</td><td><strong>1시간</strong></td></tr>
+              <tr><td>1주 초과 1개월 이하</td><td><strong>4시간</strong></td></tr>
+              <tr><td>그 밖의 근로자</td><td><strong>8시간</strong></td></tr>
+              <tr><td rowspan="2"><strong>다. 작업내용 변경 시</strong></td><td>일용·1주 이하 기간제</td><td><strong>1시간</strong></td></tr>
+              <tr><td>그 밖의 근로자</td><td><strong>2시간</strong></td></tr>
+              <tr><td rowspan="3"><strong>라. 특별교육</strong></td><td>일용·1주이하(타워크레인신호 제외)</td><td><strong>2시간</strong></td></tr>
+              <tr><td>일용·1주이하 중 타워크레인신호</td><td><strong>8시간</strong></td></tr>
+              <tr><td>그 밖의 근로자</td><td><strong>16시간</strong>(최초 4h+이후 12h/3개월 이내)</td></tr>
+              <tr><td><strong>마. 건설업 기초교육</strong></td><td>건설 일용근로자</td><td><strong>4시간</strong></td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> 정기: 사무·판매 <strong>6</strong>/ 기타 <strong>12</strong> | 채용: 일용 <strong>1</strong>/ 1개월이하 <strong>4</strong>/ 기타 <strong>8</strong></div>`
+          },
+          {
+            star: '★★', title: '관리감독자·직무교육 시간',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">관리감독자 교육시간</div>
+                <ul class="theory-list">
+                  <li>정기교육: 연간 <strong>16시간</strong></li>
+                  <li>채용 시: <strong>8시간</strong></li>
+                  <li>작업내용 변경 시: <strong>2시간</strong></li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">직무교육(신규/보수)</div>
+                <ul class="theory-list">
+                  <li>안전보건관리책임자: <strong>6/6시간</strong></li>
+                  <li>안전관리자·보건관리자: <strong>34/24시간</strong></li>
+                  <li>건설재해예방기관: <strong>34/24시간</strong></li>
+                  <li>안전보건관리담당자: <strong>-/8시간</strong></li>
+                  <li>안전·자율검사기관: <strong>34/24시간</strong></li>
+                  <li>성능검사 교육: <strong>28시간</strong></li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            star: '★★', title: '건설업 기초안전보건교육 내용 및 시간',
+            body: `<table class="theory-table">
+              <tr><th>교육 내용</th><th>시간</th></tr>
+              <tr><td>건설공사의 종류(건축·토목 등) 및 시공절차</td><td><strong>1시간</strong></td></tr>
+              <tr><td>산업재해 유형별 위험요인 및 안전보건조치</td><td><strong>2시간</strong></td></tr>
+              <tr><td>안전보건관리체제 현황 및 근로자 권리·의무</td><td><strong>1시간</strong></td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">합계</span> 총 4시간</div>`
+          },
+          {
+            star: '★★★', title: '근로자 정기안전·보건교육 내용 8가지',
+            body: `<ul class="theory-list">
+              <li>① 산업안전 및 사고 예방에 관한 사항</li>
+              <li>② 산업보건 및 직업병 예방에 관한 사항</li>
+              <li>③ 유해·위험 작업환경 관리에 관한 사항</li>
+              <li>④ 산업안전보건법령 및 산업재해보상보험제도에 관한 사항</li>
+              <li>⑤ 직무스트레스 예방 및 관리에 관한 사항</li>
+              <li>⑥ 직장 내 괴롭힘, 고객의 폭언 등 건강장해 예방·관리</li>
+              <li>⑦ 건강증진 및 질병 예방에 관한 사항 <span style="color:var(--th-accent)">(정기교육 특징!)</span></li>
+              <li>⑧ 위험성 평가에 관한 사항</li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">채용 시·작업내용 변경 시 교육 추가항목</span> ⑥기계기구 위험성·작업순서·동선 ⑦물질안전보건자료 ⑧작업개시 전 점검 ⑨정리정돈·청소 ⑩사고 발생 시 긴급조치</div>`
+          }
+        ]
+      },
+      {
+        title: '산업심리·동기부여',
+        cards: [
+          {
+            star: '★', title: '양립성(Compatibility) 종류',
+            body: `<table class="theory-table">
+              <tr><th>종류</th><th>예시</th></tr>
+              <tr><td><strong>개념적 양립성</strong></td><td>외부자극에 대한 인간의 개념적 반응 / 빨간=온수, 파란=냉수</td></tr>
+              <tr><td><strong>공간적 양립성</strong></td><td>표시장치·조종장치의 형태·공간 배치 / 오른쪽 조리대→오른쪽 조절장치</td></tr>
+              <tr><td><strong>운동의 양립성</strong></td><td>표시장치·조종장치 운동 방향 / 오른쪽 돌리면→지침 오른쪽 이동</td></tr>
+              <tr><td><strong>양식 양립성</strong></td><td>직무에 알맞은 자극·응답 양식 / 음성과업→청각 자극+음성응답</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">정의</span> 자극과 반응의 관계가 인간의 기대와 모순되지 않는 성질</div>`
+          },
+          {
+            star: '★', title: '적응기제 (방어기제 vs 도피기제)',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">방어기제 (능동·적극적)</div>
+                <ul class="theory-list">
+                  <li><strong>보상</strong>: 열등감 → 다른 곳에서 강점 발휘</li>
+                  <li><strong>합리화</strong>: 자기실패 합리화, 자기미화</li>
+                  <li><strong>동일시</strong>: 능력자를 통해 자기 만족</li>
+                  <li><strong>승화</strong>: 열등감·욕구불만 → 사회적 가치로</li>
+                  <li><strong>투사</strong>: 자신 열등감 → 타인 결함으로 전가</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">도피기제 (도망)</div>
+                <ul class="theory-list">
+                  <li><strong>고립</strong>: 외부와의 접촉 차단</li>
+                  <li><strong>퇴행</strong>: 유아 시절로 되돌아감</li>
+                  <li><strong>억압</strong>: 무의식으로 쑤셔 넣기</li>
+                  <li><strong>백일몽</strong>: 공상의 나래를 펼침</li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            star: '★★', title: '에너지 대사율(RMR) 및 작업강도',
+            body: `<div class="theory-formula">
+              RMR = 노동대사량/기초대사량 = (작업 시 소비에너지 - 안정 시 소비에너지) / 기초대사량
+            </div>
+            <table class="theory-table">
+              <tr><th>작업강도</th><th>RMR</th></tr>
+              <tr><td>경작업(가벼운)</td><td>1~2</td></tr>
+              <tr><td>중작업(보통)</td><td>2~4</td></tr>
+              <tr><td>중작업(힘든)</td><td>4~7</td></tr>
+              <tr><td>초중작업(굉장히 힘든)</td><td>7 이상</td></tr>
+            </table>
+            <div class="theory-tip"><span class="theory-tip-label">휴식시간 계산</span> R = 60×(E-5)/(E-1.5) [분] / 기초대사량 포함하지 않을 경우 분자 4 사용</div>`
+          },
+          {
+            star: '★★', title: '매슬로 욕구 5단계 / 헤르츠버그 동기·위생이론',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">매슬로 욕구 5단계</div>
+                <ul class="theory-list">
+                  <li>1단계: <strong>생리적 욕구</strong> (기본)</li>
+                  <li>2단계: <strong>안전 욕구</strong> (자기보존)</li>
+                  <li>3단계: <strong>사회적 욕구</strong> (소속·애정)</li>
+                  <li>4단계: <strong>존경 욕구</strong> (인정)</li>
+                  <li>5단계: <strong>자아실현 욕구</strong> (잠재력 실현)</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">헤르츠버그 이론</div>
+                <ul class="theory-list">
+                  <li><strong>위생요인</strong>(직무환경/저차원): 회사정책, 감독, 임금, 작업조건, 지위, 안전</li>
+                  <li><strong>동기요인</strong>(직무내용/고차원): 성취감, 책임감, 안정감, 성장·발전, 일 그 자체</li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            star: '★★', title: 'X이론 vs Y이론 (맥그리거)',
+            body: `<table class="theory-table">
+              <tr><th>구분</th><th>X이론</th><th>Y이론</th></tr>
+              <tr><td>인간관</td><td>불신감, 성악설</td><td>신뢰감, 성선설</td></tr>
+              <tr><td>인간 특성</td><td>게으르고 지배받길 원함</td><td>부지런하고 자주적</td></tr>
+              <tr><td>욕구</td><td>물질욕구(저차원)</td><td>정신욕구(고차원)</td></tr>
+              <tr><td>관리</td><td>명령·통제, 권위주의</td><td>목표통합·자기통제, 민주주의</td></tr>
+              <tr><td>유형</td><td>저개발국형</td><td>선진국형</td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '생체리듬(Biorhythm) 3종류',
+            body: `<table class="theory-table">
+              <tr><th>리듬</th><th>주기</th><th>표시</th><th>내용</th></tr>
+              <tr><td><strong>육체적(P)</strong></td><td>23일</td><td>청색 실선</td><td>식욕, 소화력, 활동력, 지구력</td></tr>
+              <tr><td><strong>감성적(S)</strong></td><td>28일</td><td>적색 점선</td><td>감정, 주의심, 창조력, 희로애락</td></tr>
+              <tr><td><strong>지성적(I)</strong></td><td>33일</td><td>녹색 일점쇄선</td><td>상상력, 사고력, 기억력, 판단력</td></tr>
+            </table>`
+          },
+          {
+            star: '★', title: '작업면 적정조도 (법적 기준)',
+            body: `<ul class="theory-list">
+              <li>초정밀 작업: <strong>750 Lux 이상</strong></li>
+              <li>정밀 작업: <strong>300 Lux 이상</strong></li>
+              <li>보통 작업: <strong>150 Lux 이상</strong></li>
+              <li>기타 작업: <strong>75 Lux 이상</strong></li>
+            </ul>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>초750 정300 보150 기75</strong> (2배씩 증가)</div>`
+          }
+        ]
+      },
+      {
+        title: '무재해운동·위험예지훈련',
+        cards: [
+          {
+            star: '★', title: '무재해 정의 + 무재해에 해당하는 경우',
+            body: `<div class="theory-tip" style="margin-bottom:8px"><span class="theory-tip-label">무재해 정의</span> 근로자가 업무에 기인하여 사망 또는 <strong>4일 이상</strong> 요양을 요하는 부상·질병에 이환되지 않는 것</div>
+            <div class="theory-tip"><span class="theory-tip-label">무재해로 보는 경우</span> <strong>출·퇴근 도중</strong> / 각종 <strong>행사</strong> 중 / <strong>제3자</strong> 행위에 의한 재해 / 업무시간 <strong>외</strong> 발생 / <strong>천재지변·돌발적 사고</strong> 구조행위 / <strong>뇌혈관·심장질병</strong></div>
+            <div class="theory-tip"><span class="theory-tip-label">두음법</span> <strong>출행제업천뇌</strong></div>`
+          },
+          {
+            star: '★★', title: '무재해 운동 3대 원칙',
+            body: `<ul class="theory-list">
+              <li>① <strong>무(無)의 원칙</strong> (ZERO 원칙): 모든 잠재위험요인을 사전에 발견·파악·해결 → 산업재해 근원 제거</li>
+              <li>② <strong>선취의 원칙</strong> (안전제일 원칙): 행동하기 전에 잠재위험 발견·파악·해결하여 재해 예방</li>
+              <li>③ <strong>참가의 원칙</strong> (참여 원칙): 전원 일치 협력, 각자 위치에서 적극 문제해결</li>
+            </ul>`
+          },
+          {
+            star: '★', title: '무재해 운동 3요소 / 소집단 활동 기법',
+            body: `<div class="theory-compare">
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">3요소</div>
+                <ul class="theory-list">
+                  <li>① 최고 경영자의 경영자세</li>
+                  <li>② 라인관리자에 의한 안전보건 추진</li>
+                  <li>③ 직장의 자주안전 활동 활성화</li>
+                </ul>
+              </div>
+              <div class="theory-compare-box">
+                <div class="theory-compare-title">소집단 활동 기법</div>
+                <ul class="theory-list">
+                  <li><strong>브레인스토밍</strong>: 비판금지·자유분방·대량발언·수정발언</li>
+                  <li><strong>T.B.M</strong>: 작업 전·후 5~10분, 3~5인, 도입→점검정비→작업지시→위험예지→확인</li>
+                  <li><strong>지적확인</strong>: 오관 활용, 대상 지적·큰소리 확인</li>
+                  <li><strong>5C운동</strong>: 복장단정·정리정돈·청소청결·점검확인·전심전력</li>
+                  <li><strong>STOP기법</strong>: 결심→정지→관찰→보고</li>
+                  <li><strong>터치 앤 콜</strong>: 전원 원 만들어 구호 지적확인</li>
+                  <li><strong>ECR제안</strong>: 오류 원인 생각하여 개선</li>
+                </ul>
+              </div>
+            </div>`
+          },
+          {
+            star: '★★', title: '위험예지훈련 4단계',
+            body: `<table class="theory-table">
+              <tr><th>단계</th><th>핵심 질문</th><th>내용</th></tr>
+              <tr><td><strong>1단계: 현상 파악</strong></td><td>어떤 위험이 잠재하는가?</td><td>도해 상황 속 잠재위험 발견, 사고 생각</td></tr>
+              <tr><td><strong>2단계: 요인조사</strong> (본질추구)</td><td>이것이 위험의 포인트다</td><td>가장 위험한 것을 합의로 결정</td></tr>
+              <tr><td><strong>3단계: 대책수립</strong></td><td>당신이라면 어떻게 할 것인가?</td><td>중요위험 해결 대책 수립</td></tr>
+              <tr><td><strong>4단계: 행동목표 설정</strong> (합의요약)</td><td>우리들은 이렇게 하자!</td><td>중점항목 합의 요약 → 행동목표 설정</td></tr>
+            </table>`
+          }
+        ]
+      }
+    ]
+  };
+
+  /* ─── 이론 렌더링 ─── */
+  window.showTheoryChapter = function(chId, btn) {
+    const panel = document.getElementById('panelTheory');
+    const content = document.getElementById('theoryContent');
+    if (!panel || !content) return;
+
+    // 서브 버튼 활성화
+    document.querySelectorAll('#subTheory .sub-nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const data = THEORY_DATA[chId];
+    if (!data) return;
+
+    let html = `<div class="theory-chapter-header">
+      <div class="theory-chapter-num">${data.num}</div>
+      <div class="theory-chapter-title">${data.title}</div>
+      <div class="theory-chapter-desc">${data.desc}</div>
+    </div>`;
+
+    data.sections.forEach(sec => {
+      html += `<div class="theory-section-title">${sec.title}</div>`;
+      sec.cards.forEach((card, i) => {
+        const cid = `tc_${chId}_${sec.title.replace(/\s/g,'')}_${i}`;
+        html += `<div class="theory-card" id="${cid}">
+          <div class="theory-card-header" onclick="toggleTheoryCard('${cid}')">
+            <span class="theory-star">${card.star}</span>
+            <span class="theory-card-title">${card.title}</span>
+            <span class="theory-toggle">▼</span>
+          </div>
+          <div class="theory-card-body">${card.body}</div>
+        </div>`;
+      });
+    });
+
+    content.innerHTML = html;
+    panel.classList.add('active');
+  };
+
+  window.toggleTheoryCard = function(id) {
+    const card = document.getElementById(id);
+    if (card) card.classList.toggle('open');
+  };
+
+  /* toggleNav 확장 — theory 타입 추가 */
+  const _origToggleNav = window.toggleNav;
+  window.toggleNav = function(type, btn) {
+    if (type === 'theory') {
+      document.querySelectorAll('.main-nav-btn').forEach(b => {
+        b.classList.remove('active');
+        b.textContent = b.textContent.replace('▲','▼');
+      });
+      btn.classList.add('active');
+      btn.textContent = btn.textContent.replace('▼','▲');
+      document.querySelectorAll('.sub-nav-bar').forEach(b => b.classList.remove('open'));
+      hideAllPanels();
+      document.getElementById('subTheory').classList.add('open');
+      // 기본 CH01 표시
+      showTheoryChapter('ch01', document.getElementById('thb_ch01'));
+    } else {
+      _origToggleNav(type, btn);
+    }
+  };
+
+  /* ── INIT ── */
+  function init() {
+    hookStateToggle();
+    injectToolbarButtons();
+    initLazyLoad();
+    showReviewBanner();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    // DOMContentLoaded already fired — run after existing init
+    setTimeout(init, 50);
+  }
+
+})();
 </script>
 </body>
 </html>
