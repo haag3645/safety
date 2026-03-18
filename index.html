@@ -35899,10 +35899,13 @@ function printWorkStudyPdf(mode) {
   function enhSave(key, val) {
     try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
   }
-  function today() { return new Date().toISOString().split('T')[0]; }
+  function today() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
   function addDays(n) {
     const d = new Date(); d.setDate(d.getDate() + n);
-    return d.toISOString().split('T')[0];
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
 
   /* ══════════════════════════════════════════
@@ -36010,7 +36013,7 @@ function printWorkStudyPdf(mode) {
     const now = new Date();
     for (let i = 0; i < 365; i++) {
       const d = new Date(now); d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split('T')[0];
+      const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
       if (log[ds] && log[ds].studied > 0) streak++;
       else if (i > 0) break;
     }
@@ -36285,7 +36288,8 @@ function printWorkStudyPdf(mode) {
     function render() {
       container.innerHTML = '';
       const now      = new Date();
-      const todayStr = now.toISOString().split('T')[0];
+      // toISOString()은 UTC 기준이라 한국(UTC+9) 오전 9시 이전에 날짜 어긋남 → 로컬 기준으로 수정
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
       const label    = `${viewYear}년 ${viewMonth + 1}월`;
       const labelEl  = document.getElementById('hmMonthLabel');
       if (labelEl) labelEl.textContent = label;
