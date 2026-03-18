@@ -13,6 +13,10 @@
   z-index: 500;
   background: white;
   touch-action: pan-x;  /* 세로 스크롤은 body에 위임 */
+  /* Safari: sticky 요소를 GPU 레이어로 고정 → 스크롤 중 높이 재계산 방지 */
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
   :root {
@@ -73,7 +77,11 @@
     padding: 24px 20px 18px;
     position: relative;
     z-index: 1;
-    overflow: hidden;
+    /* Safari fix */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
   .site-header::before {
     content: '';
@@ -439,7 +447,11 @@
     padding: 20px 28px;
     border-radius: 14px 14px 0 0;
     position: relative;
-    overflow: hidden;
+    /* Safari scroll jank fix: overflow:hidden 제거, GPU 레이어 강제 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     margin-top: 12px;
     margin-bottom: 0;
     box-shadow: none;
@@ -453,6 +465,7 @@
     width: 100px; height: 100px;
     border-radius: 50%;
     background: rgba(255,255,255,0.06);
+    pointer-events: none;
   }
   .round-number {
     font-family: 'Noto Sans KR', sans-serif;
@@ -475,7 +488,9 @@
     box-shadow: none;
     border: none;
     border-bottom: 1px solid var(--gray-border);
-    overflow: hidden;
+    /* Safari scroll jank fix: overflow:hidden 제거 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     transition: none;
   }
   /* 첫 번째 카드들을 묶어 리스트처럼 보이게 */
@@ -488,7 +503,11 @@
     border: 1px solid var(--gray-border);
     border-top: none;
     border-radius: 0 0 14px 14px;
-    overflow: hidden;
+    /* Safari scroll jank fix: overflow:hidden → GPU 레이어 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     background: white;
     box-shadow: var(--card-shadow);
     margin-bottom: 0;
@@ -646,7 +665,9 @@
     background: #f1f8f2;
     border: 1.5px solid #a5d6a7;
     border-radius: 10px;
-    overflow: hidden;
+    /* Safari fix: overflow:hidden 제거 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     padding: 0;
   }
   #panelFreq .answer-box { margin-top: 10px; }
@@ -803,7 +824,9 @@
     background: var(--red-light);
     border: 2px solid var(--note-border);
     border-radius: 10px;
-    overflow: hidden;
+    /* Safari fix: overflow:hidden 제거 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
   .wrong-note-header,
   .wrong-note-label {
@@ -1149,13 +1172,18 @@
   border-bottom: 2px solid var(--gray-border);
   padding: 0 12px; gap: 2px; overflow-x: auto;
   position: relative; z-index: 1;
+  /* Safari: sticky 안 overflow-x:auto 충돌 방지 */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
 }
 .main-nav-bar::-webkit-scrollbar { height: 2px; }
 .main-nav-btn {
   padding: 11px 14px; border: none; background: none;
   font-size: 13px; font-weight: 600; color: var(--gray-text);
   cursor: pointer; white-space: nowrap;
-  border-bottom: 3px solid transparent; transition: all 0.15s; margin-bottom: -2px;
+  border-bottom: 3px solid transparent; transition: color 0.15s; margin-bottom: -2px;
+  touch-action: manipulation;
 }
 .main-nav-btn:hover { color: var(--navy); }
 .main-nav-btn.active { color: var(--orange); border-bottom-color: var(--orange); font-weight: 700; }
@@ -35881,17 +35909,9 @@ function printWorkStudyPdf(mode) {
      1. PERFORMANCE: Lazy Loading
   ══════════════════════════════════════════ */
   function initLazyLoad() {
-    if (!('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        e.target.style.contentVisibility = e.isIntersecting ? 'visible' : 'auto';
-      });
-    }, { rootMargin: '200px' });
-    document.querySelectorAll('.q-card').forEach(c => {
-      c.style.contentVisibility = 'auto';
-      c.style.containIntrinsicSize = '0 120px';
-      io.observe(c);
-    });
+    // contentVisibility:auto는 Safari에서 스크롤 점프 유발 (카드 실제 높이 != 120px 추정치)
+    // v27과 동일하게 비활성화
+    return;
   }
 
   /* ══════════════════════════════════════════
