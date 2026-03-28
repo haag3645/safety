@@ -90,6 +90,7 @@
     width: 260px; height: 260px;
     border-radius: 50%;
     background: rgba(255,255,255,0.04);
+    pointer-events: none;
   }
   .site-header::after {
     content: '';
@@ -98,6 +99,7 @@
     width: 180px; height: 180px;
     border-radius: 50%;
     background: rgba(255,109,0,0.12);
+    pointer-events: none;
   }
 
   .header-top-row {
@@ -1145,6 +1147,7 @@
   background: white; border-radius: 16px; font-size: 12px;
   color: var(--gray-text); font-weight: 600; cursor: pointer;
   transition: all 0.15s; white-space: nowrap;
+  touch-action: manipulation;
 }
 .ctrl-btn:hover { border-color: var(--navy); color: var(--navy); }
 .ctrl-sep { width: 1px; height: 20px; background: var(--gray-border); margin: 0 2px; }
@@ -1328,7 +1331,7 @@
   <button class="main-nav-btn" id="navFreq"    onclick="toggleNav('freq',this)">필답형 빈출 ▼</button>
   <button class="main-nav-btn" id="navStudy"   onclick="toggleNav('study',this)">필답형 공부 ▼</button>
   <span class="main-nav-divider">|</span>
-  <button class="main-nav-btn work" id="navWorkYear"  onclick="toggleNav('workyear',this)">작업형 기출문제 ▲</button>
+  <button class="main-nav-btn work" id="navWorkYear"  onclick="toggleNav('workyear',this)">작업형 기출문제 ▼</button>
   <button class="main-nav-btn work" id="navWorkKw"    onclick="toggleNav('workkw',this)">작업형 키워드 ▼</button>
   <button class="main-nav-btn work" id="navWorkFreq"  onclick="toggleNav('workfreq',this)">작업형 빈출 ▼</button>
   <button class="main-nav-btn work" id="navWorkStudy" onclick="toggleNav('workstudy',this)">작업형 공부 ▼</button>
@@ -1685,9 +1688,9 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>막장 구간: <strong><span class="hl">70Lux 이상</span></strong></span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>터널 중간 구간: <strong><span class="hl">50Lux 이상</span></strong></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>터널 입출구·수직구 구간: <strong><span class="hl">30Lux 이상</span></strong></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><strong><span class="hl">70Lux 이상</span></strong></span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><strong><span class="hl">50Lux 이상</span></strong></span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><strong><span class="hl">30Lux 이상</span></strong></span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)"><span class="kt-icon">▼</span> 🔑 핵심 키워드</button>
@@ -1727,8 +1730,8 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>지면과의 정지 거리: <strong><span class="hl">2cm(센티미터)</span></strong></span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>최소 이격거리: <strong><span class="hl">2m(미터)</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><strong><span class="hl">2cm</span></strong></span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><strong><span class="hl">2m</span></strong> 이상</span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)"><span class="kt-icon">▼</span> 🔑 핵심 키워드</button>
@@ -1897,9 +1900,9 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>최대 지간 길이: <strong><span class="hl">50m</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>연면적: <strong><span class="hl">5,000m²</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>깊이: <strong><span class="hl">10m</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><strong><span class="hl">50m</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><strong><span class="hl">5,000m²</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><strong><span class="hl">10m</span></strong> 이상</span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)"><span class="kt-icon">▼</span> 🔑 핵심 키워드</button>
@@ -2077,9 +2080,9 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>테두리·달기 로우프 인장강도: <strong><span class="hl">1,500Kg</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>10cm 매듭방망: <strong><span class="hl">200Kg</span></strong></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>5cm 매듭방망: <strong><span class="hl">110Kg</span></strong></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><strong><span class="hl">1,500Kg</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><strong><span class="hl">200Kg</span></strong></span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><strong><span class="hl">110Kg</span></strong></span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)"><span class="kt-icon">▼</span> 🔑 핵심 키워드</button>
@@ -2142,12 +2145,12 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>관리감독자 정기교육: <strong><span class="hl">16시간</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>관리감독자 채용 시 교육: <strong><span class="hl">8시간</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>관리감독자 작업내용 변경 시 교육: <strong><span class="hl">2시간</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">④</span><span>안전보건관리책임자 신규교육: <strong><span class="hl">6시간</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">⑤</span><span>안전관리자·전문기관 종사자 신규교육: <strong><span class="hl">34시간</span></strong> 이상</span></div>
-<div class="answer-item"><span class="ans-num">⑥</span><span>안전관리자·전문기관 종사자 보수교육: <strong><span class="hl">24시간</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><strong><span class="hl">16시간</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><strong><span class="hl">8시간</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><strong><span class="hl">2시간</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">④</span><span><strong><span class="hl">6시간</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">⑤</span><span><strong><span class="hl">34시간</span></strong> 이상</span></div>
+<div class="answer-item"><span class="ans-num">⑥</span><span><strong><span class="hl">24시간</span></strong> 이상</span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)"><span class="kt-icon">▼</span> 🔑 핵심 키워드</button>
@@ -2534,10 +2537,10 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">2</span>일 (20℃ 이상 · 조강포틀랜드시멘트)</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span><span class="hl">4</span>일 (20℃ 이상 · 보통포틀랜드시멘트 등)</span></div>
-<div class="answer-item"><span class="ans-num">③</span><span><span class="hl">5</span>일 (20℃ 미만 10℃ 이상 · 보통포틀랜드시멘트 등)</span></div>
-<div class="answer-item"><span class="ans-num">④</span><span><span class="hl">8</span>일 (20℃ 미만 10℃ 이상 · 고로슬래그시멘트(1급) 등)</span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">2</span>일 </span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><span class="hl">4</span>일 </span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><span class="hl">5</span>일 </span></div>
+<div class="answer-item"><span class="ans-num">④</span><span><span class="hl">8</span>일 </span></div>
 </div>
 <div class="wrong-note-area" id="note_25_03_12" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -3196,7 +3199,7 @@
       </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">▶</span><span><span><span class="hl">정밀안전점검</span></span></span></div><div class="ref-extra"><div class="ref-box">
+<div class="answer-item"><span class="ans-num">-</span><span><span><span class="hl">정밀안전점검</span></span></span></div><div class="ref-extra"><div class="ref-box">
             📌 안전점검 종류<br>
             ① <em class="em4">자체안전점검</em>: 공사기간 동안 매일 공종별 실시<br>
             ② <em class="em4">정기안전점검</em>: 구조물별로 정기 실시<br>
@@ -3717,7 +3720,7 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">▶</span><span><span><span class="hl">시스템 비계</span></span></span></div>
+<div class="answer-item"><span class="ans-num">-</span><span><span><span class="hl">시스템 비계</span></span></span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)">
@@ -3814,14 +3817,16 @@
 </div>
 <div class="q-body">
 <div class="question-text">다음 [보기]의 사업장에서 선임하여야 하는 <strong>안전관리자의 최소 인원</strong>을 적으시오.
-<div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.2;">
+                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.0;">
 <div style="font-weight:600;text-align:center;margin-bottom:10px;">[보기]</div>
-<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;"><tbody><tr><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">구분</th><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">공사금액 규모</th><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">안전관리자 수</th></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">(1)</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">800억 원 이상 ~ 1,500억 원 미만</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">(    )명 이상</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">(2)</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">2,200억 원 이상 ~ 3,000억 원 미만</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">(    )명 이상</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">(3)</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">7,200억 원 이상 ~ 8,500억 원 미만</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">(    )명 이상</td></tr></tbody></table>
+<div style="margin-bottom:10px;">1. 총 공사금액 800억원 이상 1,500억원 미만 건설업</div>
+<div>2. 총공사금액 2,200억원 이상 3,000억 원 미만 건설업</div>
+<div>3. 총 공사금액 7,200억원 이상 8,500억원미만 건설업</div>
 </div>
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">(1)</span><span><span>800억~1,500억 미만 → <span class="hl">2명 이상</span></span></span></div><div class="answer-item"><span class="ans-num">(2)</span><span><span>2,200억~3,000억 미만 → <span class="hl">4명 이상</span></span></span></div><div class="answer-item"><span class="ans-num">(3)</span><span><span>7,200억~8,500억 미만 → <span class="hl">9명 이상</span></span></span></div><div class="ref-extra"><div class="ref-box">
+<div class="answer-item"><span class="ans-num">(1)</span><span><span><span class="hl">2명 이상</span></span></span></div><div class="answer-item"><span class="ans-num">(2)</span><span><span><span class="hl">4명 이상</span></span></span></div><div class="answer-item"><span class="ans-num">(3)</span><span><span><span class="hl">9명 이상</span></span></span></div><div class="ref-extra"><div class="ref-box">
             📌 건설업 안전관리자 선임기준 요약<br>
             50억~120억 미만(토목 150억): 1명 / 120억~800억: 1명<br>
             800억~1,500억: <em class="em4">2명</em> / 1,500억~2,200억: <em class="em4">3명</em> / 2,200억~3,000억: <em class="em4">4명</em><br>
@@ -4129,7 +4134,7 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">6</span>시간 이상 (사무직 정기교육, 매반기)</span></div><div class="answer-item"><span class="ans-num">②</span><span><span class="hl">16</span>시간 이상 (관리감독자 정기교육, 연간)</span></div><div class="answer-item"><span class="ans-num">③</span><span><span class="hl">4</span>시간 (건설업 기초안전·보건교육)</span></div><div class="answer-item"><span class="ans-num">④</span><span><span class="hl">2</span>시간 이상 (작업내용 변경 시, 일용 제외)</span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">6</span>시간 이상 </span></div><div class="answer-item"><span class="ans-num">②</span><span><span class="hl">16</span>시간 이상 </span></div><div class="answer-item"><span class="ans-num">③</span><span><span class="hl">4</span>시간 </span></div><div class="answer-item"><span class="ans-num">④</span><span><span class="hl">2</span>시간 이상 </span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)">
@@ -4654,7 +4659,7 @@
 </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span><span class="hl">1.85</span>m (장선방향은 1.5m)</span></span></div><div class="answer-item"><span class="ans-num">②</span><span><span><span class="hl">2.0</span>m 이하</span></span></div><div class="answer-item"><span class="ans-num">③</span><span><span><span class="hl">31</span>m 되는 지점 밑 부분 → 2본 강관으로 묶어 세울 것</span></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span><span class="hl">1.85</span>m </span></span></div><div class="answer-item"><span class="ans-num">②</span><span><span><span class="hl">2.0</span>m </span></span></div><div class="answer-item"><span class="ans-num">③</span><span><span><span class="hl">31</span>m </span></span></div>
 <div class="ref-box">벽이음 조립간격: 수직·수평방향 모두 <span class="hl">5m 이하</span> | 비계기둥간 적재하중: <span class="hl">400kg</span> 초과 금지</div>
 </div>
 <div class="keyword-section">
@@ -4860,7 +4865,7 @@
       </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span><span class="hl">연삭기 및 연마기</span> (휴대형 제외)</span></span></div><div class="answer-item"><span class="ans-num">②</span><span><span><span class="hl">산업용 로봇</span></span></span></div><div class="answer-item"><span class="ans-num">③</span><span><span><span class="hl">혼합기</span></span></span></div><div class="answer-item"><span class="ans-num">④</span><span><span><span class="hl">파쇄기 또는 분쇄기</span></span></span></div><div class="answer-item"><span class="ans-num">⑤</span><span><span><span class="hl">식품가공용기계</span> (파쇄·절단·혼합·제면기)</span></span></div><div class="answer-item"><span class="ans-num">⑥</span><span><span><span class="hl">컨베이어</span></span></span></div><div class="answer-item"><span class="ans-num">⑦</span><span><span><span class="hl">자동차 정비용 리프트</span></span></span></div><div class="answer-item"><span class="ans-num">⑧</span><span><span><span class="hl">공작기계</span> (선반·드릴·평삭·형삭기·밀링)</span></span></div><div class="answer-item"><span class="ans-num">⑨</span><span><span><span class="hl">고정형 목재가공용기계</span> (둥근톱·대패·루타기·띠톱·모떼기)</span></span></div><div class="answer-item"><span class="ans-num">⑩</span><span><span><span class="hl">인쇄기</span></span></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span><span class="hl">연삭기 및 연마기</span> (휴대형 제외)</span></span></div><div class="answer-item"><span class="ans-num">②</span><span><span><span class="hl">산업용 로봇</span></span></span></div><div class="answer-item"><span class="ans-num">③</span><span><span><span class="hl">혼합기</span></span></span></div><div class="answer-item"><span class="ans-num">④</span><span><span><span class="hl">파쇄기 또는 분쇄기</span></span></span></div><div class="answer-item"><span class="ans-num">⑤</span><span><span><span class="hl">식품가공용기계</span> (파쇄·절단·혼합·제면기)</span></span></div><div class="answer-item"><span class="ans-num">⑥</span><span><span><span class="hl">컨베이어</span></span></span></div><div class="answer-item"><span class="ans-num">⑦</span><span><span><span class="hl">자동차 정비용 리프트</span></span></span></div><div class="answer-item"><span class="ans-num"></span></span></span></div>
 </div>
 <div class="keyword-section">
 <button class="keyword-toggle" onclick="toggleKeyword(this)">
@@ -5299,7 +5304,7 @@
       </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">형태</span><span><span><span class="hl">떨어짐</span></span></span></div><div class="answer-item"><span class="ans-num">기인물</span><span><span><span class="hl">고소작업대</span></span></span></div><div class="answer-item"><span class="ans-num">가해물</span><span><span><span class="hl">지면(바닥)</span></span></span></div>
+<div class="answer-item"><span class="ans-num">(1)</span><span><span><span class="hl">떨어짐</span></span></span></div><div class="answer-item"><span class="ans-num">(2)</span><span><span><span class="hl">고소작업대</span></span></span></div><div class="answer-item"><span class="ans-num">(3)</span><span><span><span class="hl">지면(바닥)</span></span></span></div>
 <div class="ref-box"><em class="em3">기인물</em>: 재해를 유발한 물체(작업자가 접촉·사용하던 것) | <em class="em3">가해물</em>: 직접 상해를 입힌 물체</div>
 </div>
 <div class="keyword-section">
@@ -8945,7 +8950,7 @@
 </div><div class="q-card" data-star="2" id="q_20_03_03" data-id="20_03_03">
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">20/03/03</span><span class="q-star star-2" data-star="2"><span style="color:#555">★★</span></span>
-<span class="q-title">건설업 안전관리자 선임기준 (800억·2200억)</span>
+<span class="q-title">건설업 안전관리자 선임기준 </span>
 <button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('20_03_03')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('20_03_03')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('20_03_03')" title="오답 체크">✗</button>
 <span class="q-toggle">▼</span>
 </div>
@@ -34908,14 +34913,22 @@ function setStateToggle(id, state) {
    전체 보기/펼치기/접기
 ══════════════════════════════════════════ */
 function showAllCards() {
-  // 현재 활성 섹션에 따라 전체 표시
-  if (currentNav.startsWith('work')) {
-  } else {
-    const ysShowAll = document.getElementById('yearSections');
-    const ysShowAll2 = document.getElementById('yearStore');
-    if (ysShowAll2) ysShowAll2.style.display = '';
-    document.querySelectorAll('#yearSections .year-section').forEach(s => s.classList.add('active'));
-  }
+  // 필답형 기출문제 2025년으로 이동 + 활성화
+  // ① 모든 메인 버튼 비활성화 (텍스트 교체 없이 active 클래스만)
+  document.querySelectorAll('.main-nav-btn').forEach(b => b.classList.remove('active'));
+  // ② navYear 버튼 활성화
+  const navBtn = document.getElementById('navYear');
+  if (navBtn) navBtn.classList.add('active');
+  // ③ 모든 서브바 닫기 → subYear 열기
+  document.querySelectorAll('.sub-nav-bar').forEach(b => b.classList.remove('open'));
+  const subYear = document.getElementById('subYear');
+  if (subYear) subYear.classList.add('open');
+  // ④ currentNav 설정
+  currentNav = 'year';
+  currentYearId = 'y2025';
+  // ⑤ 2025 섹션 표시 (서브 버튼 포함)
+  const yb2025 = document.getElementById('yb2025');
+  showYearSection('y2025', yb2025);
 }
 function expandAll() {
   document.querySelectorAll('.q-card').forEach(c => {
@@ -35696,7 +35709,7 @@ function printWorkStudyPdf(mode) {
 .enh-modal {
   background: white; border-radius: 20px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.4);
-  max-width: 700px; width: 100%; max-height: 92vh; overflow-y: auto;
+  max-width: 700px; width: 100%; max-height: 92vh; overflow-y: auto; overscroll-behavior: contain;
   animation: enhSlideUp 0.3s cubic-bezier(.16,1,.3,1);
 }
 @keyframes enhSlideUp {
@@ -38723,7 +38736,7 @@ function printWorkStudyPdf(mode) {
         const cid = `tc_${chId}_${sec.title.replace(/\s/g,'')}_${i}`;
         html += `<div class="theory-card" id="${cid}">
           <div class="theory-card-header" onclick="toggleTheoryCard('${cid}')">
-            <span class="theory-star">${card.star}</span>
+            <span class="theory-star">${typeof card.star === 'number' ? '★'.repeat(card.star) : card.star}</span>
             <span class="theory-card-title">${card.title}</span>
             <span class="theory-toggle">▼</span>
           </div>
