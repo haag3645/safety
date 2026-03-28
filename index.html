@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>2026년 건설안전기사 4월18일 꼭 따야한다 경덕아!</title>
+<title>2026년 건설안전기사 꼭 따야한다 경덕아!</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ══ 상단 전체 고정 래퍼 ══ */
@@ -1289,7 +1289,7 @@
 <div id="stickyTop">
 <header class="site-header">
   <div class="header-top-row">
-    <h1>2026년 건설안전기사 4월18일 꼭 따야한다 경덕아!</h1>
+    <h1>2026년 건설안전기사 꼭 따야한다 경덕아!</h1>
   </div>
   <div class="header-stats">
     <div class="hstat">총 문제 <strong id="totalCount">0</strong>문</div>
@@ -1368,7 +1368,7 @@
 </div>
 
 <!-- 필답형 키워드 서브 -->
-<div class="sub-nav-bar" id="subKeyword" style="overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;">
+<div class="sub-nav-bar" id="subKeyword" style="flex-wrap:wrap;">
   <!-- Part 1 안전관리 -->
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전보건관리조직',this)">A-1 안전보건관리조직</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전관리계획 수립 및 운용',this)">A-2 안전관리계획 수립 및 운용</button>
@@ -1376,6 +1376,7 @@
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전점검·인증 및 진단',this)">A-4 안전점검·인증 및 진단</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('보호구 및 안전보건표지',this)">A-5 보호구 및 안전보건표지</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전보건교육',this)">A-6 안전보건교육</button>
+  <span style="color:#b0bec5;padding:0 4px;font-size:13px;">│</span>
   <!-- Part 2 건설공사 안전 -->
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('건설공사 특수성 분석',this)">B-1 건설공사 특수성 분석</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('가설공사 안전',this)">B-2 가설공사 안전</button>
@@ -1383,6 +1384,7 @@
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('구조물공사 안전',this)">B-4 구조물공사 안전</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('건설기계·기구 안전',this)">B-5 건설기계·기구 안전</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('사고형태별 안전',this)">B-6 사고형태별 안전</button>
+  <span style="color:#b0bec5;padding:0 4px;font-size:13px;">│</span>
   <!-- Part 3 안전기준 -->
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('건설안전 관련법규',this)">C-1 건설안전 관련법규</button>
   <button class="sub-nav-btn kw-btn" onclick="filterKeyword('안전기준 및 기술지침 적용',this)">C-2 안전기준 및 기술지침 적용</button>
@@ -1431,21 +1433,22 @@
 </div>
 <!-- 이론정리 서브 -->
 <div class="sub-nav-bar" id="subTheory" style="flex-wrap:wrap;">
-  <button class="sub-nav-btn" id="thb_ch01" onclick="showTheoryChapter('ch01',this)">CH01 안전보건관리조직</button>
-  <button class="sub-nav-btn" id="thb_ch02" onclick="showTheoryChapter('ch02',this)">CH02 안전관리계획</button>
-  <button class="sub-nav-btn" id="thb_ch03" onclick="showTheoryChapter('ch03',this)">CH03 산업재해 조사분석</button>
-  <button class="sub-nav-btn" id="thb_ch04" onclick="showTheoryChapter('ch04',this)">CH04 안전점검·인증·진단</button>
-  <button class="sub-nav-btn" id="thb_ch05" onclick="showTheoryChapter('ch05',this)">CH05 보호구·안전보건표지</button>
-  <button class="sub-nav-btn" id="thb_ch06" onclick="showTheoryChapter('ch06',this)">CH06 안전보건교육</button>
+  <button class="sub-nav-btn" id="thb_ch01" onclick="showTheoryChapter('ch01',this)">ch01-01 안전보건관리조직</button>
+  <button class="sub-nav-btn" id="thb_ch02" onclick="showTheoryChapter('ch02',this)">ch01-02 안전관리계획</button>
+  <button class="sub-nav-btn" id="thb_ch03" onclick="showTheoryChapter('ch03',this)">ch01-03 산업재해 조사분석</button>
+  <button class="sub-nav-btn" id="thb_ch04" onclick="showTheoryChapter('ch04',this)">ch01-04 안전점검·인증·진단</button>
+  <button class="sub-nav-btn" id="thb_ch05" onclick="showTheoryChapter('ch05',this)">ch01-05 보호구·안전보건표지</button>
+  <button class="sub-nav-btn" id="thb_ch06" onclick="showTheoryChapter('ch06',this)">ch01-06 안전보건교육</button>
   <span style="color:#b0bec5;padding:0 4px;font-size:13px;">│</span>
-  <button class="sub-nav-btn" id="thb_p02_ch01" onclick="showTheoryChapter('p02_ch01',this)">02-1 건설공사특수성</button>
-  <button class="sub-nav-btn" id="thb_p02_ch02" onclick="showTheoryChapter('p02_ch02',this)">02-2 가설공사안전</button>
-  <button class="sub-nav-btn" id="thb_p02_ch03" onclick="showTheoryChapter('p02_ch03',this)">02-3 토공사안전</button>
-  <button class="sub-nav-btn" id="thb_p02_ch04" onclick="showTheoryChapter('p02_ch04',this)">02-4 구조물공사안전</button>
-  <button class="sub-nav-btn" id="thb_p02_ch05" onclick="showTheoryChapter('p02_ch05',this)">02-5 건설기계기구안전</button>
-  <button class="sub-nav-btn" id="thb_p02_ch06" onclick="showTheoryChapter('p02_ch06',this)">02-6 사고형태별안전</button>
-  <button class="sub-nav-btn" id="thb_p03_ch01" onclick="showTheoryChapter('p03_ch01',this)">03-1 건설안전 관련법규</button>
-  <button class="sub-nav-btn" id="thb_p03_ch02" onclick="showTheoryChapter('p03_ch02',this)">03-2 안전기준·기술지침</button>
+  <button class="sub-nav-btn" id="thb_p02_ch01" onclick="showTheoryChapter('p02_ch01',this)">ch02-01 건설공사특수성</button>
+  <button class="sub-nav-btn" id="thb_p02_ch02" onclick="showTheoryChapter('p02_ch02',this)">ch02-02 가설공사안전</button>
+  <button class="sub-nav-btn" id="thb_p02_ch03" onclick="showTheoryChapter('p02_ch03',this)">ch02-03 토공사안전</button>
+  <button class="sub-nav-btn" id="thb_p02_ch04" onclick="showTheoryChapter('p02_ch04',this)">ch02-04 구조물공사안전</button>
+  <button class="sub-nav-btn" id="thb_p02_ch05" onclick="showTheoryChapter('p02_ch05',this)">ch02-05 건설기계기구안전</button>
+  <button class="sub-nav-btn" id="thb_p02_ch06" onclick="showTheoryChapter('p02_ch06',this)">ch02-06 사고형태별안전</button>
+  <span style="color:#b0bec5;padding:0 4px;font-size:13px;">│</span>
+  <button class="sub-nav-btn" id="thb_p03_ch01" onclick="showTheoryChapter('p03_ch01',this)">ch03-01 건설안전 관련법규</button>
+  <button class="sub-nav-btn" id="thb_p03_ch02" onclick="showTheoryChapter('p03_ch02',this)">ch03-02 안전기준·기술지침</button>
 </div>
 
 </div>
@@ -2103,11 +2106,7 @@
 <div class="answer-box">
 <div class="answer-label">정답</div>
 <div class="answer-item"><span><span class="hl">(1) 양중기 종류</span></span></div>
-<div class="answer-item"><span class="ans-num">①</span><span><strong>크레인</strong>(호이스트 포함)</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span><strong>이동식 크레인</strong></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span><strong>리프트</strong>(이삿짐운반용 리프트 : 적재하중 0.1톤 이상)</span></div>
-<div class="answer-item"><span class="ans-num">④</span><span><strong>곤돌라</strong></span></div>
-<div class="answer-item"><span class="ans-num">⑤</span><span><strong>승강기</strong></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><strong>크레인(호이스트 포함) &nbsp; ② 이동식 크레인 &nbsp; ③ 리프트(이삿짐운반용 리프트</strong>  :  <span class="kw">적재하중 0.1톤 이상) &nbsp; ④ 곤돌라 &nbsp; ⑤ 승강기</span></span></div>
 <div class="answer-item" style="margin-top:8px;"><span><span class="hl">(2) 공통 방호장치</span></span></div>
 <div class="answer-item"><span class="ans-num">①</span><span><strong>과부하방지장치</strong></span></div>
 <div class="answer-item"><span class="ans-num">②</span><span><strong>권과방지장치</strong></span></div>
@@ -5294,12 +5293,10 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">작업자가 <strong>고소작업대</strong> 위에서 작업하던 중 <strong>지면(바닥)으로 떨어지는 재해</strong>가 발생하였다.
-        <div style="background:#f0f4ff;border-left:3px solid #90a4ae;padding:8px 12px;margin-top:8px;border-radius:0 6px 6px 0;">
-<p>(1) 기인물 :</p>
-<p>(2) 가해물 :</p>
-<p>(3) 재해 발생 형태 :</p>
-</div></div>
+<div class="question-text">
+        작업자가 <strong>고소작업대</strong> 위에서 작업하던 중 <strong>지면(바닥)으로 떨어지는 재해</strong>가 발생하였다.
+        <br>(1) 재해발생 형태 &nbsp; (2) 기인물 &nbsp; (3) 가해물
+      </div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
 <div class="answer-item"><span class="ans-num">형태</span><span><span><span class="hl">떨어짐</span></span></span></div><div class="answer-item"><span class="ans-num">기인물</span><span><span><span class="hl">고소작업대</span></span></span></div><div class="answer-item"><span class="ans-num">가해물</span><span><span><span class="hl">지면(바닥)</span></span></span></div>
@@ -9758,11 +9755,10 @@
 </div>
 <div class="q-body">
 <div class="question-text">작업자가 고소작업을 하던 중 작업발판에서 떨어지며 바닥에 부딪혀 상해를 입었다.<br>
-        <div style="background:#f0f4ff;border-left:3px solid #90a4ae;padding:8px 12px;margin-top:8px;border-radius:0 6px 6px 0;">
-<p>(1) 재해 발생 형태 :</p>
-<p>(2) 기인물 :</p>
-<p>(3) 가해물 :</p>
-</div></div>
+
+(1) <strong>재해 발생 형태 :</strong>
+(2) <strong>기인물 :</strong>
+(3) <strong>가해물 :</strong></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
 <div class="answer-item"><span class="ans-num">(1)</span><span>떨어짐</span></div>
@@ -9800,10 +9796,10 @@
 </div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><strong class="kw">31m</strong></span></div>
-<div class="answer-item"><span class="ans-num">②</span><span><strong class="kw">50m</strong></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span><strong class="kw">2,000만톤</strong></span></div>
-<div class="answer-item"><span class="ans-num">④</span><span><strong class="kw">5,000m²</strong></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span>31</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span>50</span></div>
+<div class="answer-item"><span class="ans-num">③</span><span>2천만</span></div>
+<div class="answer-item"><span class="ans-num">④</span><span><strong class="kw">5,000</strong></span></div>
 <div class="answer-item"><span class="ans-num">⑤</span><span><strong class="kw">굴착공사</strong></span></div>
 <div class="ref-box"><strong>💡 암기법</strong>
 지상높이 31m / 연면적 3만㎡ / 사람 많은 시설 연면적 5,000m²
@@ -10969,10 +10965,12 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">다음 [보기]는 산업안전보건법상의 <strong>안전보건교육 시간</strong>을 설명하고 있다. ( )에 적합한 시간을 적으시오.<br>
-          1. 일용근로자의 채용시 교육: ( )시간 이상<br>
-          2. 건설업 기초안전보건교육: ( )시간<br>
-          3. 2m 이상인 구축물 파쇄작업에서 하는 일용근로자의 특별교육: ( )시간 이상</div>
+<div class="question-text">다음 [보기]는 산업안전보건법상의 <strong>안전보건교육 시간</strong>을 설명하고 있다. (  )에 적합한 시간을 적으시오.<br>
+<div style="border:2px solid #b0bec5;border-radius:8px;padding:14px 18px;margin-top:10px;background:#fafafa;font-size:16px;line-height:2.2;">
+1. 일용근로자의 채용시 교육 : ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> ) 시간 이상<br>
+2. 건설업 기초안전보건교육 : ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> ) 시간<br>
+3. 2m 이상인 구축물 파쇄작업에서 하는 일용근로자의 특별교육 : ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> ) 시간 이상<br>
+</div></div>
 <div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>1시간</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>4시간</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>2시간</strong></span></div></div>
 <div class="wrong-note-area" id="note_18_01_04" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -10991,7 +10989,10 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">순간풍속이 초당 ( )미터를 초과하는 바람이 불어올 우려가 있는 경우 옥외에 설치되어 있는 <strong>주행 크레인</strong>에 대하여 이탈 방지장치를 가동시키는 등 이탈방지조치를 하여야 한다.</div>
+<div class="question-text">다음 보기의 (    )에 적합한 내용을 적으시오.
+<div style="border:2px solid #b0bec5;border-radius:8px;padding:14px 18px;margin-top:10px;background:#fafafa;font-size:16px;line-height:2.2;">
+순간풍속이 초당 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> ) m를 초과하는 바람이 불어올 우려가 있는 경우 옥외에 설치되어 있 는 주행 크레인에 대하여 이탈 방지장치를 가동시키는등 이탈방지조치를 하여야 한다.<br>
+</div></div>
 <div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>30m</strong></span></div></div>
 <div class="wrong-note-area" id="note_18_01_05" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -11060,13 +11061,17 @@
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">18/01/08</span><span class="q-star star-2" data-star="2"><span style="color:#555">★★</span></span>
 <span class="q-title">건설업 안전관리자 선임 인원</span>
-<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('18_01_08')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('18_01_08')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('18_01_08')" title="오답 체크">✗</button>
+<<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('25_02_02')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('25_02_02')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('25_02_02')" title="오답 체크">✗</button>
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text"><strong>안전관리자 선임 인원</strong>.<br>
-          1. 총 공사금액 1,000억 원 이상인 건설업에서 선임하여야 하는 안전관리자의 수<br>
-          2. 총 공사금액 2,500억 원인 건설업에서 선임하여야 하는 안전관리자의 수</div>
+<div class="question-text">다음[보기]의 조건에 적합한안전관리자의 최소 인원을 적으시오. 
+                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.2;">
+<div style="font-weight:600;text-align:center;margin-bottom:10px;">[보기]</div>
+<div style="margin-bottom:8px;">1. 총공사금액 1,000억 원 이상인 건설업에서 선임하여야 하는 안전관리자의 수를적으시오.</div>
+<div style="margin-bottom:8px;">2. 총공사금액 2,500억 원인 건설업에서 선임하여야 하는 안전관리자의 수를 적으시오.</div>
+</div>
+</div>
 <div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>2명 이상</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>4명 이상</strong></span></div></div>
 <div class="wrong-note-area" id="note_18_01_08" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -11133,8 +11138,8 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">(1) <strong>명예산업안전감독관</strong>의 기준 3가지와 (2) 명예산업안전감독관의 임기를 적으시오.</div>
-<div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>(1) ① 산업안전보건위원회 또는 노사협의체 설치 대상 사업의 근로자 대표가 사업주의 의견을 들어 추천하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>노동조합 또는 그 지역 대표 기구가 추천하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>전국 규모의 사업주단체 또는 그 산하조직이 추천 하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">④</span><span><strong>산업재해 예방 관련 업무를 하는 단체 또는 그 산하 조직이 추천하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">⑤</span><span><strong>(2) 2년</strong></span></div></div>
+<div class="question-text">(1) <strong>명예산업안전감독관의 기준</strong> 3가지와 (2) <strong>명예산업안전감독관의 임기</strong>를 적으시오.</div>
+<div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">(1)</span><span><strong> ① 산업안전보건위원회 또는 노사협의체 설치 대상 사업의 근로자 대표가 사업주의 의견을 들어 추천하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>노동조합 또는 그 지역 대표 기구가 추천하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>전국 규모의 사업주단체 또는 그 산하조직이 추천 하는 사람</strong></span></div><div ④ 산업재해 예방 관련 업무를 하는 단체 또는 그 산하 조직이 추천하는 사람</strong></span></div><div class="answer-item"><span class="ans-num">(2)</span><span><strong> 명얘산업안전감독관의 임기 : 2년</strong></span></div></div>
 <div class="wrong-note-area" id="note_18_01_11" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
 <textarea class="wrong-note-input" id="textarea_18_01_11" onchange="saveNote('18_01_11', this.value)" placeholder="틀린 이유, 헷갈린 부분을 적어두세요..."></textarea>
@@ -11268,14 +11273,16 @@
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">18/02/02</span><span class="q-star star-3" data-star="3"><span style="color:#555">★★★</span></span>
 <span class="q-title">건설업 안전관리자 선임기준</span>
-<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('18_02_02')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('18_02_02')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('18_02_02')" title="오답 체크">✗</button>
+<<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('25_02_02')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('25_02_02')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('25_02_02')" title="오답 체크">✗</button>
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text"><strong>안전관리자 선임기준</strong> ( )에 적합한 내용을 적으시오.
-                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.0;">
+<div class="question-text">다음[보기]는건설업의 안전관리자선임기준을설명하고 있다. ( )에 적합한내용을 적으시오. 
+                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.2;">
 <div style="font-weight:600;text-align:center;margin-bottom:10px;">[보기]</div>
-<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;"><tbody><tr><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">공사금액 범위</th><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">안전관리자 수</th></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">120억 원 이상 ~ 800억 원 미만</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;"><mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(①)</mark>명 이상</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">800억 원 이상 ~ 1,500억 원 미만</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;"><mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(②)</mark>명 이상</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">1조 원 이상 (기본)</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">11명 이상</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">매 <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(③)</mark>원마다 1명 추가<br>(2조 원 이상: 매 <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(④)</mark>원마다)</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">-</td></tr></tbody></table>
+1. 공사금액 120억 원 이상 800억 원 미만 : ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> )명 이상<br>
+2. 건설업 공사금액 800억 원 이상 1500억 원 미만 : ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> )명 이상<br>
+3. 공사금액 1조원 이상: 11명 이상 [매 : ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> ) 원(2조원 이상부터는 매 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">④</mark> )원)마다 1명싹 추가한다]<br>
 </div>
 </div>
 <div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>1명</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>2명</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>2천억원</strong></span></div><div class="answer-item"><span class="ans-num">④</span><span><strong>3천억원</strong></span></div></div>
@@ -11334,10 +11341,14 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text"><strong>유해위험방지계획서 제출대상 건설업</strong>. ( )에 적합한 내용을 적으시오.
-                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.0;">
+<div class="question-text">다음 [보기]는 유해위험방지계획서 제출대상 건설업에 관한 내용이다. (     )에 적합한 내용을적으시오. 
+                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.2;">
 <div style="font-weight:600;text-align:center;margin-bottom:10px;">[보기]</div>
-<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;"><tbody><tr><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">대상 기준</th><th style="border:1px solid #b0bec5;padding:7px 10px;background:#e3eaf5;font-weight:600;text-align:center;">구분</th></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">연면적 <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(①)</mark> 이상의 냉동·냉장창고시설 설비·단열공사</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">냉동창고</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">최대 지간길이 <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(②)</mark> 이상인 교량 건설 등 공사</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">교량</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">터널 건설 등의 공사</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">터널</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">다목적댐·발전용댐 및 저수용량 2천만 톤 이상 댐 건설</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">댐</td></tr><tr><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">깊이 <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(③)</mark> 이상인 굴착공사</td><td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">굴착</td></tr></tbody></table>
+1. 연면적 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> ) 이상의 냉동•냉장창고시설의 설비공사 및 단열공사<br>
+2. 최대 지간길이가 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> )이상인 교량 건설 등공사<br>
+3. 터널 건설 등의 공사<br>
+4. 다목적댐, 발전용댐 및 저수용량 2천만 톤 이상의 용수 전용 댐, 지방상수도 전용 댐 건설 등의 공사<br>
+5. 깊이 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> ) 이상인 굴착공사<br>
 </div>
 </div>
 <div class="answer-box">
@@ -11435,15 +11446,21 @@
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">18/02/09</span><span class="q-star star-3" data-star="3"><span style="color:#555">★★★</span></span>
 <span class="q-title">종합재해지수(FSI) 계산</span>
-<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('18_02_09')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('18_02_09')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('18_02_09')" title="오답 체크">✗</button>
+<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('18_02_05')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('18_02_05')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('18_02_05')" title="오답 체크">✗</button>
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">근로자 수 500명, 일일 8시간 연간 280일을 근무하는 사업장에서 연간 10건의 재해가 발생하여 159일의 휴업일수가 발생되었다. <strong>종합재해지수(FSI)</strong>를 계산하시오.</div>
+<div class="question-text">다음 [보기]와 같은 조건에서 종합재해지수(FSI)를 계산하시오. 
+                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.2;">
+<div style="font-weight:600;text-align:center;margin-bottom:10px;">[보기]</div>
+근로자 수 500명, 일일 8시간 연간 280일을 근무하는 사업장에서 연간 10건의 재해가 발생 하여 159일의 휴업일수가 발생되었다.<br>
+</div>
+</div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
 <div class="answer-item"><span class="ans-num">도수율</span><span>= 10 / (500×8×280) × 10⁶ = <span class="hl">8.93</span></span></div>
 <div class="answer-item"><span class="ans-num">강도율</span><span>= (159 × 280/365) / (500×8×280) × 1,000 = <span class="hl">0.11</span></span></div>
+<div class="answer-item"><span class="ans-num">FSI = √(도수율×강도율) = √(8.93 × 0.11) = <span class="hl">0.99</span></span></div>
 </div>
 <div class="wrong-note-area" id="note_18_02_09" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -11784,7 +11801,7 @@
 </div>
 <div class="q-body">
 <div class="question-text">근로자 500명이 근무하던 사업장에서 12건의 재해가 발생하여 재해자수가 15명, 600일의 근로손실이 생겼다. <strong>도수율·강도율·연천인율</strong>, (2) 강도율, (3) 연천인율을 계산하시오. (단, 1일 9시간, 연 270일 근무)</div>
-<div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>(1) 도수율  = 12 / (500×9×270) × 1,000,000 = 9.88</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>(2) 강도율  = 600 / (500×9×270) × 1,000 = 0.49</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>(3) 연천인율  = 9.88 / 0.49 × 1,000 = 30</strong></span></div></div>
+<div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">(1)</span><span><strong> 도수율  = 12 / (500×9×270) × 1,000,000 = 9.88</strong></span></div><div class="answer-item"><span class="ans-num">(2)</span><span><strong> 강도율  = 600 / (500×9×270) × 1,000 = 0.49</strong></span></div><div class="answer-item"><span class="ans-num">(3)</span><span><strong> 연천인율  = 9.88 / 0.49 × 1,000 = 30</strong></span></div></div>
 <div class="wrong-note-area" id="note_18_04_09" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
 <textarea class="wrong-note-input" id="textarea_18_04_09" onchange="saveNote('18_04_09', this.value)" placeholder="틀린 이유, 헷갈린 부분을 적어두세요..."></textarea>
@@ -11984,8 +12001,8 @@
 <div class="question-text">400명의 근로자가 1일 8시간, 연간 300일 근무하는 사업장에서 과거 빈도율 120, 현재 빈도율이 100일 경우 <strong>Safe-T-Score</strong>를 계산하시오.</div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>Safe-T-Score = (현재빈도율 – 과거빈도율) ÷ √(과거빈도율 / 총근로시간수 × 1,000,000)</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>= (100 – 120) ÷ √(120 / (400×8×300) × 1,000,000) = <span class="hl">–1.79</span></span></div>
+<div class="answer-item"><span class="ans-num">-</span><span>Safe-T-Score = (현재빈도율 – 과거빈도율) ÷ √(과거빈도율 / 총근로시간수 × 1,000,000)</span></div>
+<div class="answer-item"><span class="ans-num">-</span><span>Safe-T-Score = (100 – 120) ÷ √(120 / (400×8×300) × 1,000,000) = <span class="hl">–1.79</span></span></div>
 </div>
 <div class="ref-box">📌 판정기준: –2 이하 → 과거보다 안전이 좋아짐 / –2~+2 → 과거와 큰 차이 없음 / +2 이상 → 과거보다 안전이 심각하게 나빠짐</div>
 <div class="wrong-note-area" id="note_17_01_04" style="display:none">
@@ -12199,7 +12216,7 @@
 <div class="question-text"><strong>OJT교육(On The Job Training)의 특징</strong>을 설명하시오.</div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">직속 상사가 부하 직원에게 일상 업무를 통하여</span> 지식, 기능, 문제 해결 능력 및 태도 등을 교육하는 방법으로 <strong>개별 교육</strong>에 적합하다.</span></div>
+<div class="answer-item"><span class="ans-num">-</span><span><span class="hl">직속 상사가 부하 직원에게 일상 업무를 통하여</span> 지식, 기능, 문제 해결 능력 및 태도 등을 교육하는 방법으로 <strong>개별 교육</strong>에 적합하다.</span></div>
 </div>
 <div class="ref-box">📌 OFF JT(Off The Job Training): 외부강사를 초청하여 근로자를 일정한 장소에 집합시켜 실시하는 교육 형태로서 <strong>집합교육</strong>에 적합하다.</div>
 <div class="wrong-note-area" id="note_17_01_12" style="display:none">
@@ -12372,7 +12389,7 @@
 <div class="answer-label">정답</div>
 <div class="answer-item"><span class="ans-num">①</span><span><strong class="kw">강도율 = 총 요양 근로손실일수 / 연 근로시간수 × 1,000</strong></span></div>
 <div class="answer-item"><span class="ans-num">②</span><span><strong class="kw">근로손실일수 = 휴업일수 × 300/365 (실제근로일수)</strong></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>= [7,500 + (50 × 305/365 × 2) + (20 × 305/365 × 1)] / (200 × 8 × 305) × 1,000 = <span class="hl">15.57</span></span></div>
+<div class="answer-item"><span class="ans-num">③</span><span>강도율 = [7,500 + (50 × 305/365 × 2) + (20 × 305/365 × 1)] / (200 × 8 × 305) × 1,000 = <span class="hl">15.57</span></span></div>
 </div>
 <div class="ref-box">📌 사망·1~3급: 7,500일 / 4급: 5,500일 / 5급: 4,000일 / 6급: 3,000일 / 7급: 2,200일 / 8급: 1,500일 / 9급: 1,000일 / 10급: 600일 / 11급: 400일 / 12급: 200일 / 13급: 100일 / 14급: 50일</div>
 <div class="wrong-note-area" id="note_17_02_05" style="display:none">
@@ -12500,7 +12517,7 @@
 </div>
 <div class="q-body">
 <div class="question-text">터널공사 중 NATM 공법에서 지질 및 지층에 관한 <strong>지반조사를 실시하고 확인하여야 하는 사항</strong> 3가지를 적으시오.</div>
-<div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>토층 분포상태</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>투수계수</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>지하수위</strong></span></div></div>
+<div class="answer-box"><div class="answer-label">정답</div><div class="answer-item"><span class="ans-num">①</span><span><strong>토층 분포상태</strong></span></div><div class="answer-item"><span class="ans-num">②</span><span><strong>투수계수</strong></span></div><div class="answer-item"><span class="ans-num">③</span><span><strong>지하수위</strong></span></div><div class="answer-item"><span class="ans-num">④</span><span><strong>시추위치</strong></span></div></div>
 <div class="wrong-note-area" id="note_17_02_11" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
 <textarea class="wrong-note-input" id="textarea_17_02_11" onchange="saveNote('17_02_11', this.value)" placeholder="틀린 이유, 헷갈린 부분을 적어두세요..."></textarea>
@@ -12521,9 +12538,9 @@
 <div class="question-text">작업발판 위에서 전기용접 작업을 하던 근로자가 전기로 인해 짜릿함을 느껴 균형을 잃고 바닥으로 떨어져 다치는 사고가 발생하였다. <strong>(1) 기인물, (2) 가해물, (3) 재해 발생형태</strong>를 적으시오.</div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">(1)</span><span> 기인물 : <span class="hl">전기</span></span></div>
-<div class="answer-item"><span class="ans-num">(2)</span><span> 가해물 : <span class="hl">바닥</span></span></div>
-<div class="answer-item"><span class="ans-num">(3)</span><span> 재해 발생형태 : <span class="hl">떨어짐(추락)</span></span></div>
+<div class="answer-item"><span class="ans-num">(1)</span><span> 기인물: <span class="hl">전기</span></span></div>
+<div class="answer-item"><span class="ans-num">(2)</span><span> 가해물: <span class="hl">바닥</span></span></div>
+<div class="answer-item"><span class="ans-num">(3)</span><span> 재해 발생형태: <span class="hl">떨어짐(추락)</span></span></div>
 </div>
 <div class="wrong-note-area" id="note_17_02_12" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -12542,15 +12559,16 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">다음은 추락재해 예방을 위하여 설치하는 안전난간의 구조 및 설치요건에 관한 설명이다. ( )에 적합한 내용을 적으시오.
+<div class="question-text">다음 [보기]는 가설공사 표준 안전지침에 의한 이동식 사다리에 관한 내용이다. (    )에 적합 한 내용을 적으시오.
 <div style="border:2px solid #b0bec5;border-radius:8px;padding:14px 18px;margin-top:10px;background:#fafafa;font-size:16px;line-height:2.2;">
-1. 상부 난간대는 바닥면·발판 또는 경사로의 표면으로부터 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> )cm 이상 지점에 설치하고, 상부 난간대를 120cm 이하에 설치하는 경우에는 중간 난간대는 상부 난간대와 바닥면 등의 중간에 설치하여야 하며, 120cm 이상 지점에 설치하는 경우에는 중간 난간대를 2단이상으로 균등하게 설치하고 난간의 상하 간격은 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">②</mark> )cm 이하가 되도록 할 것<br>
-2. 발끝막이판은 바닥면 등으로부터 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> )센티미터 이상의 높이를 유지할 것
+1. 길이가 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> ) m를 초과해서는 안 된다.<br>
+2. 다리의 벌림은 벽 높이의 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> )정도가 적당하다.<br>
+3. 벽면 상부로부터 최소한 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> )cm 이상의 연장길이가 있어야 한다.<br>
 </div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">6</span>m</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span> 벽 높이의 <span class="hl">1/4</span></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">6</span>cm</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><span class="hl">1/4</span></span></div>
 <div class="answer-item"><span class="ans-num">③</span><span><span class="hl">60</span>cm</span></div>
 </div>
 <div class="wrong-note-area" id="note_17_02_13" style="display:none">
@@ -12672,16 +12690,16 @@
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">다음은 추락재해 예방을 위하여 설치하는 안전난간의 <strong>구조 및 설치요건</strong>에 관한 설명이다. ( )에 적합한 내용을 적으시오.
+<div class="question-text">다음은 추락재해 예방을 위하여 설치하는 <strong>안전난간의 구조 및 설치요건</strong>에 관한 설명이다. (   )에 적합한 내용을 적으시오.
 <div style="border:2px solid #b0bec5;border-radius:8px;padding:14px 18px;margin-top:10px;background:#fafafa;font-size:16px;line-height:2.2;">
-1. 상부 난간대는 바닥면·발판 또는 경사로의 표면으로부터 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> )cm 이상 지점에 설치하고, 상부 난간대를 120센티미터 이하에 설치하는 경우에는 중간 난간대는 상부 난간대와 바닥면 등의 중간에 설치하여야 하며, 120센티미터 이상 지점에 설치하는 경우에는 중간 난간대를 2단이상으로 균등하게 설치하고 난간의 상하 간격은 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">②</mark> )센티미터 이하가 되도록 할 것<br>
+1. 상부 난간대는 바닥면·발판 또는 경사로의 표면으로부터 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">①</mark> )cm 이상 지점에 설치하고, 상부 난간대를 120cm 이하에 설치하는 경우에는 중간 난간대는 상부 난간대와 바닥면 등의 중간에 설치하여야 하며, 120cm 이상 지점에 설치하는 경우에는 중간 난간대를 2단이상으로 균등하게 설치하고 난간의 상하 간격은 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">②</mark> )cm 이하가 되도록 할 것<br>
 2. 발끝막이판은 바닥면 등으로부터 ( <mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">③</mark> )cm 이상의 높이를 유지할 것
 </div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>상부 난간대 높이: <span class="hl">90</span>cm 이상</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>중간 난간대 상하 간격: <span class="hl">60</span>cm 이하</span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>발끝막이판 높이: <span class="hl">10</span>cm 이상</span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">90</span>cm 이상</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><span class="hl">60</span>cm 이하</span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><span class="hl">10</span>cm 이상</span></div>
 </div>
 <div class="wrong-note-area" id="note_17_04_05" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -12750,9 +12768,9 @@
 </div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>대상액 = 재료비 + 직접노무비 = 40억원 + 30억원 = <span class="hl">70억원</span></span></div>
-<div class="answer-item"><span class="ans-num">②</span><span><strong class="kw">대상액이 50억원 이상이므로 → 대상액 × 비율 (기초액 없음)</strong></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>산업안전보건관리비 = 70억원 × 0.0228 = <span class="hl">159,600,000원</span></span></div>
+<div class="answer-item"><span class="ans-num">1.</span><span>대상액 = 재료비 + 직접노무비 = 40억원 + 30억원 = <span class="hl">70억원</span></span></div>
+<div class="answer-item"><span class="ans-num">2.</span><span><strong class="kw">대상액이 50억원 이상이므로 → 대상액 × 비율 (기초액 없음)</strong></span></div>
+<div class="answer-item"><span class="ans-num"></span><span><strong class="kw">산업안전보건관리비</strong> = 대상액(재료비 + 직접노무비) × 비율 = (40억원 + 30억원) × 0.0228 = <span class="hl">159,600,000원</span></span></div>
 </div>
 <div class="ref-extra"><div class="ref-box">
 <strong>📌 산업안전보건관리비의 계상</strong><br>
@@ -12859,9 +12877,9 @@
 </div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span>① <span class="hl">60</span>일 이내 제출</span></div>
-<div class="answer-item"><span class="ans-num">②</span><span>② <span class="hl">안전·보건관리체제</span></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span>③ <span class="hl">안전·보건교육</span></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">60일</span> 이내 제출</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><span class="hl">안전·보건관리체제</span></span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><span class="hl">안전·보건교육</span></span></div>
 </div>
 <div class="wrong-note-area" id="note_17_04_12" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -12971,7 +12989,7 @@
 <div class="answer-item"><span class="ans-num">①</span><span><span class="hl">건설용 리프트</span></span></div>
 <div class="answer-item"><span class="ans-num">②</span><span><span class="hl">산업용 리프트</span></span></div>
 <div class="answer-item"><span class="ans-num">③</span><span><span class="hl">자동차정비용 리프트</span></span></div>
-<div class="answer-item"><span class="ans-num">④</span><span><strong class="kw">이삿짐운반용 리프트 (4개 중 3개 선택)</strong></span></div>
+<div class="answer-item"><span class="ans-num">④</span><span><strong class="kw">이삿짐운반용 리프트</strong></span></div>
 </div>
 <div class="wrong-note-area" id="note_16_01_03" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -13296,21 +13314,29 @@
 </div><div class="q-card" data-star="3" id="q_16_02_02" data-id="16_02_02">
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">16/02/02</span><span class="q-star star-3" data-star="3"><span style="color:#555">★★★</span></span>
-<span class="q-title">산업안전보건관리비 계상 (터널신설공사)</span>
-<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('22_01_03')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('22_01_03')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('22_01_03')" title="오답 체크">✗</button>
+<span class="q-title">산업안전보건관리비 계상 (건축공사)</span>
+<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('16_02_02')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('16_02_02')" title="중간답">▲</button><button class="wrong-btn marked" onclick="event.stopPropagation(); toggleWrong('16_02_02')" title="오답 체크">✗</button>
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">건축공사에 해당하는 공사로서 재료비 2억 5천만 원, 관급재료비 3억 5천만 원, 직접노무비 2억원일 경우 산업안전보건관리비를 계상하시오.
-                <div style="margin-top:12px;font-weight:600;text-align:center;font-size:15px;margin-bottom:6px;">[보기]</div>
-<table style="width:100%;border-collapse:collapse;font-size:12.5px;border:1px solid #b0bec5;">
+<div class="question-text">건축공사에 해당하는 공사로서 재료비 2억 5천만 원, 관급재료비 3억 5천만 원, 직접노무비 2억 원일 경우 <strong>산업안전보건관리비를 계상</strong>하시오.</div>
+<div class="answer-box">
+<div class="answer-label">정답</div>
+<div style="border:1.5px solid #90a4ae;border-radius:6px;padding:12px 16px;margin:8px 0 10px;background:#f5f7fa;font-size:13.5px;line-height:2.0;">
+  <div style="font-weight:700;margin-bottom:6px;">산업안전보건관리비의 계상</div>
+  <div>1. 대상액이 5억 원 미만 또는 50억 원 이상</div>
+  <div style="margin-left:16px;color:#444;">산업안전보건관리비 = 대상액(재료비 + 직접 노무비) × 비율</div>
+  <div>2. 대상액이 5억 원 이상 50억 원 미만</div>
+  <div style="margin-left:16px;color:#444;">산업안전보건관리비 = 대상액(재료비 + 직접 노무비) × 비율 + 기초액</div>
+</div>
+<table style="width:100%;border-collapse:collapse;font-size:12.5px;border:1px solid #b0bec5;margin-bottom:10px;">
 <thead>
 <tr>
 <th rowspan="2" style="background:#1a237e;color:white;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;vertical-align:middle;">구분<br>공사종류</th>
 <th style="background:#1a237e;color:white;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;">대상액 5억 원<br>미만인 경우<br>적용비율(%)</th>
 <th colspan="2" style="background:#1a237e;color:white;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;">대상액 5억 원 이상<br>50억 원 미만인 경우</th>
 <th style="background:#1a237e;color:white;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;">대상액 50억 원<br>이상인 경우<br>적용비율(%)</th>
-<th style="background:#1a237e;color:white;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;">보건관리자<br>선임 대상<br>건설공사의<br>적용비율(%)</th>
+<th style="background:#1a237e;color:white;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;">보건관리자 선임<br>대상 건설공사의<br>적용비율(%)</th>
 </tr>
 <tr>
 <th style="background:#283593;color:white;padding:6px 10px;text-align:center;font-weight:600;border:1px solid #3949ab;"></th>
@@ -13321,11 +13347,11 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr style="background:#e3f2fd;font-weight:700;">
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">건축공사</td>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">3.11%</td>
-<td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;color:#c62828;">2.28%</td>
-<td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;color:#c62828;">4,325,000원</td>
+<td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">2.28%</td>
+<td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">4,325,000원</td>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">2.37%</td>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">2.64%</td>
 </tr>
@@ -13337,7 +13363,7 @@
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">2.60%</td>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">2.73%</td>
 </tr>
-<tr style="background:#e8f5e9;font-weight:600;">
+<tr>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">중건설공사</td>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">3.64%</td>
 <td style="border:1px solid #b0bec5;padding:7px 10px;text-align:center;">3.05%</td>
@@ -13355,34 +13381,50 @@
 </tr>
 </tbody>
 </table>
+<div class="answer-item"><span class="ans-num" style="min-width:auto;padding:2px 8px;">1.</span><span style="font-weight:600;">관급재료비를 포함할 경우</span></div>
+<div style="margin-left:12px;font-size:13.5px;line-height:2.0;color:#333;">
+  - 대상액 = 2억 5천만 원 + 3억 5천만 원 + 2억 원 = <strong>8억 원</strong> (대상액이 5억 원 이상 50억 원 미만에 해당)<br>
+  - 산업안전보건관리비 = 대상액(재료비 + 직접 노무비) × 비율 + 기초액<br>
+  <div style="margin-left:20px;">= (2억 5천만 원 + 3억 5천만 원 + 2억 원) × 0.0228 + 4,325,000<br>= <span class="hl">22,565,000원</span></div>
 </div>
+<div class="ref-box" style="margin-top:10px;">※ 관급재료비 포함·제외 두 값 중 <span class="hl">작은 값(13,995,000원) 이상</span>으로 계상<br>→ 산업안전보건관리비: <strong>22,565,000원</strong> 계상</div>
+</div>
+<div class="wrong-note-area" id="note_16_02_02" style="display:none">
+<div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
+<textarea class="wrong-note-input" id="textarea_16_02_02" onchange="saveNote('16_02_02', this.value)" placeholder="틀린 이유, 헷갈린 부분을 적어두세요..."></textarea>
+<div class="wrong-note-actions">
+<button class="note-save-btn" onclick="saveNote('16_02_02', document.getElementById('textarea_16_02_02').value)">💾 저장</button>
+<button class="note-clear-btn" onclick="clearNote('16_02_02')">🗑 삭제</button>
+</div>
+</div>
+</div>
+</div><div class="q-card" data-star="1" id="q_16_02_03" data-id="16_02_03">
+<div class="q-header" onclick="toggleCard(this.parentElement)">
+<span class="q-code">16/02/03</span><span class="q-star star-1" data-star="1"><span style="color:#555">★</span></span>
+<span class="q-title">산업재해 발생 시 보고 기준</span>
+<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('16_02_03')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('16_02_03')" title="중간답">▲</button><button class="wrong-btn marked" onclick="event.stopPropagation(); toggleWrong('16_02_03')" title="오답 체크">✗</button>
+<span class="q-toggle">▼</span>
+</div>
+<div class="q-body">
+<div class="question-text">다음 [보기]는 사업장에서 <strong>산업재해 발생 시</strong> 보고에 관한 내용을 설명하고 있다. ( )에 적합한 내용을 적으시오.
+<div style="border:2px solid #b0bec5;border-radius:8px;padding:14px 18px;margin-top:10px;background:#fafafa;font-size:16px;line-height:2.2;">
+사업주는 산업재해로 사망자가 발생, 3일 이상의 휴업이 필요한 부상 또는 질병에 걸린 자가 발생 시에는 산업재해가 발생한 날부터 ( <mark>①</mark> )개월 이내에 ( <mark>②</mark> )를 작성, 관할 지방고용노동관서장에게 제출하여야 한다.
+</div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">1</span><span><span class="hl">건축공사</span></span></span></div><div class="answer-item"><span class="ans-num">2</span><span><span>대상액 = 재료비 + 관급재료비 + 직접노무비 = <span class="hl">8억 원</span></span></span></div><div class="answer-item"><span class="ans-num">3</span><span><span>대상액 <span class="hl">5억 원 이상 50억 원 미만</span>이므로 → 대상액(재료비 + 직접노부비) × 적용비율(%) + 기초액</span></span></div><div class="ref-extra"><div class="formula-box">산업안전보건관리비 = 대상액(재료비 + 직접노무비) × 비율 + 기초액 <br>= (2억 5천만 원 + 3억 5천만 원 + 2억 원) × 0.0228 + 4,325,000<br>= <span class="hl">22,565,000원</span></div>
-<div class="divider"></div></div>
-<div class="ref-box">
-            ※ 대상액 5억 미만 또는 <em class="em3">50억 이상</em>: 대상액 × 비율<br>
-            ※ 대상액 5억 이상 50억 미만: 대상액 × 비율 + <span class="hl">기초액(C)</span>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">1</span>개월</span></div>
+<div class="answer-item"><span class="ans-num">②</span><span><span class="hl">산업재해조사표</span></span></div>
 </div>
-</div>
-<div class="keyword-section">
-<button class="keyword-toggle" onclick="toggleKeyword(this)">
-<span class="kt-icon">▼</span> 🔑 핵심 키워드
-            </button>
-<div class="keyword-content">
-<div class="keyword-chips"><span class="chip">건축공사 </span><span class="chip">대상액 8억 원 </span><span class="chip">5억 원 이상 50억 원 미만이므로 </span><span class="chip">22,565,000원 </span></div>
-</div>
-</div>
-<div class="wrong-note-area" id="note_22_01_03" style="display:none">
+<div class="wrong-note-area" id="note_16_02_03" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
-<textarea class="wrong-note-input" id="textarea_22_01_03" onchange="saveNote('22_01_03', this.value)" placeholder="틀린 이유, 헷갈린 부분, 핵심 암기사항 등을 적어두세요..."></textarea>
+<textarea class="wrong-note-input" id="textarea_16_02_03" onchange="saveNote('16_02_03', this.value)" placeholder="틀린 이유, 헷갈린 부분을 적어두세요..."></textarea>
 <div class="wrong-note-actions">
-<button class="note-save-btn" onclick="saveNote('22_01_03', document.getElementById('textarea_22_01_03').value)">💾 저장</button>
-<button class="note-clear-btn" onclick="clearNote('22_01_03')">🗑 삭제</button>
+<button class="note-save-btn" onclick="saveNote('16_02_03', document.getElementById('textarea_16_02_03').value)">💾 저장</button>
+<button class="note-clear-btn" onclick="clearNote('16_02_03')">🗑 삭제</button>
 </div>
 </div>
 </div>
-</div><div class="q-card" data-star="3" id="q_22_01_04" data-id="22_01_04">
+</div><div class="q-card" data-star="2" id="q_16_02_04" data-id="16_02_04">
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">16/02/04</span><span class="q-star star-2" data-star="2"><span style="color:#555">★★</span></span>
 <span class="q-title">구축물 안전성 평가 실시 경우</span>
@@ -13824,19 +13866,14 @@
 <div class="q-header" onclick="toggleCard(this.parentElement)">
 <span class="q-code">16/04/06</span><span class="q-star star-1" data-star="1"><span style="color:#555">★</span></span>
 <span class="q-title">추락방호망 그물코 크기</span>
-<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('16_02_08')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('16_02_08')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('16_02_08')" title="오답 체크">✗</button>
+<button class="correct-btn" onclick="event.stopPropagation(); toggleCorrect('16_04_06')" title="정답">○</button><button class="partial-btn" onclick="event.stopPropagation(); togglePartial('16_04_06')" title="중간답">▲</button><button class="wrong-btn" onclick="event.stopPropagation(); toggleWrong('16_04_06')" title="오답 체크">✗</button>
 <span class="q-toggle">▼</span>
 </div>
 <div class="q-body">
-<div class="question-text">다음 [보기]의 괄호에 적합한 내용을 적으시오. 
-                <div style="border:2px solid #b0bec5;border-radius:8px;padding:18px 22px;margin-top:12px;background:#fafafa;font-size:16px;line-height:2.0;">
-<div style="font-weight:600;text-align:center;margin-bottom:10px;">[보기]</div>
-<div style="line-height:2.2;"><div>추락방호망의 그물코는 사각또는 마름모로서 그 크기는 <strong><mark style="background:#fff176;color:#222;font-weight:600;padding:1px 4px;border-radius:3px;">(①)</mark></strong>mm 이하이어야 한다.</div></div>
-</div>
-</div>
+<div class="question-text">추락방호망의 그물코는 사각 또는 마름모로서 그 크기는 <mark>(①)</mark> mm 이하이어야 한다.</div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">100mm 이하</span></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span><span class="hl">100mm</span></span></div>
 </div>
 <div class="wrong-note-area" id="note_16_04_06" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -14352,9 +14389,9 @@
 </div></div>
 <div class="answer-box">
 <div class="answer-label">정답</div>
-<div class="answer-item"><span class="ans-num">(1)</span><span> 실내용 : <span class="hl">인조고무</span></span></div>
-<div class="answer-item"><span class="ans-num">(2)</span><span> 평탄한 맨땅 : <span class="hl">쐐기형 강스파이크</span></span></div>
-<div class="answer-item"><span class="ans-num">(3)</span><span> 돌마무리·인조석 바닥 : <span class="hl">미끄럼 방지 판자 및 미끄럼 방지 고정쇠</span></span></div>
+<div class="answer-item"><span class="ans-num">①</span><span>(1) 실내용 : <span class="hl">인조고무</span></span></div>
+<div class="answer-item"><span class="ans-num">②</span><span>(2) 평탄한 맨땅 : <span class="hl">쐐기형 강스파이크</span></span></div>
+<div class="answer-item"><span class="ans-num">③</span><span>(3) 돌마무리·인조석 바닥 : <span class="hl">미끄럼 방지 판자 및 미끄럼 방지 고정쇠</span></span></div>
 </div>
 <div class="wrong-note-area" id="note_15_01_12" style="display: none;">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -14915,9 +14952,9 @@
 <div class="answer-label">정답</div>
 <div class="answer-item"><span class="ans-num">①</span><span><span class="hl">500kg/m²</span></span></div>
 <div class="answer-item"><span class="ans-num">②</span><span><span class="hl">4</span></span></div>
-<div class="answer-item"><span class="ans-num">③</span><span><span class="hl">1미터</span></span></div>
-<div class="answer-item"><span class="ans-num">④</span><span><span class="hl">2미터</span></span></div>
-<div class="answer-item"><span class="ans-num">⑤</span><span><span class="hl">1미터</span></span></div>
+<div class="answer-item"><span class="ans-num">③</span><span><span class="hl">1m</span></span></div>
+<div class="answer-item"><span class="ans-num">④</span><span><span class="hl">2m</span></span></div>
+<div class="answer-item"><span class="ans-num">⑤</span><span><span class="hl">1m</span></span></div>
 </div>
 <div class="wrong-note-area" id="note_15_04_06" style="display:none">
 <div class="wrong-note-header" onclick="this.parentElement.classList.toggle('open')">📝 오답노트</div>
@@ -15086,7 +15123,7 @@
 </div>
 </div>
 </div></div>
-</div>
+</div></div>
 </div></div><!-- /yearStore -->
 
   <!-- 필답형 키워드 패널 -->
